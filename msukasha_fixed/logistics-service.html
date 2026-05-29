@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logistics Service | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .logistics-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px;margin-bottom:48px; }
+    .logistics-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px; }
+    .l-icon { width:54px;height:54px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px; }
+    .l-icon i { font-size:22px;color:#fff; }
+    .price-table { width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:48px; }
+    .price-table th { background:var(--dark);color:#fff;padding:14px 18px;text-align:left;font-size:13px; }
+    .price-table td { padding:13px 18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text); }
+    .price-table tr:last-child td { border-bottom:none; }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1>Logistics Service</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Logistics</span></div></div></div>
+<main>
+  <div class="container" style="padding:40px 0 70px;">
+
+    <div style="text-align:center;max-width:640px;margin:0 auto 48px;">
+      <span class="badge badge-orange" style="margin-bottom:14px;">Nationwide Delivery</span>
+      <h2 style="font-size:28px;font-weight:900;margin-bottom:14px;">Fast & Reliable Logistics Across Pakistan</h2>
+      <p style="color:var(--muted);line-height:1.8;">MSukasha's logistics network connects you with trusted freight partners for domestic and cross-border shipments — from single parcels to full container loads.</p>
+    </div>
+
+    <div class="stats-bar" style="margin-bottom:48px;">
+      <div class="stat-item"><span class="stat-num">150+</span><span class="stat-label">Cities Covered</span></div>
+      <div class="stat-item"><span class="stat-num">24–48h</span><span class="stat-label">Express Delivery</span></div>
+      <div class="stat-item"><span class="stat-num">99.2%</span><span class="stat-label">On-Time Rate</span></div>
+      <div class="stat-item"><span class="stat-num">PKR 0</span><span class="stat-label">Hidden Charges</span></div>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">Our Services</h2></div>
+    <div class="logistics-grid">
+      <div class="logistics-card"><div class="l-icon" style="background:linear-gradient(135deg,#ff6600,#ff9944);"><i class="fas fa-box"></i></div><h4 style="font-weight:800;margin-bottom:8px;">Express Parcel Delivery</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Same-day and next-day delivery for parcels up to 30kg across all major cities. Tracked end-to-end via MSukasha dashboard.</p></div>
+      <div class="logistics-card"><div class="l-icon" style="background:linear-gradient(135deg,#0066cc,#44aaff);"><i class="fas fa-truck-moving"></i></div><h4 style="font-weight:800;margin-bottom:8px;">Bulk Freight (FTL/LTL)</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Full and partial truckload services for wholesale orders. Dedicated trucks or shared loads depending on your volume. Door-to-door service available.</p></div>
+      <div class="logistics-card"><div class="l-icon" style="background:linear-gradient(135deg,#22c55e,#4ade80);"><i class="fas fa-warehouse"></i></div><h4 style="font-weight:800;margin-bottom:8px;">Warehousing & Fulfillment</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Store your inventory in MSukasha's partner warehouses in Karachi, Lahore, and Islamabad. We pick, pack, and dispatch orders on your behalf.</p></div>
+      <div class="logistics-card"><div class="l-icon" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);"><i class="fas fa-plane"></i></div><h4 style="font-weight:800;margin-bottom:8px;">Air Cargo (Export/Import)</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Fast international air freight from Karachi, Lahore, and Islamabad airports. Customs clearance and door delivery included.</p></div>
+      <div class="logistics-card"><div class="l-icon" style="background:linear-gradient(135deg,#0891b2,#67e8f9);"><i class="fas fa-ship"></i></div><h4 style="font-weight:800;margin-bottom:8px;">Sea Freight (FCL/LCL)</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Cost-effective ocean freight from Karachi Port for large volume exports. Full container or shared container loads handled from booking to delivery.</p></div>
+      <div class="logistics-card"><div class="l-icon" style="background:linear-gradient(135deg,#f59e0b,#fcd34d);"><i class="fas fa-undo-alt"></i></div><h4 style="font-weight:800;margin-bottom:8px;">Returns Management</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Seamless reverse logistics for B2B and C2C orders. Scheduled pickups, condition assessment at warehouse, and fast restocking or refunds.</p></div>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">Domestic Shipping Rates</h2></div>
+    <div style="overflow-x:auto;">
+      <table class="price-table">
+        <thead><tr><th>Route</th><th>Weight</th><th>Standard (3–5 days)</th><th>Express (1–2 days)</th></tr></thead>
+        <tbody>
+          <tr><td>Karachi → Lahore</td><td>Up to 5 kg</td><td>PKR 350</td><td>PKR 650</td></tr>
+          <tr><td>Karachi → Lahore</td><td>5–30 kg</td><td>PKR 650</td><td>PKR 1,100</td></tr>
+          <tr><td>Lahore → Islamabad</td><td>Up to 5 kg</td><td>PKR 250</td><td>PKR 450</td></tr>
+          <tr><td>Any City → Any City</td><td>30 kg+</td><td>Contact for freight quote</td><td>Contact for freight quote</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:48px;">Rates are indicative. Final rates depend on dimensions, insurance, and delivery zone. <a href="contact.html" style="color:var(--orange);font-weight:700;">Contact us</a> for a custom quote.</p>
+
+    <div class="promo-banner" style="margin-bottom:0;">
+      <div class="promo-text"><h2>Book a Shipment Today</h2><p>Get an instant quote and schedule pickup within 2 hours in Karachi, Lahore, and Islamabad.</p></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="contact.html" class="btn-primary"><i class="fas fa-calculator"></i> Get a Quote</a>
+        <a href="track-order.html" class="btn-outline-white"><i class="fas fa-map-marker-alt"></i> Track Shipment</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+</body>
+</html>

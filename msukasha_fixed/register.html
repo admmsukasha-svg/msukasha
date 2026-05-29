@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-page { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px 0; }
+    .auth-box { background: #fff; border-radius: 14px; border: 1px solid var(--border); padding: 40px; width: 100%; max-width: 480px; box-shadow: var(--shadow-md); }
+    .auth-logo { text-align: center; margin-bottom: 24px; }
+    .auth-logo img { height: 44px; margin: 0 auto 10px; }
+    .account-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .account-type-btn { padding: 14px; border: 2px solid var(--border); border-radius: 10px; text-align: center; cursor: pointer; transition: all var(--transition); background: #fff; }
+    .account-type-btn.selected { border-color: var(--orange); background: var(--orange-light); }
+    .account-type-btn i { font-size: 24px; color: var(--muted); display: block; margin-bottom: 6px; }
+    .account-type-btn.selected i { color: var(--orange); }
+    .account-type-btn span { font-size: 13px; font-weight: 700; color: var(--text); }
+    .account-type-btn small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<main class="auth-page">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <img src="Logo/logo.png" alt="MSukasha" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span style="display:none;font-size:24px;font-weight:900;color:var(--orange);">MSukasha</span>
+    </div>
+    <h1 style="font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;">Create Your Account</h1>
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:24px;">Join Pakistan's largest trading platform</p>
+
+    <!-- Account Type -->
+    <p style="font-size:13px;font-weight:700;margin-bottom:12px;">I want to:</p>
+    <div class="account-type-grid">
+      <div class="account-type-btn selected" id="type-buyer" onclick="selectType('buyer')">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Buy Products</span>
+        <small>Browse & purchase</small>
+      </div>
+      <div class="account-type-btn" id="type-seller" onclick="selectType('seller')">
+        <i class="fas fa-store"></i>
+        <span>Sell / Wholesale</span>
+        <small>List your products</small>
+      </div>
+    </div>
+
+    <form id="register-form">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="form-group">
+          <label class="form-label">First Name *</label>
+          <input type="text" class="form-control" placeholder="First name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name *</label>
+          <input type="text" class="form-control" placeholder="Last name" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input type="email" class="form-control" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number *</label>
+        <input type="tel" class="form-control" placeholder="+92 300 0000000" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password *</label>
+        <input type="password" class="form-control" placeholder="Min. 8 characters" required minlength="8">
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;margin-bottom:20px;cursor:pointer;line-height:1.5;">
+        <input type="checkbox" style="accent-color:var(--orange);margin-top:2px;" required>
+        I agree to MSukasha's <a href="terms and conditions.html" style="color:var(--orange);">Terms & Conditions</a> and <a href="safety-tips.html" style="color:var(--orange);">Privacy Policy</a>
+      </label>
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="handleRegister(event)">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+    </form>
+
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:20px;">
+      Already have an account? <a href="login.html" style="color:var(--orange);font-weight:700;">Sign In</a>
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+<script>
+function selectType(type) {
+  document.getElementById('type-buyer').classList.toggle('selected', type === 'buyer');
+  document.getElementById('type-seller').classList.toggle('selected', type === 'seller');
+}
+function handleRegister(e) {
+  e.preventDefault();
+  const form = document.getElementById('register-form');
+  if (validateForm(form)) {
+    showToast('Account created! Welcome to MSukasha!', 'success');
+    setTimeout(() => window.location.href = 'my-account.html', 1500);
+  }
+}
+</script>
+</body>
+</html>

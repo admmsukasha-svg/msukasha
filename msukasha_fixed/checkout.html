@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .checkout-grid{display:grid;grid-template-columns:1fr 360px;gap:28px;margin-bottom:50px;}
+    @media(max-width:768px){.checkout-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1><i class="fas fa-lock" style="color:var(--orange);margin-right:10px;"></i>Secure Checkout</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><a href="cart.html">Cart</a><span>/</span><span>Checkout</span></div></div></div>
+<main><div class="container" style="padding-top:36px;">
+  <div class="checkout-grid">
+    <div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h3><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:8px;"></i>Delivery Address</h3></div>
+        <div class="card-body-pad">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" placeholder="Your full name" required></div>
+            <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-control" placeholder="+92 300 0000000" required></div>
+          </div>
+          <div class="form-group"><label class="form-label">Street Address *</label><input type="text" class="form-control" placeholder="House/Plot no., Street, Area" required></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group"><label class="form-label">City *</label><select class="form-control" required><option>Select city</option><option>Karachi</option><option>Lahore</option><option>Islamabad</option><option>Rawalpindi</option><option>Peshawar</option><option>Quetta</option></select></div>
+            <div class="form-group"><label class="form-label">Province *</label><select class="form-control" required><option>Select province</option><option>Sindh</option><option>Punjab</option><option>KPK</option><option>Balochistan</option><option>Federal</option></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3><i class="fas fa-credit-card" style="color:var(--orange);margin-right:8px;"></i>Payment Method</h3></div>
+        <div class="card-body-pad">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--orange);border-radius:8px;cursor:pointer;background:var(--orange-light);">
+              <input type="radio" name="payment" value="cod" checked style="accent-color:var(--orange);"> <div><p style="font-weight:700;font-size:13px;">Cash on Delivery</p><p style="font-size:12px;color:var(--muted);">Pay when you receive your order</p></div>
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:8px;cursor:pointer;">
+              <input type="radio" name="payment" value="bank" style="accent-color:var(--orange);"> <div><p style="font-weight:700;font-size:13px;">Bank Transfer</p><p style="font-size:12px;color:var(--muted);">Transfer to MSukasha escrow account</p></div>
+            </label>
+            <label style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:8px;cursor:pointer;">
+              <input type="radio" name="payment" value="easypaisa" style="accent-color:var(--orange);"> <div><p style="font-weight:700;font-size:13px;">EasyPaisa / JazzCash</p><p style="font-size:12px;color:var(--muted);">Pay via mobile wallet</p></div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header"><h3>Order Summary</h3></div>
+        <div class="card-body-pad">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--muted);">Solar Panels × 10</span><span>$1,200.00</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--muted);">T-Shirts × 100</span><span>$250.00</span></div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--muted);">Shipping</span><span style="color:#22c55e;">Free</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800;margin-bottom:20px;"><span>Total</span><span style="color:var(--orange);">$1,450.00</span></div>
+          <button class="btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Place Order Securely</button>
+        </div>
+      </div>
+      <div class="alert alert-info"><i class="fas fa-shield-alt"></i> Protected by MSukasha Trade Assurance</div>
+    </div>
+  </div>
+</div></main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+<script>
+function placeOrder(){
+  showToast('Order placed successfully! Order #MS-2026-'+ Math.floor(Math.random()*9000+1000), 'success');
+  setTimeout(()=>window.location.href='track-order.html',2000);
+}
+</script>
+</body></html>

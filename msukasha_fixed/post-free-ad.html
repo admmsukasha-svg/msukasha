@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Free Ad | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1>Post a Free Ad</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Post Free Ad</span></div></div></div>
+<main><div class="container" style="padding-bottom:60px;"><div style="max-width:680px;margin:0 auto;">
+<div class="alert alert-info" style="margin-bottom:24px;"><i class="fas fa-info-circle"></i> Listing your item is completely free. Reach thousands of buyers in your city!</div>
+<div class="card">
+  <div class="card-header"><h3><i class="fas fa-camera" style="color:var(--orange);margin-right:8px;"></i> Create Your Listing</h3></div>
+  <div class="card-body-pad">
+    <div class="form-group"><label class="form-label">Ad Title *</label><input type="text" class="form-control" placeholder="e.g. Used iPhone 12 Pro 128GB — Excellent Condition" required></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="form-group"><label class="form-label">Category *</label><select class="form-control" required><option>Select category</option><option>Electronics</option><option>Vehicles</option><option>Fashion</option><option>Home & Living</option><option>Industrial</option></select></div>
+      <div class="form-group"><label class="form-label">Condition *</label><select class="form-control" required><option>Select condition</option><option>Like New</option><option>Good</option><option>Fair</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Price (Rs.) *</label><input type="number" class="form-control" placeholder="e.g. 35000" required></div>
+    <div class="form-group"><label class="form-label">Location *</label><input type="text" class="form-control" placeholder="e.g. DHA Phase 2, Karachi" required></div>
+    <div class="form-group"><label class="form-label">Description *</label><textarea class="form-control" rows="5" placeholder="Describe your item honestly — mention any defects, accessories included, reason for selling..." required style="resize:vertical;"></textarea></div>
+    <div class="form-group"><label class="form-label">Photos</label><div style="border:2px dashed var(--border);border-radius:8px;padding:30px;text-align:center;cursor:pointer;color:var(--muted);font-size:13px;"><i class="fas fa-camera" style="font-size:28px;margin-bottom:10px;display:block;"></i>Click to upload photos (max 5 images, JPG/PNG)</div></div>
+    <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-control" placeholder="+92 300 0000000" required></div>
+    <button class="btn-primary" style="width:100%;justify-content:center;" onclick="event.preventDefault();showToast('Your ad has been posted successfully!','success')"><i class="fas fa-paper-plane"></i> Post My Ad for Free</button>
+  </div>
+</div></div></div></main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+</body></html>
