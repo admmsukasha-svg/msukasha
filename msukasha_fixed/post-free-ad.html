@@ -1,33 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Post a Free Ad | MSukasha</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Free Ad | MSukasha</title>
   <link rel="icon" type="image/png" href="Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .ad-steps{display:flex;gap:0;margin-bottom:36px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+    .ad-step{flex:1;padding:16px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);border-right:1px solid var(--border);position:relative;}
+    .ad-step:last-child{border-right:none;}
+    .ad-step.active{background:var(--orange-light);color:var(--orange);}
+    .ad-step.done{background:#eafaf1;color:#22863a;}
+    .ad-step .step-num{width:26px;height:26px;border-radius:50%;background:var(--border);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;}
+    .ad-step.active .step-num{background:var(--orange);}
+    .ad-step.done .step-num{background:#22c55e;}
+    .upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;cursor:pointer;transition:all 0.2s;background:#fafafa;}
+    .upload-area:hover{border-color:var(--orange);background:var(--orange-light);}
+    .upload-area i{font-size:40px;color:var(--muted);margin-bottom:12px;display:block;}
+    .cat-select-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
+    .cat-sel-btn{border:2px solid var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;transition:all 0.2s;background:#fff;}
+    .cat-sel-btn.active,.cat-sel-btn:hover{border-color:var(--orange);background:var(--orange-light);}
+    .cat-sel-btn i{font-size:22px;color:var(--muted);display:block;margin-bottom:6px;}
+    .cat-sel-btn.active i,.cat-sel-btn:hover i{color:var(--orange);}
+    .cat-sel-btn span{font-size:12px;font-weight:700;color:var(--text);}
+    @media(max-width:600px){.ad-steps{flex-wrap:wrap;}.ad-step{min-width:50%;border-bottom:1px solid var(--border);}}
+  </style>
 </head>
 <body>
 <header class="site-header" id="site-header"></header>
-<div class="page-header"><div class="container"><h1>Post a Free Ad</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Post Free Ad</span></div></div></div>
-<main><div class="container" style="padding-bottom:60px;"><div style="max-width:680px;margin:0 auto;">
-<div class="alert alert-info" style="margin-bottom:24px;"><i class="fas fa-info-circle"></i> Listing your item is completely free. Reach thousands of buyers in your city!</div>
-<div class="card">
-  <div class="card-header"><h3><i class="fas fa-camera" style="color:var(--orange);margin-right:8px;"></i> Create Your Listing</h3></div>
-  <div class="card-body-pad">
-    <div class="form-group"><label class="form-label">Ad Title *</label><input type="text" class="form-control" placeholder="e.g. Used iPhone 12 Pro 128GB — Excellent Condition" required></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div class="form-group"><label class="form-label">Category *</label><select class="form-control" required><option>Select category</option><option>Electronics</option><option>Vehicles</option><option>Fashion</option><option>Home & Living</option><option>Industrial</option></select></div>
-      <div class="form-group"><label class="form-label">Condition *</label><select class="form-control" required><option>Select condition</option><option>Like New</option><option>Good</option><option>Fair</option></select></div>
-    </div>
-    <div class="form-group"><label class="form-label">Price (Rs.) *</label><input type="number" class="form-control" placeholder="e.g. 35000" required></div>
-    <div class="form-group"><label class="form-label">Location *</label><input type="text" class="form-control" placeholder="e.g. DHA Phase 2, Karachi" required></div>
-    <div class="form-group"><label class="form-label">Description *</label><textarea class="form-control" rows="5" placeholder="Describe your item honestly — mention any defects, accessories included, reason for selling..." required style="resize:vertical;"></textarea></div>
-    <div class="form-group"><label class="form-label">Photos</label><div style="border:2px dashed var(--border);border-radius:8px;padding:30px;text-align:center;cursor:pointer;color:var(--muted);font-size:13px;"><i class="fas fa-camera" style="font-size:28px;margin-bottom:10px;display:block;"></i>Click to upload photos (max 5 images, JPG/PNG)</div></div>
-    <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" class="form-control" placeholder="+92 300 0000000" required></div>
-    <button class="btn-primary" style="width:100%;justify-content:center;" onclick="event.preventDefault();showToast('Your ad has been posted successfully!','success')"><i class="fas fa-paper-plane"></i> Post My Ad for Free</button>
+<div class="page-header">
+  <div class="container">
+    <h1><i class="fas fa-camera" style="color:var(--orange);margin-right:10px;"></i>Post a Free Ad</h1>
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Post Free Ad</span></div>
   </div>
-</div></div></div></main>
+</div>
+<main>
+  <div class="container" style="padding:30px 0 60px;max-width:800px;">
+    <!-- Steps -->
+    <div class="ad-steps" id="ad-steps">
+      <div class="ad-step active" id="step-1"><div class="step-num">1</div>Category</div>
+      <div class="ad-step" id="step-2"><div class="step-num">2</div>Details</div>
+      <div class="ad-step" id="step-3"><div class="step-num">3</div>Photos</div>
+      <div class="ad-step" id="step-4"><div class="step-num">4</div>Contact</div>
+    </div>
+
+    <!-- Step 1: Category -->
+    <div id="panel-1">
+      <div class="card">
+        <div class="card-header"><h3>Select a Category *</h3></div>
+        <div class="card-body-pad">
+          <div class="cat-select-grid" id="cat-grid">
+            <div class="cat-sel-btn" onclick="selectCat(this,'Electronics')"><i class="fas fa-mobile-alt"></i><span>Electronics</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Vehicles')"><i class="fas fa-car"></i><span>Vehicles</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Fashion')"><i class="fas fa-tshirt"></i><span>Fashion</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Home & Living')"><i class="fas fa-couch"></i><span>Home & Living</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Sports')"><i class="fas fa-futbol"></i><span>Sports</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Books')"><i class="fas fa-book"></i><span>Books</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Tools')"><i class="fas fa-tools"></i><span>Tools</span></div>
+            <div class="cat-sel-btn" onclick="selectCat(this,'Other')"><i class="fas fa-box"></i><span>Other</span></div>
+          </div>
+          <input type="hidden" id="ad-category" value="">
+          <button class="btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="nextStep(1)">Next: Add Details <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Details -->
+    <div id="panel-2" style="display:none;">
+      <div class="card">
+        <div class="card-header"><h3>Item Details</h3></div>
+        <div class="card-body-pad">
+          <div class="form-group">
+            <label class="form-label">Ad Title *</label>
+            <input type="text" class="form-control" id="ad-title" placeholder="e.g. Used iPhone 13 Pro 256GB — Excellent Condition" required>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Price (PKR) *</label>
+              <input type="number" class="form-control" id="ad-price" placeholder="e.g. 95000" min="0" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Condition *</label>
+              <select class="form-control" id="ad-condition" required>
+                <option value="">Select condition</option>
+                <option>New</option>
+                <option>Like New (10/10)</option>
+                <option>Excellent (9/10)</option>
+                <option>Good (7–8/10)</option>
+                <option>Fair (5–6/10)</option>
+                <option>For Parts</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description *</label>
+            <textarea class="form-control" id="ad-desc" rows="5" placeholder="Describe your item — condition, age, reason for selling, accessories included..." required style="resize:vertical;"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <select class="form-control" id="ad-city" required>
+                <option value="">Select city</option>
+                <option>Karachi</option><option>Lahore</option><option>Islamabad</option>
+                <option>Rawalpindi</option><option>Faisalabad</option><option>Multan</option>
+                <option>Peshawar</option><option>Quetta</option><option>Sialkot</option>
+                <option>Gujranwala</option><option>Hyderabad</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Area / Locality</label>
+              <input type="text" class="form-control" id="ad-area" placeholder="e.g. DHA Phase 5, Gulberg III">
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button onclick="prevStep(2)" style="padding:12px 22px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="btn-primary" style="flex:1;justify-content:center;padding:13px;" onclick="nextStep(2)">Next: Add Photos <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Photos -->
+    <div id="panel-3" style="display:none;">
+      <div class="card">
+        <div class="card-header"><h3>Add Photos (Recommended)</h3></div>
+        <div class="card-body-pad">
+          <div class="upload-area" onclick="document.getElementById('photo-input').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p style="font-weight:700;margin-bottom:4px;">Click to Upload Photos</p>
+            <p style="font-size:13px;color:var(--muted);">Up to 8 photos. JPG, PNG. Max 5MB each.</p>
+          </div>
+          <input type="file" id="photo-input" multiple accept="image/*" style="display:none;" onchange="previewPhotos(this)">
+          <div id="photo-previews" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"></div>
+          <div class="alert alert-info" style="margin-top:16px;"><i class="fas fa-lightbulb"></i> Ads with photos get <strong>3x more responses</strong>. Add clear photos from multiple angles.</div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button onclick="prevStep(3)" style="padding:12px 22px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="btn-primary" style="flex:1;justify-content:center;padding:13px;" onclick="nextStep(3)">Next: Contact Info <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Contact & Publish -->
+    <div id="panel-4" style="display:none;">
+      <div class="card">
+        <div class="card-header"><h3>Contact Information</h3></div>
+        <div class="card-body-pad">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" class="form-control" id="ad-name" placeholder="Your full name" required>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-group">
+              <label class="form-label">Phone / WhatsApp *</label>
+              <input type="tel" class="form-control" id="ad-phone" placeholder="+92 300 0000000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email (Optional)</label>
+              <input type="email" class="form-control" id="ad-email" placeholder="your@email.com">
+            </div>
+          </div>
+          <label style="display:flex;gap:8px;font-size:13px;margin-bottom:22px;cursor:pointer;align-items:flex-start;line-height:1.5;">
+            <input type="checkbox" id="ad-terms" style="accent-color:var(--orange);margin-top:2px;" required>
+            I confirm this ad is genuine and I agree to MSukasha's <a href="terms-and-conditions.html" style="color:var(--orange);" target="_blank">Terms &amp; Conditions</a>
+          </label>
+          <div style="display:flex;gap:10px;">
+            <button onclick="prevStep(4)" style="padding:12px 22px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="btn-primary" style="flex:1;justify-content:center;padding:13px;" onclick="publishAd()"><i class="fas fa-check-circle"></i> Publish Ad Free</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div id="panel-success" style="display:none;text-align:center;padding:60px 20px;background:#fff;border-radius:var(--radius);border:1px solid var(--border);">
+      <div style="width:80px;height:80px;background:#eafaf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;"><i class="fas fa-check-circle" style="font-size:36px;color:#22c55e;"></i></div>
+      <h2 style="font-weight:800;margin-bottom:10px;">Ad Posted Successfully!</h2>
+      <p style="color:var(--muted);margin-bottom:6px;">Your ad has been submitted and will go live after a quick review (usually within 1 hour).</p>
+      <p style="color:var(--muted);margin-bottom:24px;">Ad ID: <strong id="ad-id"></strong></p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="c2c.html" class="btn-primary"><i class="fas fa-store"></i> View All Ads</a>
+        <a href="post-free-ad.html" style="padding:12px 22px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-weight:700;color:var(--text);background:#fff;"><i class="fas fa-plus"></i> Post Another Ad</a>
+      </div>
+    </div>
+  </div>
+</main>
 <footer class="site-footer" id="site-footer"></footer>
 <script src="main.js"></script>
-</body></html>
+<script>
+let selectedCat = '';
+
+function selectCat(el, name) {
+  document.querySelectorAll('.cat-sel-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedCat = name;
+  document.getElementById('ad-category').value = name;
+}
+
+function nextStep(from) {
+  if (from === 1) {
+    if (!selectedCat) { showToast('Please select a category.', 'warning'); return; }
+  }
+  if (from === 2) {
+    const title = document.getElementById('ad-title').value.trim();
+    const price = document.getElementById('ad-price').value;
+    const cond = document.getElementById('ad-condition').value;
+    const city = document.getElementById('ad-city').value;
+    const desc = document.getElementById('ad-desc').value.trim();
+    if (!title || !price || !cond || !city || !desc) { showToast('Please fill all required fields.', 'warning'); return; }
+  }
+  if (from === 4) { publishAd(); return; }
+  goToPanel(from + 1);
+}
+
+function prevStep(current) { goToPanel(current - 1); }
+
+function goToPanel(n) {
+  for (let i=1; i<=4; i++) {
+    const p = document.getElementById('panel-'+i);
+    const s = document.getElementById('step-'+i);
+    if (p) p.style.display = i === n ? 'block' : 'none';
+    if (s) {
+      s.classList.remove('active','done');
+      if (i === n) s.classList.add('active');
+      else if (i < n) s.classList.add('done');
+    }
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function previewPhotos(input) {
+  const container = document.getElementById('photo-previews');
+  container.innerHTML = '';
+  Array.from(input.files).slice(0,8).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.style.cssText = 'width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid var(--border);position:relative;';
+      div.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+      container.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function publishAd() {
+  const name = document.getElementById('ad-name').value.trim();
+  const phone = document.getElementById('ad-phone').value.trim();
+  const terms = document.getElementById('ad-terms').checked;
+  if (!name || !phone) { showToast('Please fill all required contact fields.', 'warning'); return; }
+  if (!terms) { showToast('Please accept the Terms & Conditions.', 'warning'); return; }
+
+  const adId = 'MS-AD-' + Date.now().toString().slice(-6);
+  document.getElementById('ad-id').textContent = adId;
+
+  // Save to localStorage
+  const listings = JSON.parse(localStorage.getItem('msukasha_listings') || '[]');
+  listings.push({
+    id: adId,
+    category: selectedCat,
+    title: document.getElementById('ad-title').value,
+    price: document.getElementById('ad-price').value,
+    condition: document.getElementById('ad-condition').value,
+    city: document.getElementById('ad-city').value,
+    area: document.getElementById('ad-area').value,
+    desc: document.getElementById('ad-desc').value,
+    name, phone,
+    date: new Date().toLocaleDateString()
+  });
+  localStorage.setItem('msukasha_listings', JSON.stringify(listings));
+
+  // Show all steps as done
+  for (let i=1;i<=4;i++) {
+    const p = document.getElementById('panel-'+i);
+    const s = document.getElementById('step-'+i);
+    if (p) p.style.display='none';
+    if (s) { s.classList.remove('active'); s.classList.add('done'); }
+  }
+  document.getElementById('panel-success').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
