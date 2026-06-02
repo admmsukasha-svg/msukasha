@@ -640,11 +640,15 @@
     document.getElementById('file-name').textContent = input.files[0] ? '📎 ' + input.files[0].name : '';
   }
 
-  function submitApplication() {
+  async function submitApplication() {
     const name     = document.getElementById('f-name').value.trim();
     const email    = document.getElementById('f-email').value.trim();
     const phone    = document.getElementById('f-phone').value.trim();
     const position = document.getElementById('f-position').value;
+    const exp      = document.getElementById('f-exp').value;
+    const cover    = document.getElementById('f-cover').value;
+
+    // Validation
     if (!name || !email || !phone || !position) {
       alert('Please fill in all required fields (*).');
       return;
@@ -653,8 +657,43 @@
       alert('Please enter a valid email address.');
       return;
     }
-    document.getElementById('form-body').style.display = 'none';
-    document.getElementById('success-state').style.display = 'flex';
+
+    // Button loading state
+    const btn = document.querySelector('.btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+    try {
+      const res = await fetch('https://msukasha-backend-git-main-msukasha.vercel.app/api/applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName:    name,
+          email:       email,
+          phone:       phone,
+          position:    position,
+          experience:  exp,
+          coverLetter: cover
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // Success screen dikhao
+        document.getElementById('form-body').style.display = 'none';
+        document.getElementById('success-state').style.display = 'flex';
+      } else {
+        alert(data.message);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
+      }
+
+    } catch (err) {
+      alert('Network error — please try again.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
+    }
   }
 
   function resetForm() {
