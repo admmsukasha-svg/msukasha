@@ -12,20 +12,20 @@ const HEADER_HTML = `
   <div class="container">
     <div>🇵🇰 Pakistan's #1 B2B Wholesale & C2C Trading Platform</div>
     <div class="header-top-links">
-      <a href="/msukasha_fixed/help-center.html"><i class="fas fa-question-circle"></i> Help Center</a>
-      <a href="/msukasha_fixed/book-call.html"><i class="fas fa-phone"></i> Book a Free Call</a>
-      <a href="/msukasha_fixed/become-partner.html"><i class="fas fa-handshake"></i> Become a Partner</a>
-      <a href="/msukasha_fixed/careers.html"><i class="fas fa-briefcase"></i> Careers</a>
+      <a href="help-center.html"><i class="fas fa-question-circle"></i> Help Center</a>
+      <a href="book-call.html"><i class="fas fa-phone"></i> Book a Free Call</a>
+      <a href="become-partner.html"><i class="fas fa-handshake"></i> Become a Partner</a>
+      <a href="careers.html"><i class="fas fa-briefcase"></i> Careers</a>
     </div>
   </div>
 </div>
 <div class="header-main">
   <div class="container">
-    <a href="/msukasha_fixed/index.html" class="site-logo">
-      <img src="/msukasha_fixed/Logo/logo.png" alt="MSukasha - Pakistan's Trading Hub" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <a href="index.html" class="site-logo">
+      <img src="Logo/logo.png" alt="MSukasha - Pakistan's Trading Hub" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <span style="display:none;font-size:22px;font-weight:900;color:#ff6600;">MSukasha</span>
     </a>
-    <form class="search-form" action="/msukasha_fixed/shop.html" method="get" onsubmit="handleSearch(event)">
+    <form class="search-form" action="shop.html" method="get" onsubmit="handleSearch(event)">
       <select name="category" aria-label="Category">
         <option value="">All Categories</option>
         <option value="electronics">Electronics</option>
@@ -39,15 +39,15 @@ const HEADER_HTML = `
       <button type="submit"><i class="fas fa-search"></i> Search</button>
     </form>
     <div class="header-actions">
-      <a href="/msukasha_fixed/wishlist.html" class="hdr-btn">
+      <a href="wishlist.html" class="hdr-btn">
         <i class="far fa-heart"></i>
         <span>Wishlist</span>
       </a>
-      <a href="/msukasha_fixed/cart.html" class="hdr-btn">
+      <a href="cart.html" class="hdr-btn">
         <i class="fas fa-shopping-cart"></i>
         <span>Cart <span id="cart-count" style="background:var(--orange);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;"></span></span>
       </a>
-      <a href="/msukasha_fixed/login.html" class="hdr-btn primary-btn">
+      <a href="login.html" class="hdr-btn primary-btn">
         <i class="fas fa-user"></i>
         <span>Sign In</span>
       </a>
@@ -56,14 +56,14 @@ const HEADER_HTML = `
 </div>
 <nav class="nav-bar">
   <div class="container">
-    <a href="/msukasha_fixed/categories.html" class="all-cats"><i class="fas fa-bars"></i> All Categories</a>
-    <a href="/msukasha_fixed/wholesale.html">Wholesale B2B</a>
-    <a href="/msukasha_fixed/c2c.html">Used Items (C2C)</a>
-    <a href="/msukasha_fixed/trade-assurance.html">Trade Assurance</a>
-    <a href="/msukasha_fixed/verified-suppliers.html">Verified Suppliers</a>
-    <a href="/msukasha_fixed/logistics-service.html">Logistics</a>
-    <a href="/msukasha_fixed/blog.html">Blog</a>
-    <a href="/msukasha_fixed/contact.html">Contact</a>
+    <a href="categories.html" class="all-cats"><i class="fas fa-bars"></i> All Categories</a>
+    <a href="wholesale.html">Wholesale B2B</a>
+    <a href="c2c.html">Used Items (C2C)</a>
+    <a href="trade-assurance.html">Trade Assurance</a>
+    <a href="verified-suppliers.html">Verified Suppliers</a>
+    <a href="logistics-service.html">Logistics</a>
+    <a href="blog.html">Blog</a>
+    <a href="contact.html">Contact</a>
   </div>
 </nav>
 `;
@@ -72,7 +72,7 @@ const FOOTER_HTML = `
 <div class="container">
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="/msukasha_fixed/Logo/logo.png" alt="MSukasha" class="footer-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <img src="Logo/logo.png" alt="MSukasha" class="footer-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <span style="display:none;font-size:20px;font-weight:900;color:#fff;margin-bottom:12px;display:block;">MSukasha</span>
       <p>Pakistan's leading platform for B2B wholesale sourcing and C2C local marketplace. Connecting buyers and sellers nationwide.</p>
       <div class="footer-socials">
@@ -85,42 +85,42 @@ const FOOTER_HTML = `
     <div class="footer-col">
       <h5>Company</h5>
       <div class="footer-links">
-        <a href="/msukasha_fixed/about-us.html">About Us</a>
-        <a href="/msukasha_fixed/careers.html">Careers</a>
-        <a href="/msukasha_fixed/blog.html">Blog</a>
-        <a href="/msukasha_fixed/contact.html">Contact Us</a>
-        <a href="/msukasha_fixed/terms and conditions.html">Terms & Conditions</a>
+        <a href="about-us.html">About Us</a>
+        <a href="careers.html">Careers</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="terms and conditions.html">Terms & Conditions</a>
       </div>
     </div>
     <div class="footer-col">
       <h5>B2B Services</h5>
       <div class="footer-links">
-        <a href="/msukasha_fixed/trade-assurance.html">Trade Assurance</a>
-        <a href="/msukasha_fixed/verified-suppliers.html">Verified Suppliers</a>
-        <a href="/msukasha_fixed/logistics-service.html">Logistics Service</a>
-        <a href="/msukasha_fixed/bulk-import-strategies.html">Bulk Import Guide</a>
-        <a href="/msukasha_fixed/b2b-expert.html">B2B Expert</a>
+        <a href="trade-assurance.html">Trade Assurance</a>
+        <a href="verified-suppliers.html">Verified Suppliers</a>
+        <a href="logistics-service.html">Logistics Service</a>
+        <a href="bulk-import-strategies.html">Bulk Import Guide</a>
+        <a href="b2b-expert.html">B2B Expert</a>
       </div>
     </div>
     <div class="footer-col">
       <h5>C2C Marketplace</h5>
       <div class="footer-links">
-        <a href="/msukasha_fixed/post-free-ad.html">Post Free Ad</a>
-        <a href="/msukasha_fixed/safety-tips.html">Safety Tips</a>
-        <a href="/msukasha_fixed/buying-guides.html">Buying Guides</a>
-        <a href="/msukasha_fixed/inspecting-used-goods.html">Inspecting Used Goods</a>
-        <a href="/msukasha_fixed/safe-bargaining.html">Safe Bargaining</a>
+        <a href="post-free-ad.html">Post Free Ad</a>
+        <a href="safety-tips.html">Safety Tips</a>
+        <a href="buying-guides.html">Buying Guides</a>
+        <a href="inspecting-used-goods.html">Inspecting Used Goods</a>
+        <a href="safe-bargaining.html">Safe Bargaining</a>
       </div>
     </div>
     <div class="footer-col">
       <h5>Support</h5>
       <div class="footer-links">
-        <a href="/msukasha_fixed/help-center.html">Help Center</a>
-        <a href="/msukasha_fixed/track-order.html">Track Order</a>
-        <a href="/msukasha_fixed/book-call.html">Book a Free Call</a>
-        <a href="/msukasha_fixed/become-partner.html">Become a Partner</a>
-        <a href="/msukasha_fixed/start-verification.html">Vendor Verification</a>
-        <a href="/msukasha_fixed/contact.html">Report an Issue</a>
+        <a href="help-center.html">Help Center</a>
+        <a href="track-order.html">Track Order</a>
+        <a href="book-call.html">Book a Free Call</a>
+        <a href="become-partner.html">Become a Partner</a>
+        <a href="start-verification.html">Vendor Verification</a>
+        <a href="contact.html">Report an Issue</a>
       </div>
     </div>
   </div>
@@ -253,4 +253,3 @@ function validateForm(formEl) {
   });
   return valid;
 }
-
