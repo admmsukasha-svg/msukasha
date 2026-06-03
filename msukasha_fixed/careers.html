@@ -1,21 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Careers | MSukasha</title>
   <link rel="icon" type="image/png" href="Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .careers-hero{background:linear-gradient(135deg,#1a2332 0%,#2d4a6e 100%);color:#fff;padding:70px 0;text-align:center;margin-bottom:60px;position:relative;overflow:hidden;}
+    .careers-hero::before{content:'';position:absolute;right:-80px;top:-80px;width:340px;height:340px;background:rgba(255,102,0,0.12);border-radius:50%;}
+    .careers-hero::after{content:'';position:absolute;left:-60px;bottom:-60px;width:260px;height:260px;background:rgba(255,102,0,0.08);border-radius:50%;}
+    .careers-hero h2{font-size:38px;font-weight:900;margin-bottom:14px;position:relative;}
+    .careers-hero p{font-size:16px;opacity:.85;max-width:580px;margin:0 auto 28px;position:relative;}
+
+    .perks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-bottom:56px;}
+    .perk-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;text-align:center;}
+    .perk-card i{font-size:30px;color:var(--orange);margin-bottom:10px;display:block;}
+    .perk-card h5{font-size:13px;font-weight:800;margin-bottom:4px;}
+    .perk-card p{font-size:12px;color:var(--muted);line-height:1.6;}
+
+    .job-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+    .job-filter{padding:7px 18px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+    .job-filter.active,.job-filter:hover{background:var(--orange);color:#fff;border-color:var(--orange);}
+
+    .job-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;display:flex;align-items:flex-start;gap:18px;transition:all .25s;}
+    .job-card:hover{box-shadow:var(--shadow-md);border-color:#d0d8e4;}
+    .job-dept-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;flex-shrink:0;}
+    .job-info{flex:1;}
+    .job-title{font-size:16px;font-weight:800;color:var(--dark);margin-bottom:6px;}
+    .job-meta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;}
+    .job-meta span{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;}
+    .job-tags{display:flex;gap:6px;flex-wrap:wrap;}
+    .job-tag{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;}
+    .tag-full{background:#dcfce7;color:#15803d;}
+    .tag-part{background:#fef3c7;color:#d97706;}
+    .tag-remote{background:#e0f2fe;color:#0369a1;}
+    .tag-onsite{background:var(--orange-light);color:var(--orange);}
+    .tag-new{background:#fee2e2;color:#ef4444;}
+
+    .no-jobs{text-align:center;padding:50px 20px;background:#fff;border:1px dashed var(--border);border-radius:var(--radius);margin-bottom:40px;}
+
+    .culture-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:56px;align-items:center;}
+    @media(max-width:768px){.culture-grid{grid-template-columns:1fr;}.job-card{flex-direction:column;gap:12px;}}
+  </style>
 </head>
 <body>
 <header class="site-header" id="site-header"></header>
-<div class="page-header"><div class="container"><h1>Careers at MSukasha</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Careers</span></div></div></div>
-<main><div class="container" style="padding-bottom:60px;"><div style="text-align:center;margin-bottom:40px;"><p style="font-size:16px;color:var(--muted);max-width:600px;margin:0 auto;">Join our mission to empower trade across Pakistan. We are a fast-growing startup with a passionate team.</p></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-bottom:40px;">
-  <div class="card" style="padding:24px;"><span class="badge badge-green" style="margin-bottom:12px;">Engineering</span><h3 style="font-weight:700;margin-bottom:8px;">Senior Frontend Developer</h3><p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Build fast, beautiful interfaces for millions of Pakistani users. React, TypeScript, TailwindCSS.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"><span class="badge badge-gray">React</span><span class="badge badge-gray">TypeScript</span><span class="badge badge-gray">Remote OK</span></div><a href="./application.html?job=Senior+Frontend+Developer" class="btn-primary" style="font-size:13px;padding:9px 18px;display:inline-flex;">Apply Now</a></div>
-  <div class="card" style="padding:24px;"><span class="badge badge-orange" style="margin-bottom:12px;">Sales</span><h3 style="font-weight:700;margin-bottom:8px;">B2B Account Manager</h3><p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Help wholesale suppliers onboard and grow on MSukasha. Karachi or Lahore based.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"><span class="badge badge-gray">B2B Sales</span><span class="badge badge-gray">Karachi</span></div><a href="./application.html?job=B2B+Account+Manager" class="btn-primary" style="font-size:13px;padding:9px 18px;display:inline-flex;">Apply Now</a></div>
-  <div class="card" style="padding:24px;"><span class="badge badge-orange" style="margin-bottom:12px;">Marketing</span><h3 style="font-weight:700;margin-bottom:8px;">Digital Marketing Specialist</h3><p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Drive user growth through SEO, social media, and paid campaigns for our marketplace.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"><span class="badge badge-gray">SEO</span><span class="badge badge-gray">Meta Ads</span><span class="badge badge-gray">Remote OK</span></div><a href="./application.html?job=Digital+Marketing+Specialist" class="btn-primary" style="font-size:13px;padding:9px 18px;display:inline-flex;">Apply Now</a></div>
-</div></div></main>
+
+<!-- Hero -->
+<div class="careers-hero">
+  <div class="container" style="position:relative;z-index:1;">
+    <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,102,0,0.2);border:1px solid rgba(255,102,0,0.4);color:#ffaa66;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:18px;text-transform:uppercase;letter-spacing:1px;">
+      <i class="fas fa-briefcase"></i> We're Hiring
+    </div>
+    <h2>Build Pakistan's Future of Trade — With Us</h2>
+    <p>Join a fast-growing startup on a mission to digitise Pakistan's wholesale and local marketplace. Work on real problems, with real impact, from day one.</p>
+    <a href="#open-roles" class="btn-primary" style="font-size:15px;padding:13px 32px;"><i class="fas fa-search"></i> View Open Roles</a>
+  </div>
+</div>
+
+<main>
+  <div class="container" style="padding-bottom:60px;">
+
+    <!-- Why MSukasha -->
+    <div class="section-header"><h2 class="section-title">Why Work at MSukasha?</h2></div>
+    <div class="perks-grid">
+      <div class="perk-card"><i class="fas fa-rocket"></i><h5>High Impact Work</h5><p>Your work directly affects 1.2M+ traders across Pakistan. No bureaucracy — ship fast, learn fast.</p></div>
+      <div class="perk-card"><i class="fas fa-chart-line"></i><h5>Career Growth</h5><p>We're scaling rapidly. Early team members grow into leadership roles as the company expands.</p></div>
+      <div class="perk-card"><i class="fas fa-laptop-house"></i><h5>Flexible Working</h5><p>Hybrid and remote-friendly roles. We care about results, not clock-watching.</p></div>
+      <div class="perk-card"><i class="fas fa-graduation-cap"></i><h5>Learning Budget</h5><p>Courses, certifications, and conferences — we invest in your professional development.</p></div>
+      <div class="perk-card"><i class="fas fa-hand-holding-usd"></i><h5>Competitive Pay</h5><p>Market-rate salaries plus performance bonuses. We reward people who deliver results.</p></div>
+      <div class="perk-card"><i class="fas fa-heart"></i><h5>Great Culture</h5><p>Transparent leadership, direct feedback, and a team that genuinely cares about each other.</p></div>
+    </div>
+
+    <!-- Culture Section -->
+    <div class="culture-grid">
+      <div>
+        <span class="badge badge-orange" style="margin-bottom:12px;">Our Culture</span>
+        <h2 style="font-size:26px;font-weight:900;margin-bottom:16px;line-height:1.35;">We Move Fast, Think Big, and Stay Humble</h2>
+        <p style="color:var(--muted);line-height:1.9;margin-bottom:14px;">MSukasha is an early-stage startup — which means you'll wear multiple hats, see the direct impact of your work, and grow faster than at any traditional company. We value ownership, honesty, and a hunger to solve hard problems.</p>
+        <p style="color:var(--muted);line-height:1.9;">We're building a team that reflects Pakistan's diversity — from Karachi to Peshawar — and we welcome applicants from all backgrounds, genders, and experiences.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="background:linear-gradient(135deg,#ff6600,#ff9944);border-radius:var(--radius);padding:24px;color:#fff;text-align:center;"><div style="font-size:32px;font-weight:900;">15+</div><div style="font-size:13px;opacity:.9;">Team Members</div></div>
+        <div style="background:linear-gradient(135deg,#1a2332,#2d4a6e);border-radius:var(--radius);padding:24px;color:#fff;text-align:center;"><div style="font-size:32px;font-weight:900;">4</div><div style="font-size:13px;opacity:.9;">Cities</div></div>
+        <div style="background:linear-gradient(135deg,#22c55e,#4ade80);border-radius:var(--radius);padding:24px;color:#fff;text-align:center;"><div style="font-size:32px;font-weight:900;">6mo</div><div style="font-size:13px;opacity:.9;">Avg. Promotion</div></div>
+        <div style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);border-radius:var(--radius);padding:24px;color:#fff;text-align:center;"><div style="font-size:32px;font-weight:900;">∞</div><div style="font-size:13px;opacity:.9;">Growth Ahead</div></div>
+      </div>
+    </div>
+
+    <!-- Open Roles -->
+    <div id="open-roles">
+      <div class="section-header"><h2 class="section-title">Open Positions</h2></div>
+
+      <div class="job-filter-bar" id="dept-filters">
+        <button class="job-filter active" onclick="filterJobs('all',this)">All Departments</button>
+        <button class="job-filter" onclick="filterJobs('tech',this)">Technology</button>
+        <button class="job-filter" onclick="filterJobs('ops',this)">Operations</button>
+        <button class="job-filter" onclick="filterJobs('sales',this)">Sales & BD</button>
+        <button class="job-filter" onclick="filterJobs('marketing',this)">Marketing</button>
+        <button class="job-filter" onclick="filterJobs('support',this)">Support</button>
+      </div>
+
+      <div id="jobs-list"></div>
+    </div>
+
+    <!-- Open Application -->
+    <div style="background:linear-gradient(135deg,#1a2332,#2d4a6e);border-radius:var(--radius);padding:36px;color:#fff;text-align:center;margin-top:40px;">
+      <h3 style="font-size:22px;font-weight:900;margin-bottom:10px;">Don't See Your Role?</h3>
+      <p style="opacity:.85;margin-bottom:22px;">We're always looking for talented people. Send us an open application and we'll reach out when the right opportunity arises.</p>
+      <a href="application.html?role=open" class="btn-primary" style="font-size:14px;padding:12px 28px;"><i class="fas fa-paper-plane"></i> Send Open Application</a>
+    </div>
+
+  </div>
+</main>
+
 <footer class="site-footer" id="site-footer"></footer>
-<script src="./main.js"></script>
-</body></html>
+<script src="main.js"></script>
+<script>
+const JOBS = [
+  {id:'j1',dept:'tech',title:'Full Stack Developer (React + Node.js)',type:'Full Time',mode:'Hybrid',location:'Karachi',exp:'2–4 years',icon:'fa-code',color:'linear-gradient(135deg,#0066cc,#44aaff)',isNew:true,desc:'Build and scale MSukasha\'s core marketplace platform. Work on buyer/seller dashboards, payment flows, and real-time messaging.'},
+  {id:'j2',dept:'tech',title:'Mobile App Developer (React Native)',type:'Full Time',mode:'Remote',location:'Anywhere in Pakistan',exp:'1–3 years',icon:'fa-mobile-alt',color:'linear-gradient(135deg,#8b5cf6,#a78bfa)',isNew:true,desc:'Lead the development of MSukasha\'s iOS and Android mobile apps from the ground up.'},
+  {id:'j3',dept:'tech',title:'UI/UX Designer',type:'Full Time',mode:'Hybrid',location:'Karachi',exp:'2+ years',icon:'fa-paint-brush',color:'linear-gradient(135deg,#ec4899,#f9a8d4)',isNew:false,desc:'Design intuitive, beautiful product experiences for both B2B buyers and C2C sellers across web and mobile.'},
+  {id:'j4',dept:'ops',title:'Supplier Verification Officer',type:'Full Time',mode:'On-site',location:'Karachi / Lahore',exp:'1–2 years',icon:'fa-shield-alt',color:'linear-gradient(135deg,#22c55e,#4ade80)',isNew:false,desc:'Verify and onboard new B2B suppliers. Review business documents, conduct background checks, and maintain quality standards.'},
+  {id:'j5',dept:'ops',title:'Logistics Coordinator',type:'Full Time',mode:'On-site',location:'Karachi',exp:'1–3 years',icon:'fa-truck',color:'linear-gradient(135deg,#f59e0b,#fcd34d)',isNew:false,desc:'Coordinate with freight partners, manage shipment tracking, and resolve delivery issues for B2B wholesale orders.'},
+  {id:'j6',dept:'sales',title:'B2B Sales Executive',type:'Full Time',mode:'Hybrid',location:'Lahore / Faisalabad',exp:'1–3 years',icon:'fa-handshake',color:'linear-gradient(135deg,#ff6600,#ff9944)',isNew:true,desc:'Onboard new wholesale suppliers and buyers in Punjab\'s key trade hubs. Strong Urdu/Punjabi communication a plus.'},
+  {id:'j7',dept:'sales',title:'Business Development Manager',type:'Full Time',mode:'Hybrid',location:'Karachi',exp:'3–5 years',icon:'fa-chart-line',color:'linear-gradient(135deg,#1a2332,#2d4a6e)',isNew:false,desc:'Identify and close strategic partnerships with logistics companies, trade associations, and payment providers.'},
+  {id:'j8',dept:'marketing',title:'Digital Marketing Executive',type:'Full Time',mode:'Remote',location:'Anywhere in Pakistan',exp:'1–2 years',icon:'fa-bullhorn',color:'linear-gradient(135deg,#0891b2,#67e8f9)',isNew:false,desc:'Run paid and organic campaigns across Facebook, Google, and TikTok. Manage content calendar and platform SEO.'},
+  {id:'j9',dept:'marketing',title:'Content Writer (English & Urdu)',type:'Part Time',mode:'Remote',location:'Anywhere in Pakistan',exp:'1+ year',icon:'fa-pen-nib',color:'linear-gradient(135deg,#6366f1,#a5b4fc)',isNew:false,desc:'Write blog articles, product descriptions, email campaigns, and social media content for MSukasha in both English and Urdu.'},
+  {id:'j10',dept:'support',title:'Customer Support Agent',type:'Full Time',mode:'On-site',location:'Karachi',exp:'0–1 year',icon:'fa-headset',color:'linear-gradient(135deg,#22c55e,#86efac)',isNew:false,desc:'Handle buyer and seller queries via WhatsApp, chat, and email. Resolve disputes and escalate issues to the right teams.'},
+];
+
+let activeFilter = 'all';
+
+function filterJobs(dept, btn) {
+  activeFilter = dept;
+  document.querySelectorAll('.job-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderJobs();
+}
+
+function renderJobs() {
+  const list = activeFilter === 'all' ? JOBS : JOBS.filter(j => j.dept === activeFilter);
+  const container = document.getElementById('jobs-list');
+  if (list.length === 0) {
+    container.innerHTML = `<div class="no-jobs"><i class="fas fa-search" style="font-size:42px;color:var(--border);margin-bottom:14px;display:block;"></i><p style="color:var(--muted);">No open roles in this department right now.</p><p style="color:var(--muted);font-size:13px;">Check back soon or send an open application below.</p></div>`;
+    return;
+  }
+  container.innerHTML = list.map(j => `
+    <div class="job-card">
+      <div class="job-dept-icon" style="background:${j.color};">
+        <i class="fas ${j.icon}"></i>
+      </div>
+      <div class="job-info">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <h3 class="job-title">${j.title}</h3>
+          ${j.isNew ? '<span class="job-tag tag-new" style="flex-shrink:0;">🆕 New</span>' : ''}
+        </div>
+        <div class="job-meta">
+          <span><i class="fas fa-map-marker-alt"></i> ${j.location}</span>
+          <span><i class="fas fa-briefcase"></i> ${j.exp} experience</span>
+          <span><i class="fas fa-clock"></i> ${j.type}</span>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;">${j.desc}</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div class="job-tags">
+            <span class="job-tag ${j.type==='Full Time'?'tag-full':'tag-part'}">${j.type}</span>
+            <span class="job-tag ${j.mode==='Remote'?'tag-remote':j.mode==='On-site'?'tag-onsite':'tag-remote'}">${j.mode}</span>
+          </div>
+          <a href="application.html?role=${encodeURIComponent(j.title)}&id=${j.id}" class="btn-primary" style="font-size:12px;padding:9px 20px;">
+            <i class="fas fa-paper-plane"></i> Apply Now
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', renderJobs);
+</script>
+</body>
+</html>
