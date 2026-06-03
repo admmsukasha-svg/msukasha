@@ -1,713 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apply | MSukasha Careers</title>
-  <link rel="icon" type="image/png" href="Favicon/favicon.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application | MSukasha</title>
 
-    :root {
-      --app-bg: #f5f4f0;
-      --app-card: #ffffff;
-      --app-ink: #1a1a18;
-      --app-muted: #6b6b65;
-      --app-border: #e2e1dc;
-      --app-accent: #d4500a;
-      --app-accent2: #1d6f42;
-      --app-tag-bg: #eeede8;
-    }
+<link rel="icon" type="image/png" href="Favicon/favicon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    html, body {
-      margin: 0; padding: 0;
-      overflow-x: hidden;
-    }
-    body.app-page {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--app-bg);
-      color: var(--app-ink);
-    }
+<style>
+:root{
+    --orange:#ff6600;
+    --dark:#1a2332;
+    --border:#e5e7eb;
+    --muted:#6b7280;
+    --radius:14px;
+}
 
-    /* ── HERO ── */
-    .app-hero {
-      background: var(--app-ink);
-      padding: clamp(36px, 7vw, 64px) 0 clamp(28px, 5vw, 48px);
-      position: relative;
-      overflow: hidden;
-    }
-    .app-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(
-        -45deg, transparent, transparent 28px,
-        rgba(255,255,255,.03) 28px, rgba(255,255,255,.03) 29px
-      );
-    }
-    .app-hero-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 clamp(16px, 5vw, 32px);
-      position: relative;
-    }
-    .app-hero-eyebrow {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(10px, 1.5vw, 11px);
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--app-accent);
-      margin-bottom: 12px;
-    }
-    .app-hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(22px, 5vw, 52px);
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.08;
-      margin-bottom: 14px;
-    }
-    .app-hero h1 em { font-style: normal; color: var(--app-accent); }
-    .app-hero p {
-      font-size: clamp(13px, 2vw, 15px);
-      color: rgba(255,255,255,.55);
-      max-width: 480px;
-      line-height: 1.7;
-    }
-    .app-breadcrumb {
-      margin-top: 22px;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 12px;
-      color: rgba(255,255,255,.35);
-    }
-    .app-breadcrumb a { color: rgba(255,255,255,.45); text-decoration: none; }
-    .app-breadcrumb a:hover { color: #fff; }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    /* ── LAYOUT ── */
-    .app-layout {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: clamp(24px, 5vw, 48px) clamp(16px, 5vw, 32px) clamp(40px, 8vw, 80px);
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: clamp(20px, 3vw, 40px);
-      align-items: start;
-    }
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f8fafc;
+    color:#111827;
+}
 
-    /* Tablet: side by side but narrower form */
-    @media (max-width: 900px) {
-      .app-layout {
-        grid-template-columns: 1fr 300px;
-        gap: 20px;
-      }
-    }
+.container{
+    width:90%;
+    max-width:900px;
+    margin:auto;
+}
 
-    /* Mobile: single column, form comes first */
-    @media (max-width: 660px) {
-      .app-layout {
-        grid-template-columns: 1fr;
-        padding-left: 14px;
-        padding-right: 14px;
-      }
-      .app-sidebar { order: -1; }
-    }
+.hero{
+    background:linear-gradient(135deg,#1a2332,#2d4a6e);
+    color:#fff;
+    text-align:center;
+    padding:70px 20px;
+}
 
-    /* ── SECTION TITLE ── */
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--app-muted);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-title::after {
-      content: ''; flex: 1; height: 1px; background: var(--app-border);
-    }
+.hero h1{
+    font-size:40px;
+    margin-bottom:15px;
+}
 
-    /* ── JOB CARDS ── */
-    .jobs-list { display: flex; flex-direction: column; gap: 12px; }
+.hero p{
+    opacity:.9;
+    max-width:650px;
+    margin:auto;
+}
 
-    .job-card {
-      background: var(--app-card);
-      border: 1.5px solid var(--app-border);
-      border-radius: 14px;
-      padding: clamp(16px, 3vw, 22px) clamp(16px, 3vw, 24px);
-      cursor: pointer;
-      transition: border-color .2s, box-shadow .2s, transform .15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .job-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: transparent;
-      border-radius: 14px 0 0 14px;
-      transition: background .2s;
-    }
-    .job-card:hover {
-      border-color: #c4c3be;
-      box-shadow: 0 4px 20px rgba(0,0,0,.08);
-      transform: translateY(-1px);
-    }
-    .job-card.active { border-color: var(--app-accent); box-shadow: 0 4px 24px rgba(212,80,10,.12); }
-    .job-card.active::before { background: var(--app-accent); }
+.application-card{
+    background:#fff;
+    margin-top:-40px;
+    margin-bottom:60px;
+    padding:35px;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
 
-    .job-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .job-card-dept {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 20px;
-      flex-shrink: 0;
-    }
-    .dept-eng  { background: #e6f4ec; color: #1d6f42; }
-    .dept-sale { background: #fff0e8; color: #d4500a; }
-    .dept-mkt  { background: #fff0e8; color: #d4500a; }
+.form-group{
+    margin-bottom:20px;
+}
 
-    .job-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(14px, 2.2vw, 17px);
-      font-weight: 700;
-      margin-bottom: 5px;
-      line-height: 1.25;
-    }
-    .job-card p {
-      font-size: clamp(12px, 1.6vw, 13px);
-      color: var(--app-muted);
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-    .job-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-    .job-tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 20px;
-      background: var(--app-tag-bg);
-      color: var(--app-muted);
-    }
-    .job-tag.remote { background: #e6f4ec; color: #1d6f42; }
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:700;
+}
 
-    .job-card-arrow {
-      color: var(--app-border);
-      font-size: 15px;
-      transition: color .2s, transform .2s;
-      flex-shrink: 0;
-    }
-    .job-card:hover .job-card-arrow,
-    .job-card.active .job-card-arrow { color: var(--app-accent); transform: translateX(3px); }
+input,
+select,
+textarea{
+    width:100%;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font-size:14px;
+}
 
-    /* ── PERKS ── */
-    .perks-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 8px;
-    }
-    @media (max-width: 480px) {
-      .perks-grid { grid-template-columns: 1fr; }
-    }
-    .perk {
-      background: var(--app-card);
-      border: 1.5px solid var(--app-border);
-      border-radius: 12px;
-      padding: clamp(12px, 2vw, 16px);
-    }
-    .perk i { font-size: 17px; margin-bottom: 7px; display: block; }
-    .perk strong {
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      display: block;
-      margin-bottom: 3px;
-    }
-    .perk span { font-size: 11px; color: var(--app-muted); line-height: 1.5; }
+textarea{
+    resize:vertical;
+    min-height:120px;
+}
 
-    /* ── SIDEBAR / FORM ── */
-    .app-sidebar { position: sticky; top: 16px; }
+input:focus,
+textarea:focus,
+select:focus{
+    outline:none;
+    border-color:var(--orange);
+}
 
-    @media (max-width: 660px) {
-      .app-sidebar { position: static; }
-    }
+.btn{
+    background:var(--orange);
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:15px;
+}
 
-    .form-panel {
-      background: var(--app-card);
-      border: 1.5px solid var(--app-border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 40px rgba(0,0,0,.07);
-    }
+.btn:hover{
+    opacity:.9;
+}
 
-    .form-panel-header {
-      background: var(--app-ink);
-      padding: clamp(16px, 3vw, 22px) clamp(16px, 3vw, 24px);
-    }
-    .fp-label {
-      font-size: 10px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.4);
-      margin-bottom: 5px;
-    }
-    .fp-job {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(14px, 2.5vw, 18px);
-      font-weight: 700;
-      color: #fff;
-      min-height: 24px;
-    }
-    .fp-job.placeholder {
-      color: rgba(255,255,255,.3);
-      font-size: 13px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-style: italic;
-    }
+.role-box{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
 
-    .form-body { padding: clamp(16px, 3vw, 24px); }
+.success-message{
+    display:none;
+    background:#dcfce7;
+    color:#166534;
+    padding:16px;
+    border-radius:10px;
+    margin-top:20px;
+}
 
-    .field { margin-bottom: 15px; }
-    .field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--app-muted);
-      margin-bottom: 5px;
-      letter-spacing: .03em;
-    }
-    .field label span { color: var(--app-accent); }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      padding: 10px 13px;
-      border: 1.5px solid var(--app-border);
-      border-radius: 9px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(13px, 1.8vw, 14px);
-      color: var(--app-ink);
-      background: #fafaf8;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-      resize: vertical;
-    }
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--app-accent);
-      box-shadow: 0 0 0 3px rgba(212,80,10,.08);
-      background: #fff;
-    }
-    .field select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b65' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 36px;
-    }
-
-    /* File upload */
-    .file-upload { position: relative; }
-    .file-upload input[type="file"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2;
-    }
-    .file-upload-label {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 13px;
-      border: 1.5px dashed var(--app-border);
-      border-radius: 9px;
-      font-size: 13px;
-      color: var(--app-muted);
-      background: #fafaf8;
-      transition: border-color .2s, background .2s;
-      cursor: pointer;
-    }
-    .file-upload-label i { color: var(--app-accent); font-size: 14px; }
-    .file-upload:hover .file-upload-label { border-color: var(--app-accent); background: #fff8f5; }
-    #file-name { font-size: 12px; color: var(--app-accent); margin-top: 4px; min-height: 16px; }
-
-    /* Submit */
-    .btn-submit {
-      width: 100%;
-      padding: 12px;
-      background: var(--app-accent);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(13px, 2vw, 15px);
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background .2s, transform .15s, box-shadow .2s;
-      margin-top: 4px;
-    }
-    .btn-submit:hover {
-      background: #b8430a;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(212,80,10,.3);
-    }
-    .btn-submit:active { transform: translateY(0); }
-
-    /* Success */
-    .success-state {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: clamp(28px, 5vw, 40px) 24px;
-    }
-    .success-icon {
-      width: 60px; height: 60px;
-      background: #e6f4ec;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      color: var(--app-accent2);
-      margin-bottom: 14px;
-    }
-    .success-state h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(16px, 2.5vw, 19px);
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .success-state p { font-size: 13px; color: var(--app-muted); line-height: 1.6; }
-    .btn-reset {
-      margin-top: 18px;
-      padding: 9px 22px;
-      border: 1.5px solid var(--app-border);
-      border-radius: 8px;
-      background: transparent;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      cursor: pointer;
-      color: var(--app-muted);
-      transition: border-color .2s, color .2s;
-    }
-    .btn-reset:hover { border-color: var(--app-ink); color: var(--app-ink); }
-
-    /* Animations */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .job-card { animation: fadeUp .4s ease both; }
-    .job-card:nth-child(1) { animation-delay: .05s; }
-    .job-card:nth-child(2) { animation-delay: .12s; }
-    .job-card:nth-child(3) { animation-delay: .19s; }
-    .form-panel { animation: fadeUp .4s ease .1s both; }
-  </style>
+footer{
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+</style>
 </head>
-<body class="app-page">
+<body>
 
-<header class="site-header" id="site-header"></header>
-
-<!-- Hero -->
-<div class="app-hero">
-  <div class="app-hero-inner">
-    <div class="app-hero-eyebrow"><i class="fa-solid fa-briefcase" style="margin-right:6px;"></i>We're Hiring</div>
-    <h1>Build the future of<br><em>Pakistani Trade</em></h1>
-    <p>Explore open roles at MSukasha and submit your application directly below. We review every application personally.</p>
-    <div class="app-breadcrumb">
-      <a href="index.html">Home</a><span>/</span>
-      <a href="careers.html">Careers</a><span>/</span>
-      <span>Apply</span>
+<section class="hero">
+    <div class="container">
+        <h1>Apply at MSukasha</h1>
+        <p>
+            Join Pakistan's growing B2B & C2C marketplace and help shape
+            the future of digital trade.
+        </p>
     </div>
-  </div>
-</div>
+</section>
 
-<!-- Main layout -->
-<div class="app-layout">
+<div class="container">
+    <div class="application-card">
 
-  <!-- LEFT: Jobs + Perks -->
-  <div>
-    <p class="section-title">Open Positions</p>
-    <div class="jobs-list">
+        <div class="role-box">
+            <strong>Position Applied For:</strong>
+            <span id="jobRole">Open Application</span>
+        </div>
 
-      <div class="job-card" data-job="Senior Frontend Developer" onclick="selectJob(this)">
-        <div class="job-card-top">
-          <span class="job-card-dept dept-eng">Engineering</span>
-          <i class="fa-solid fa-arrow-right job-card-arrow"></i>
-        </div>
-        <h3>Senior Frontend Developer</h3>
-        <p>Build fast, beautiful interfaces for millions of Pakistani users using React, TypeScript, and TailwindCSS.</p>
-        <div class="job-tags">
-          <span class="job-tag">React</span>
-          <span class="job-tag">TypeScript</span>
-          <span class="job-tag">TailwindCSS</span>
-          <span class="job-tag remote"><i class="fa-solid fa-wifi" style="margin-right:3px;font-size:9px;"></i>Remote OK</span>
-        </div>
-      </div>
+        <form id="applicationForm">
 
-      <div class="job-card" data-job="B2B Account Manager" onclick="selectJob(this)">
-        <div class="job-card-top">
-          <span class="job-card-dept dept-sale">Sales</span>
-          <i class="fa-solid fa-arrow-right job-card-arrow"></i>
-        </div>
-        <h3>B2B Account Manager</h3>
-        <p>Help wholesale suppliers onboard and grow on MSukasha. Build lasting relationships in Karachi and Lahore.</p>
-        <div class="job-tags">
-          <span class="job-tag">B2B Sales</span>
-          <span class="job-tag">Karachi</span>
-          <span class="job-tag">Lahore</span>
-        </div>
-      </div>
-
-      <div class="job-card" data-job="Digital Marketing Specialist" onclick="selectJob(this)">
-        <div class="job-card-top">
-          <span class="job-card-dept dept-mkt">Marketing</span>
-          <i class="fa-solid fa-arrow-right job-card-arrow"></i>
-        </div>
-        <h3>Digital Marketing Specialist</h3>
-        <p>Drive user growth through SEO, social media, and paid campaigns for our fast-growing marketplace.</p>
-        <div class="job-tags">
-          <span class="job-tag">SEO</span>
-          <span class="job-tag">Meta Ads</span>
-          <span class="job-tag">Google Ads</span>
-          <span class="job-tag remote"><i class="fa-solid fa-wifi" style="margin-right:3px;font-size:9px;"></i>Remote OK</span>
-        </div>
-      </div>
-
-    </div>
-
-    <p class="section-title" style="margin-top:32px;">Why Join Us</p>
-    <div class="perks-grid">
-      <div class="perk">
-        <i class="fa-solid fa-rocket" style="color:#d4500a;"></i>
-        <strong>Early Stage Impact</strong>
-        <span>Shape the product from ground up with real ownership</span>
-      </div>
-      <div class="perk">
-        <i class="fa-solid fa-money-bill-trend-up" style="color:#1d6f42;"></i>
-        <strong>Competitive Pay</strong>
-        <span>Market-rate salaries + equity for key hires</span>
-      </div>
-      <div class="perk">
-        <i class="fa-solid fa-laptop-house" style="color:#2563eb;"></i>
-        <strong>Flexible Work</strong>
-        <span>Remote-first culture with optional Karachi office</span>
-      </div>
-      <div class="perk">
-        <i class="fa-solid fa-chart-line" style="color:#7c3aed;"></i>
-        <strong>Fast Growth</strong>
-        <span>Learn fast in a high-velocity startup environment</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- RIGHT: Form -->
-  <div class="app-sidebar">
-    <p class="section-title">Application Form</p>
-    <div class="form-panel" id="form-panel">
-
-      <div class="form-panel-header">
-        <div class="fp-label">Applying for</div>
-        <div class="fp-job placeholder" id="fp-job-title">← Select a position</div>
-      </div>
-
-      <div class="form-body" id="form-body">
-        <div class="field">
-          <label>Full Name <span>*</span></label>
-          <input type="text" id="f-name" placeholder="e.g. Ali Hassan">
-        </div>
-        <div class="field">
-          <label>Email Address <span>*</span></label>
-          <input type="email" id="f-email" placeholder="you@example.com">
-        </div>
-        <div class="field">
-          <label>Phone Number <span>*</span></label>
-          <input type="tel" id="f-phone" placeholder="+92 300 0000000">
-        </div>
-        <div class="field">
-          <label>Position <span>*</span></label>
-          <select id="f-position" onchange="syncPosition(this.value)">
-            <option value="">— Select a position —</option>
-            <option value="Senior Frontend Developer">Senior Frontend Developer</option>
-            <option value="B2B Account Manager">B2B Account Manager</option>
-            <option value="Digital Marketing Specialist">Digital Marketing Specialist</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Years of Experience</label>
-          <select id="f-exp">
-            <option value="">— Select —</option>
-            <option>Less than 1 year</option>
-            <option>1–2 years</option>
-            <option>3–5 years</option>
-            <option>5+ years</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Cover Letter / Why MSukasha?</label>
-          <textarea id="f-cover" rows="3" placeholder="Tell us what excites you about this role…"></textarea>
-        </div>
-        <div class="field">
-          <label>Resume / CV <span>*</span></label>
-          <div class="file-upload">
-            <input type="file" id="f-resume" accept=".pdf,.doc,.docx" onchange="showFileName(this)">
-            <div class="file-upload-label">
-              <i class="fa-solid fa-paperclip"></i>
-              <span>Attach PDF or Word file</span>
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" required>
             </div>
-          </div>
-          <div id="file-name"></div>
-        </div>
-        <button class="btn-submit" onclick="submitApplication()">
-          <i class="fa-solid fa-paper-plane"></i> Submit Application
-        </button>
-      </div>
 
-      <div class="success-state" id="success-state">
-        <div class="success-icon"><i class="fa-solid fa-check"></i></div>
-        <h3>Application Sent!</h3>
-        <p>Thank you for applying. Our team will review your application and get back to you within 5–7 business days.</p>
-        <button class="btn-reset" onclick="resetForm()">Apply for another role</button>
-      </div>
+            <div class="form-group">
+                <label>CNIC *</label>
+                <input type="text" placeholder="Enter your CNIC" required>
+                <input type="file" accept=".jpg,.jpeg,.png,.pdf" style="margin-top:8px;" required>
+            </div>
+
+            <div class="form-group">
+                <label>Business Name (if applicable)</label>
+                <input type="text">
+            </div>
+
+             <div class="form-group">
+                <label>Current Location (City, Country) *</label>
+                <input type="text" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" required>
+            </div>
+
+            <div class="form-group">
+                <label>City *</label>
+                <input type="text" required>
+            </div>
+           
+            <div class="form-group">
+                <label>Education *</label>
+                <input type="text"
+                placeholder="Bachelor's, Master's, Intermediate etc."
+                required>
+            </div>
+
+            <div class="form-group">
+                <label>Years of Experience *</label>
+                <select required>
+                    <option value="">Select Experience</option>
+                    <option>0-1 Years</option>
+                    <option>1-3 Years</option>
+                    <option>3-5 Years</option>
+                    <option>5+ Years</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Preferred Role Type *</label>
+                <select required>
+                    <option value="">Select Role Type</option>
+                    <option>Product Management</option>
+                    <option>Engineering</option>
+                    <option>Design</option>
+                    <option>Marketing</option>
+                    <option>Operations</option>
+                    <option>Customer Support</option>
+                    <option>Other</option>
+                </select>
+
+            </div>
+
+            <div class="form-group">
+                <label>Resume / CV *</label>
+                <input type="file" accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <div class="form-group">
+                <label>Document</label>
+                <input type="file" accept=".pdf,.jpg,.jpeg,.png">
+            </div>
+
+            <div class="form-group">  
+                 <label>LinkedIn Profile(Optional)</label>
+                 <input type="url" placeholder="https://linkedin.com/in/your-profile">
+            </div>
+
+            <div class="form-group">
+                <label>Why do you want to join MSukasha?</label>
+                <textarea placeholder="Tell us about yourself, your skills, and why you'd be a great fit."></textarea>
+            </div>
+
+            <button type="submit" class="btn">
+                <i class="fas fa-paper-plane"></i>
+                Submit Application
+            </button>
+
+        </form>
+
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            Thank you for applying. Your application has been received successfully.
+        </div>
 
     </div>
-  </div>
-
 </div>
 
-<footer class="site-footer" id="site-footer"></footer>
-<script src="main.js"></script>
+<footer>
+    © 2026 MSukasha. All Rights Reserved.
+</footer>
+
 <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const job = new URLSearchParams(window.location.search).get('job');
-    if (job) {
-      const card = [...document.querySelectorAll('.job-card')].find(c => c.dataset.job === job);
-      if (card) selectJob(card);
+const params = new URLSearchParams(window.location.search);
+
+const role =
+    params.get("role") ||
+    "Open Application";
+
+document.getElementById("jobRole").textContent = role;
+
+document
+.getElementById("applicationForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    document.getElementById("successMessage").style.display = "block";
+
+    this.reset();
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+});
+const fileInput = document.querySelector('input[type="file"]');
+
+fileInput.addEventListener('change', function () {
+    const file = this.files[0];
+
+    if (file && file.size > 5 * 1024 * 1024) {
+        alert('CV must be less than 5MB');
+        this.value = '';
     }
-  });
-
-  function selectJob(card) {
-    document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
-    const title = card.dataset.job;
-    const el = document.getElementById('fp-job-title');
-    el.textContent = title;
-    el.classList.remove('placeholder');
-    document.getElementById('f-position').value = title;
-    if (window.innerWidth < 660) {
-      document.getElementById('form-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
-  function syncPosition(val) {
-    const el = document.getElementById('fp-job-title');
-    if (val) {
-      el.textContent = val;
-      el.classList.remove('placeholder');
-      document.querySelectorAll('.job-card').forEach(c => c.classList.toggle('active', c.dataset.job === val));
-    } else {
-      el.textContent = '← Select a position';
-      el.classList.add('placeholder');
-      document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
-    }
-  }
-
-  function showFileName(input) {
-    document.getElementById('file-name').textContent = input.files[0] ? '📎 ' + input.files[0].name : '';
-  }
-
-  async function submitApplication() {
-    const name     = document.getElementById('f-name').value.trim();
-    const email    = document.getElementById('f-email').value.trim();
-    const phone    = document.getElementById('f-phone').value.trim();
-    const position = document.getElementById('f-position').value;
-    const exp      = document.getElementById('f-exp').value;
-    const cover    = document.getElementById('f-cover').value;
-
-    // Validation
-    if (!name || !email || !phone || !position) {
-      alert('Please fill in all required fields (*).');
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-
-    // Button loading state
-    const btn = document.querySelector('.btn-submit');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
-
-    try {
-      const res = await fetch('https://msukasha-backend-git-main-msukasha.vercel.app/api/applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fullName:    name,
-          email:       email,
-          phone:       phone,
-          position:    position,
-          experience:  exp,
-          coverLetter: cover
-        })
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        // Success screen dikhao
-        document.getElementById('form-body').style.display = 'none';
-        document.getElementById('success-state').style.display = 'flex';
-      } else {
-        alert(data.message);
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
-      }
-
-    } catch (err) {
-      alert('Network error — please try again.');
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
-    }
-  }
-
-  function resetForm() {
-    ['f-name','f-email','f-phone','f-cover'].forEach(id => document.getElementById(id).value = '');
-    ['f-position','f-exp'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('f-resume').value = '';
-    document.getElementById('file-name').textContent = '';
-    const el = document.getElementById('fp-job-title');
-    el.textContent = '← Select a position';
-    el.classList.add('placeholder');
-    document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
-    document.getElementById('success-state').style.display = 'none';
-    document.getElementById('form-body').style.display = 'block';
-  }
+});
 </script>
+
 </body>
 </html>
