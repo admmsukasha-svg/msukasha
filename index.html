@@ -11,6 +11,7 @@
 </head>
 <body>
 
+<!-- HEADER -->
 <header class="site-header" id="site-header"></header>
 
 <main>
@@ -19,6 +20,7 @@
     <!-- HERO SECTION -->
     <section class="hero-section">
       <div class="hero-grid">
+        <!-- Side Categories -->
         <div class="side-categories">
           <div class="side-cat-title"><i class="fas fa-th-large"></i> Shop by Category</div>
           <a href="shop.html?cat=electronics" class="side-cat-link"><i class="fas fa-mobile-alt"></i> Electronics</a>
@@ -32,6 +34,7 @@
           <a href="categories.html" class="side-cat-link view-all"><i class="fas fa-plus-circle"></i> View All Categories</a>
         </div>
 
+        <!-- Hero Banner -->
         <div class="hero-banner">
           <div class="hero-badge"><i class="fas fa-star"></i> Pakistan's Smartest Trading Hub</div>
           <h1>Buy Wholesale.<br><span>Sell Locally.</span><br>Trade Confidently.</h1>
@@ -42,6 +45,7 @@
           </div>
         </div>
 
+        <!-- Hero Right -->
         <div class="hero-right">
           <div class="why-card">
             <h4><i class="fas fa-shield-alt" style="color:var(--orange);margin-right:6px;"></i> Why MSukasha?</h4>
@@ -56,7 +60,7 @@
           <div class="post-ad-card">
             <h5><i class="fas fa-camera"></i> Post a Free Ad</h5>
             <p>Reach thousands of buyers near you. 100% free to list.</p>
-            <a href="post-free-ad.html" class="btn-white">Post Now →</a>
+            <a href="post-free-ad.html" class="btn-white">Post Now &rarr;</a>
           </div>
         </div>
       </div>
@@ -69,23 +73,51 @@
         <a href="categories.html" class="see-all">View All <i class="fas fa-arrow-right"></i></a>
       </div>
       <div class="cat-grid">
-        <a href="shop.html?cat=electronics" class="cat-card"><i class="fas fa-mobile-alt"></i><span>Electronics</span></a>
-        <a href="shop.html?cat=fashion" class="cat-card"><i class="fas fa-tshirt"></i><span>Fashion</span></a>
-        <a href="shop.html?cat=home" class="cat-card"><i class="fas fa-couch"></i><span>Home & Living</span></a>
-        <a href="shop.html?cat=vehicles" class="cat-card"><i class="fas fa-car"></i><span>Vehicles</span></a>
-        <a href="shop.html?cat=industrial" class="cat-card"><i class="fas fa-industry"></i><span>Industrial</span></a>
-        <a href="shop.html?cat=agriculture" class="cat-card"><i class="fas fa-seedling"></i><span>Agriculture</span></a>
-        <a href="shop.html?cat=sports" class="cat-card"><i class="fas fa-futbol"></i><span>Sports</span></a>
-        <a href="shop.html?cat=tools" class="cat-card"><i class="fas fa-tools"></i><span>Tools</span></a>
+        <a href="shop.html?cat=electronics" class="cat-card">
+          <i class="fas fa-mobile-alt"></i><span>Electronics</span>
+        </a>
+        <a href="shop.html?cat=fashion" class="cat-card">
+          <i class="fas fa-tshirt"></i><span>Fashion</span>
+        </a>
+        <a href="shop.html?cat=home" class="cat-card">
+          <i class="fas fa-couch"></i><span>Home & Living</span>
+        </a>
+        <a href="shop.html?cat=vehicles" class="cat-card">
+          <i class="fas fa-car"></i><span>Vehicles</span>
+        </a>
+        <a href="shop.html?cat=industrial" class="cat-card">
+          <i class="fas fa-industry"></i><span>Industrial</span>
+        </a>
+        <a href="shop.html?cat=agriculture" class="cat-card">
+          <i class="fas fa-seedling"></i><span>Agriculture</span>
+        </a>
+        <a href="shop.html?cat=sports" class="cat-card">
+          <i class="fas fa-futbol"></i><span>Sports</span>
+        </a>
+        <a href="shop.html?cat=tools" class="cat-card">
+          <i class="fas fa-tools"></i><span>Tools</span>
+        </a>
       </div>
     </section>
 
     <!-- PLATFORM STATS -->
-    <div class="stats-bar" id="stats-bar">
-      <div class="stat-item"><span class="stat-num" id="stat-suppliers">50,000+</span><span class="stat-label">Verified Suppliers</span></div>
-      <div class="stat-item"><span class="stat-num" id="stat-listings">200,000+</span><span class="stat-label">Active Listings</span></div>
-      <div class="stat-item"><span class="stat-num" id="stat-users">1.2M+</span><span class="stat-label">Registered Users</span></div>
-      <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">Cities Covered</span></div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-num">50,000+</span>
+        <span class="stat-label">Verified Suppliers</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">200,000+</span>
+        <span class="stat-label">Active Listings</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">1.2M+</span>
+        <span class="stat-label">Registered Users</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100+</span>
+        <span class="stat-label">Cities Covered</span>
+      </div>
     </div>
 
     <!-- B2B WHOLESALE SECTION -->
@@ -94,12 +126,86 @@
         <h2 class="section-title">Wholesale Essentials (B2B)</h2>
         <a href="wholesale.html" class="see-all">See More <i class="fas fa-arrow-right"></i></a>
       </div>
-      <div class="product-grid" id="b2b-products">
-        <!-- Loaded from Firebase -->
-        <div class="product-card"><div class="card-img"><i class="fas fa-solar-panel placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Industrial Grade Solar Panels — 545W Mono PERC</p><p class="card-price">$120.00/pc</p><p class="card-moq">MOQ: 10 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-tshirt placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Wholesale Cotton Plain T-Shirts (Pack of 50)</p><p class="card-price">$2.50/pc</p><p class="card-moq">MOQ: 100 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-headphones placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Professional Wireless Earbuds — Bulk Export Grade</p><p class="card-price">$8.90/pc</p><p class="card-moq">MOQ: 50 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-battery-full placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Custom Logo Power Banks — 10,000mAh Wholesale</p><p class="card-price">$5.20/pc</p><p class="card-moq">MOQ: 20 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-solar-panel placeholder-icon"></i>
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="compare.html" class="card-action-btn" title="Compare"><i class="fas fa-exchange-alt"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Industrial Grade Solar Panels — 545W Mono PERC</p>
+            <p class="card-price">$120.00/pc</p>
+            <p class="card-moq">MOQ: 10 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn">Inquire Now</a>
+            <a href="cart.html" class="card-btn solid">Buy Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-tshirt placeholder-icon"></i>
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="compare.html" class="card-action-btn" title="Compare"><i class="fas fa-exchange-alt"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Wholesale Cotton Plain T-Shirts (Pack of 50)</p>
+            <p class="card-price">$2.50/pc</p>
+            <p class="card-moq">MOQ: 100 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn">Inquire Now</a>
+            <a href="cart.html" class="card-btn solid">Buy Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-headphones placeholder-icon"></i>
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="compare.html" class="card-action-btn" title="Compare"><i class="fas fa-exchange-alt"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Professional Wireless Earbuds — Bulk Export Grade</p>
+            <p class="card-price">$8.90/pc</p>
+            <p class="card-moq">MOQ: 50 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn">Inquire Now</a>
+            <a href="cart.html" class="card-btn solid">Buy Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-battery-full placeholder-icon"></i>
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="compare.html" class="card-action-btn" title="Compare"><i class="fas fa-exchange-alt"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Custom Logo Power Banks — 10,000mAh Wholesale</p>
+            <p class="card-price">$5.20/pc</p>
+            <p class="card-moq">MOQ: 20 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn">Inquire Now</a>
+            <a href="cart.html" class="card-btn solid">Buy Now</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -118,28 +224,120 @@
         <h2 class="section-title" style="--color:#0066cc;">Local Deals & Used Items (C2C)</h2>
         <a href="c2c.html" class="see-all" style="color:#0066cc;">View All Ads <i class="fas fa-arrow-right"></i></a>
       </div>
-      <div class="product-grid" id="c2c-products">
-        <!-- Loaded from Firebase -->
-        <div class="product-card"><div class="card-img"><i class="fas fa-mobile-alt placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Used iPhone 12 Pro — 128GB (Water Pack)</p><p class="card-price" style="color:var(--dark);">Rs. 135,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> DHA, Karachi</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-motorcycle placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Honda CD 70 — 2024 Model (Urgent Sale)</p><p class="card-price" style="color:var(--dark);">Rs. 115,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> Johar Town, Lahore</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-chair placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Office Desk & Ergonomic Chair Set — Good Condition</p><p class="card-price" style="color:var(--dark);">Rs. 12,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> G-11, Islamabad</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-camera placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Nikon D5600 DSLR Camera with 18-55mm Lens</p><p class="card-price" style="color:var(--dark);">Rs. 75,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> Peshawar Cantt</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-mobile-alt placeholder-icon"></i>
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="messages.html" class="card-action-btn" title="Message Seller"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Used iPhone 12 Pro — 128GB (Water Pack)</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 135,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> DHA, Karachi</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn">Message Seller</a>
+            <a href="contact.html" class="card-btn solid">Call Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-motorcycle placeholder-icon"></i>
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="messages.html" class="card-action-btn" title="Message Seller"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Honda CD 70 — 2024 Model (Urgent Sale)</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 115,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Johar Town, Lahore</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn">Message Seller</a>
+            <a href="contact.html" class="card-btn solid">Call Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-chair placeholder-icon"></i>
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="messages.html" class="card-action-btn" title="Message Seller"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Office Desk & Ergonomic Chair Set — Good Condition</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 12,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> G-11, Islamabad</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn">Message Seller</a>
+            <a href="contact.html" class="card-btn solid">Call Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="card-img">
+            <i class="fas fa-camera placeholder-icon"></i>
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <a href="wishlist.html" class="card-action-btn" title="Add to Wishlist"><i class="far fa-heart"></i></a>
+              <a href="messages.html" class="card-action-btn" title="Message Seller"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Nikon D5600 DSLR Camera with 18-55mm Lens</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 75,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Peshawar Cantt</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn">Message Seller</a>
+            <a href="contact.html" class="card-btn solid">Call Now</a>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- TRUST SECTION -->
+    <!-- TRUST / PARTNER LOGOS -->
     <section class="section" style="margin-bottom:50px;">
-      <div class="section-header"><h2 class="section-title">Trusted & Regulated</h2></div>
+      <div class="section-header">
+        <h2 class="section-title">Trusted & Regulated</h2>
+      </div>
       <div class="card" style="padding:28px 40px;">
         <div style="display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:24px;">
           <div style="text-align:center;">
-            <img src="icone/SECP_logo.png" alt="SECP Registered" style="height:50px;margin:0 auto 8px;" onerror="this.parentElement.innerHTML='<div style=\'font-size:13px;font-weight:700;color:var(--orange);\'>SECP</div><p style=\'font-size:11px;color:var(--muted);\'>SECP Registered</p>'">
+            <img src="icone/SECP_logo.png" alt="SECP Registered" style="height:50px;margin:0 auto 8px;" onerror="this.parentElement.innerHTML='<div style=\'font-size:13px;font-weight:700;color:var(--muted);\'>SECP Registered</div>'">
             <p style="font-size:11px;color:var(--muted);">SECP Registered</p>
           </div>
-          <div style="text-align:center;"><div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-shield-alt"></i></div><p style="font-size:13px;font-weight:700;color:var(--dark);">Trade Assurance</p><p style="font-size:11px;color:var(--muted);">Buyer Protection</p></div>
-          <div style="text-align:center;"><div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-certificate"></i></div><p style="font-size:13px;font-weight:700;color:var(--dark);">Verified Suppliers</p><p style="font-size:11px;color:var(--muted);">Background Checked</p></div>
-          <div style="text-align:center;"><div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-lock"></i></div><p style="font-size:13px;font-weight:700;color:var(--dark);">Secure Payments</p><p style="font-size:11px;color:var(--muted);">SSL Encrypted</p></div>
-          <div style="text-align:center;"><div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-headset"></i></div><p style="font-size:13px;font-weight:700;color:var(--dark);">24/7 Support</p><p style="font-size:11px;color:var(--muted);">Dispute Resolution</p></div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-shield-alt"></i></div>
+            <p style="font-size:13px;font-weight:700;color:var(--dark);">Trade Assurance</p>
+            <p style="font-size:11px;color:var(--muted);">Buyer Protection</p>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-certificate"></i></div>
+            <p style="font-size:13px;font-weight:700;color:var(--dark);">Verified Suppliers</p>
+            <p style="font-size:11px;color:var(--muted);">Background Checked</p>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-lock"></i></div>
+            <p style="font-size:13px;font-weight:700;color:var(--dark);">Secure Payments</p>
+            <p style="font-size:11px;color:var(--muted);">SSL Encrypted</p>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-headset"></i></div>
+            <p style="font-size:13px;font-weight:700;color:var(--dark);">24/7 Support</p>
+            <p style="font-size:11px;color:var(--muted);">Dispute Resolution</p>
+          </div>
         </div>
       </div>
     </section>
@@ -147,8 +345,9 @@
   </div>
 </main>
 
+<!-- FOOTER -->
 <footer class="site-footer" id="site-footer"></footer>
+
 <script src="main.js"></script>
-<script src="firebase-config.js"></script>
 </body>
 </html>

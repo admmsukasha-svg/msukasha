@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 60px; }
+    .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 60px; }
+    .value-card { background: #fff; border-radius: var(--radius); padding: 28px 24px; border: 1px solid var(--border); text-align: center; }
+    .value-icon { width: 60px; height: 60px; background: var(--orange-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .value-icon i { font-size: 24px; color: var(--orange); }
+    .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 60px; }
+    .team-card { background: #fff; border-radius: var(--radius); padding: 24px; border: 1px solid var(--border); text-align: center; }
+    .team-avatar { width: 80px; height: 80px; background: linear-gradient(135deg, #ff6600, #ff9944); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 28px; color: #fff; font-weight: 700; }
+    @media (max-width: 768px) { .about-grid, .team-grid { grid-template-columns: 1fr; } .value-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<div class="page-header">
+  <div class="container">
+    <h1>About MSukasha</h1>
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>About Us</span></div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+
+    <!-- MISSION -->
+    <div class="about-grid">
+      <div>
+        <span class="badge badge-orange" style="margin-bottom:14px;">Our Story</span>
+        <h2 style="font-size:30px;font-weight:800;line-height:1.3;margin-bottom:16px;">Empowering Trade <br>Across Pakistan</h2>
+        <p style="color:var(--muted);line-height:1.8;margin-bottom:16px;">MSukasha was founded with a simple mission: to make trade easier, safer, and more accessible for every Pakistani — from factory owners sourcing in bulk to individuals selling a used laptop from their home.</p>
+        <p style="color:var(--muted);line-height:1.8;margin-bottom:24px;">We combine the power of B2B wholesale sourcing with the simplicity of C2C local classifieds, all under one trusted platform backed by trade assurance and verified supplier programs.</p>
+        <div style="display:flex;gap:28px;">
+          <div>
+            <p style="font-size:28px;font-weight:800;color:var(--orange);">2021</p>
+            <p style="font-size:13px;color:var(--muted);">Founded</p>
+          </div>
+          <div>
+            <p style="font-size:28px;font-weight:800;color:var(--orange);">100+</p>
+            <p style="font-size:13px;color:var(--muted);">Cities</p>
+          </div>
+          <div>
+            <p style="font-size:28px;font-weight:800;color:var(--orange);">1.2M+</p>
+            <p style="font-size:13px;color:var(--muted);">Users</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:40px;text-align:center;background:linear-gradient(135deg,#1a2332,#2d4a6e);color:#fff;">
+        <i class="fas fa-handshake" style="font-size:60px;color:var(--orange);margin-bottom:20px;"></i>
+        <h3 style="font-size:22px;font-weight:800;margin-bottom:12px;">Trusted by 1.2 Million+</h3>
+        <p style="opacity:0.8;font-size:14px;line-height:1.7;">Businesses, wholesalers, and individual sellers across Pakistan trust MSukasha for secure, reliable trade every day.</p>
+      </div>
+    </div>
+
+    <!-- VALUES -->
+    <section class="section">
+      <div class="section-header"><h2 class="section-title">Our Core Values</h2></div>
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-shield-alt"></i></div>
+          <h4 style="font-weight:700;margin-bottom:10px;">Trust & Safety</h4>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">Every supplier is verified and every transaction is backed by our Trade Assurance program to protect buyers and sellers.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-users"></i></div>
+          <h4 style="font-weight:700;margin-bottom:10px;">Community First</h4>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">We build tools and features that empower local entrepreneurs, small businesses, and individual traders across Pakistan.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon"><i class="fas fa-bolt"></i></div>
+          <h4 style="font-weight:700;margin-bottom:10px;">Speed & Simplicity</h4>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;">From posting a free ad to negotiating a bulk deal — MSukasha makes every step fast, simple, and mobile-friendly.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="section">
+      <div class="section-header"><h2 class="section-title">Leadership Team</h2></div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">AK</div>
+          <p style="font-weight:700;font-size:14px;">Ahmed Khan</p>
+          <p style="font-size:12px;color:var(--muted);">CEO & Co-Founder</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#0066cc,#44aaff);">SR</div>
+          <p style="font-weight:700;font-size:14px;">Sara Raza</p>
+          <p style="font-size:12px;color:var(--muted);">CTO & Co-Founder</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#22c55e,#4ade80);">BM</div>
+          <p style="font-weight:700;font-size:14px;">Bilal Mahmood</p>
+          <p style="font-size:12px;color:var(--muted);">Head of B2B</p>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">NA</div>
+          <p style="font-weight:700;font-size:14px;">Nadia Akhtar</p>
+          <p style="font-size:12px;color:var(--muted);">Head of Operations</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="promo-banner" style="margin-bottom:50px;">
+      <div class="promo-text">
+        <h2>Ready to Start Trading?</h2>
+        <p>Join over 1.2 million users who buy and sell on MSukasha every day.</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="register.html" class="btn-primary"><i class="fas fa-user-plus"></i> Create Free Account</a>
+        <a href="contact.html" class="btn-outline-white"><i class="fas fa-phone"></i> Talk to Sales</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+</body>
+</html>

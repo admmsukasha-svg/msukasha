@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-page{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:40px 0;}
+    .auth-box{background:#fff;border-radius:14px;border:1px solid var(--border);padding:40px;width:100%;max-width:440px;box-shadow:var(--shadow-md);}
+    .auth-logo{text-align:center;margin-bottom:28px;}
+    .auth-logo img{height:44px;margin:0 auto 10px;}
+    .auth-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;}
+    .auth-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:28px;}
+    .divider{display:flex;align-items:center;gap:12px;margin:22px 0;}
+    .divider hr{flex:1;border:none;border-top:1px solid var(--border);}
+    .divider span{font-size:12px;color:var(--muted);white-space:nowrap;}
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<main class="auth-page">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <img src="Logo/logo.png" alt="MSukasha" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <span style="display:none;font-size:24px;font-weight:900;color:var(--orange);">MSukasha</span>
+    </div>
+    <h1 class="auth-title">Welcome Back</h1>
+    <p class="auth-sub">Sign in to your MSukasha account</p>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label"><i class="fas fa-envelope" style="color:var(--muted);margin-right:5px;"></i> Email Address *</label>
+        <input type="email" class="form-control" id="login-email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" style="display:flex;justify-content:space-between;align-items:center;">
+          <span><i class="fas fa-lock" style="color:var(--muted);margin-right:5px;"></i> Password *</span>
+          <a href="#" style="font-size:12px;color:var(--orange);" onclick="forgotPwd(event)">Forgot password?</a>
+        </label>
+        <div style="position:relative;">
+          <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required style="padding-right:44px;">
+          <button type="button" onclick="togglePwd()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;" id="pwd-toggle"><i class="fas fa-eye"></i></button>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:20px;cursor:pointer;">
+        <input type="checkbox" id="remember-me" style="accent-color:var(--orange);"> Remember me for 30 days
+      </label>
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="handleLogin(event)">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </button>
+    </form>
+
+    <div class="divider"><hr><span>or continue with</span><hr></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+      <button onclick="socialLogin('Google')" style="padding:11px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='#fff'">
+        <i class="fab fa-google" style="color:#ea4335;"></i> Google
+      </button>
+      <button onclick="socialLogin('Facebook')" style="padding:11px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='#fff'">
+        <i class="fab fa-facebook-f" style="color:#1877f2;"></i> Facebook
+      </button>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--muted);">
+      Don't have an account? <a href="register.html" style="color:var(--orange);font-weight:700;">Create Account</a>
+    </p>
+  </div>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+<script>
+// If already logged in, redirect
+document.addEventListener('DOMContentLoaded', function() {
+  if (getUser()) {
+    window.location.href = 'my-account.html';
+  }
+});
+
+function togglePwd() {
+  const inp = document.getElementById('login-password');
+  const btn = document.getElementById('pwd-toggle');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+  } else {
+    inp.type = 'password';
+    btn.innerHTML = '<i class="fas fa-eye"></i>';
+  }
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const form = document.getElementById('login-form');
+  if (!validateForm(form)) return;
+
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+
+  if (password.length < 6) {
+    showToast('Please enter a valid password.', 'error');
+    return;
+  }
+
+  // Check if user registered in this browser
+  const savedUser = getUser();
+  if (savedUser && savedUser.email === email) {
+    showToast('Login successful! Welcome back, ' + savedUser.name.split(' ')[0] + '!', 'success');
+    setTimeout(() => window.location.href = 'my-account.html', 1500);
+    return;
+  }
+
+  // Demo login — accept any valid email/password
+  const demoUser = {
+    name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+    email: email,
+    phone: '',
+    city: 'Karachi',
+    role: 'buyer',
+    joined: new Date().toLocaleDateString('en-PK', {year:'numeric',month:'long',day:'numeric'})
+  };
+  setUser(demoUser);
+  showToast('Login successful! Welcome to MSukasha!', 'success');
+  setTimeout(() => window.location.href = 'my-account.html', 1500);
+}
+
+function forgotPwd(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) {
+    showToast('Please enter your email address first.', 'warning');
+    document.getElementById('login-email').focus();
+    return;
+  }
+  showToast('Password reset link sent to ' + email, 'success');
+}
+
+function socialLogin(provider) {
+  showToast(provider + ' login coming soon!', 'info');
+}
+</script>
+</body>
+</html>

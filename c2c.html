@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Used Items & Local Deals (C2C) | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .c2c-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;}
+    .c2c-search{flex:1;min-width:220px;display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff;}
+    .c2c-search input{flex:1;border:none;outline:none;padding:10px 14px;font-size:13px;}
+    .c2c-search button{background:var(--orange);color:#fff;border:none;padding:0 16px;cursor:pointer;font-size:14px;}
+    .c2c-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+    .c2c-filter{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .c2c-filter.active,.c2c-filter:hover{background:var(--orange);color:#fff;border-color:var(--orange);}
+    .c2c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-bottom:36px;}
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header">
+  <div class="container">
+    <h1>Used Items & Local Deals</h1>
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>C2C Marketplace</span></div>
+  </div>
+</div>
+<main>
+  <div class="container" style="padding:30px 0 60px;">
+
+    <!-- Promo -->
+    <div style="background:linear-gradient(135deg,#0066cc,#44aaff);border-radius:var(--radius);padding:22px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;color:#fff;flex-wrap:wrap;">
+      <div>
+        <h3 style="font-size:18px;font-weight:800;margin-bottom:4px;"><i class="fas fa-camera" style="margin-right:8px;"></i>Have something to sell?</h3>
+        <p style="font-size:13px;opacity:0.9;">Post your ad free — reach thousands of buyers near you in minutes!</p>
+      </div>
+      <a href="post-free-ad.html" class="btn-primary" style="white-space:nowrap;"><i class="fas fa-plus-circle"></i> Post Free Ad</a>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="c2c-toolbar">
+      <div class="c2c-search">
+        <input type="text" id="c2c-search-input" placeholder="Search used items, vehicles, phones...">
+        <button onclick="filterC2C()"><i class="fas fa-search"></i></button>
+      </div>
+      <select class="sort-select" id="c2c-sort" onchange="filterC2C()" style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#fff;cursor:pointer;outline:none;">
+        <option value="newest">Newest First</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="c2c-filter-bar" id="c2c-filters">
+      <button class="c2c-filter active" onclick="setCat('',this)">All</button>
+      <button class="c2c-filter" onclick="setCat('Electronics',this)"><i class="fas fa-mobile-alt"></i> Electronics</button>
+      <button class="c2c-filter" onclick="setCat('Vehicles',this)"><i class="fas fa-car"></i> Vehicles</button>
+      <button class="c2c-filter" onclick="setCat('Home',this)"><i class="fas fa-couch"></i> Home & Living</button>
+      <button class="c2c-filter" onclick="setCat('Fashion',this)"><i class="fas fa-tshirt"></i> Fashion</button>
+      <button class="c2c-filter" onclick="setCat('Sports',this)"><i class="fas fa-futbol"></i> Sports</button>
+      <button class="c2c-filter" onclick="setCat('Books',this)"><i class="fas fa-book"></i> Books</button>
+    </div>
+
+    <div class="c2c-grid" id="c2c-grid"></div>
+
+    <div style="text-align:center;padding:24px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);">
+      <p style="color:var(--muted);margin-bottom:14px;">Don't see what you're looking for? Post a "Want to Buy" request!</p>
+      <a href="post-free-ad.html" class="btn-primary"><i class="fas fa-search-plus"></i> Post Wanted Ad</a>
+    </div>
+  </div>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+<script>
+const C2C_LISTINGS = [
+  {id:'c1',title:'Used iPhone 12 Pro — 128GB (Water Pack)',price:135000,cat:'Electronics',icon:'fa-mobile-alt',loc:'DHA, Karachi',cond:'Excellent (9/10)',time:'2 hours ago'},
+  {id:'c2',title:'Honda CD 70 — 2024 Model (Urgent Sale)',price:115000,cat:'Vehicles',icon:'fa-motorcycle',loc:'Johar Town, Lahore',cond:'Good (8/10)',time:'5 hours ago'},
+  {id:'c3',title:'Office Desk & Ergonomic Chair Set',price:12000,cat:'Home',icon:'fa-chair',loc:'G-11, Islamabad',cond:'Good (7/10)',time:'1 day ago'},
+  {id:'c4',title:'Nikon D5600 DSLR Camera + 18-55mm Lens',price:75000,cat:'Electronics',icon:'fa-camera',loc:'Peshawar Cantt',cond:'Like New (10/10)',time:'1 day ago'},
+  {id:'c5',title:'Samsung Galaxy A54 — 8GB/128GB',price:42000,cat:'Electronics',icon:'fa-mobile-alt',loc:'Gulberg, Lahore',cond:'Good (8/10)',time:'2 days ago'},
+  {id:'c6',title:'Suzuki Mehran 2019 — First Owner',price:1250000,cat:'Vehicles',icon:'fa-car',loc:'Clifton, Karachi',cond:'Excellent (9/10)',time:'2 days ago'},
+  {id:'c7',title:'Rowing Machine — Barely Used',price:18000,cat:'Sports',icon:'fa-dumbbell',loc:'F-8, Islamabad',cond:'Like New',time:'3 days ago'},
+  {id:'c8',title:'Study Table with Bookshelf',price:6500,cat:'Home',icon:'fa-table',loc:'Gulshan, Karachi',cond:'Good',time:'3 days ago'},
+  {id:'c9',title:'HP Laptop Core i5 10th Gen 8GB RAM',price:65000,cat:'Electronics',icon:'fa-laptop',loc:'Model Town, Lahore',cond:'Good (7/10)',time:'4 days ago'},
+  {id:'c10',title:'Men Leather Jacket — Large',price:4500,cat:'Fashion',icon:'fa-tshirt',loc:'Saddar, Rawalpindi',cond:'Good',time:'4 days ago'},
+  {id:'c11',title:'Cricket Kit Complete Set',price:8000,cat:'Sports',icon:'fa-baseball-ball',loc:'Sialkot',cond:'Good',time:'5 days ago'},
+  {id:'c12',title:'Yamaha Guitar Acoustic — F310',price:12000,cat:'Electronics',icon:'fa-guitar',loc:'Bahria Town, Islamabad',cond:'Like New',time:'5 days ago'},
+];
+
+let activeCat = '';
+
+function setCat(cat, btn) {
+  activeCat = cat;
+  document.querySelectorAll('.c2c-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterC2C();
+}
+
+function filterC2C() {
+  const q = document.getElementById('c2c-search-input').value.toLowerCase();
+  const sort = document.getElementById('c2c-sort').value;
+  let list = C2C_LISTINGS.filter(item => {
+    if (activeCat && item.cat !== activeCat) return false;
+    if (q && !item.title.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if (sort === 'price-asc') list.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') list.sort((a,b) => b.price - a.price);
+  renderC2C(list);
+}
+
+function renderC2C(list) {
+  const grid = document.getElementById('c2c-grid');
+  if (list.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:50px 20px;">
+      <i class="fas fa-search" style="font-size:42px;color:var(--border);margin-bottom:14px;display:block;"></i>
+      <p style="color:var(--muted);margin-bottom:14px;">No listings found.</p>
+      <a href="post-free-ad.html" class="btn-primary"><i class="fas fa-plus"></i> Post the First Ad</a>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = list.map(item => `
+    <div class="product-card">
+      <div class="card-img">
+        <i class="fas ${item.icon} placeholder-icon"></i>
+        <span class="card-badge badge-used">USED</span>
+        <div class="card-actions">
+          <button onclick="addToWishlist({id:'${item.id}',name:'${item.title.replace(/'/g,"\\'")}',price:${item.price}})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+          <a href="messages.html" class="card-action-btn" title="Message"><i class="fas fa-comment"></i></a>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="card-name">${item.title}</p>
+        <p class="card-price" style="color:var(--dark);">Rs. ${item.price.toLocaleString()}</p>
+        <p class="card-location"><i class="fas fa-map-marker-alt"></i> ${item.loc}</p>
+        <p style="font-size:11px;color:var(--muted);margin-top:4px;"><i class="fas fa-clock"></i> ${item.time}</p>
+      </div>
+      <div class="card-footer">
+        <a href="messages.html" class="card-btn">Message</a>
+        <a href="contact.html" class="card-btn solid">Call Now</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', filterC2C);
+document.getElementById('c2c-search-input').addEventListener('keyup', function(e) {
+  if (e.key === 'Enter') filterC2C();
+});
+</script>
+</body>
+</html>
