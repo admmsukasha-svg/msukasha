@@ -1,68 +1,103 @@
+<!-- ===== FILE 3: start-verification.html ===== -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Start Verification | MSukasha</title>
+  <title>Start Vendor Verification | MSukasha</title>
   <link rel="icon" type="image/png" href="Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
-    .step-timeline { display:flex;flex-direction:column;gap:0;margin-bottom:40px; }
-    .step-item { display:flex;gap:20px; }
-    .step-line { display:flex;flex-direction:column;align-items:center; }
-    .step-dot { width:40px;height:40px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px;flex-shrink:0; }
-    .step-connector { width:2px;flex:1;background:var(--border);min-height:32px; }
-    .step-body { padding-bottom:28px;flex:1; }
+    .verify-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:40px;}
+    .verify-step{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;text-align:center;}
+    .v-num{width:40px;height:40px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;margin:0 auto 12px;}
+    .tier-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:16px;}
   </style>
 </head>
 <body>
 <header class="site-header" id="site-header"></header>
-<div class="page-header"><div class="container"><h1>Get Verified on MSukasha</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Verification</span></div></div></div>
-<main>
-  <div class="container" style="padding:40px 0 70px;">
+<div class="page-header"><div class="container"><h1>Start Vendor Verification</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><a href="vendor-verification.html">Verification Program</a><span>/</span><span>Apply</span></div></div></div>
+<main><div class="container" style="padding:36px 0 60px;">
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:960px;margin:0 auto;align-items:start;">
-      <div>
-        <span class="badge badge-orange" style="margin-bottom:14px;">MSukasha Verified</span>
-        <h2 style="font-size:26px;font-weight:900;margin-bottom:16px;">Why Get Verified?</h2>
-        <p style="color:var(--muted);line-height:1.8;margin-bottom:24px;">The MSukasha Verified badge tells buyers and suppliers that you are a legitimate, trustworthy trader. Verified accounts get more inquiries, better ranking in search results, and access to Trade Assurance for bulk orders.</p>
-        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px;">
-          <div style="display:flex;gap:12px;align-items:flex-start;"><i class="fas fa-check-circle" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><div><p style="font-weight:700;margin-bottom:2px;">3x More Inquiries</p><p style="font-size:13px;color:var(--muted);">Verified listings receive 3x more buyer messages on average.</p></div></div>
-          <div style="display:flex;gap:12px;align-items:flex-start;"><i class="fas fa-check-circle" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><div><p style="font-weight:700;margin-bottom:2px;">Priority Search Ranking</p><p style="font-size:13px;color:var(--muted);">Verified listings rank higher in category and keyword searches.</p></div></div>
-          <div style="display:flex;gap:12px;align-items:flex-start;"><i class="fas fa-check-circle" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><div><p style="font-weight:700;margin-bottom:2px;">Trade Assurance Access</p><p style="font-size:13px;color:var(--muted);">Required to activate payment protection on B2B orders over PKR 50,000.</p></div></div>
-          <div style="display:flex;gap:12px;align-items:flex-start;"><i class="fas fa-check-circle" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><div><p style="font-weight:700;margin-bottom:2px;">Verified Badge on Profile</p><p style="font-size:13px;color:var(--muted);">Build buyer trust instantly with the MSukasha Verified ✓ badge.</p></div></div>
-        </div>
-        <div style="background:var(--orange-light);border-radius:var(--radius);padding:16px 18px;">
-          <p style="font-weight:700;font-size:13px;color:var(--dark);">Verification is free for individuals. Business verification has a one-time PKR 1,500 processing fee.</p>
-        </div>
-      </div>
-
-      <div>
-        <h2 style="font-size:22px;font-weight:900;margin-bottom:24px;">How It Works</h2>
-        <div class="step-timeline">
-          <div class="step-item"><div class="step-line"><div class="step-dot">1</div><div class="step-connector"></div></div><div class="step-body"><h4 style="font-weight:700;margin-bottom:6px;">Submit Your Application</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Fill out the form below with your personal or business details. Takes less than 5 minutes.</p></div></div>
-          <div class="step-item"><div class="step-line"><div class="step-dot">2</div><div class="step-connector"></div></div><div class="step-body"><h4 style="font-weight:700;margin-bottom:6px;">Upload Documents</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Individuals: CNIC copy. Businesses: CNIC + NTN + trade license or SECP registration.</p></div></div>
-          <div class="step-item"><div class="step-line"><div class="step-dot">3</div><div class="step-connector"></div></div><div class="step-body"><h4 style="font-weight:700;margin-bottom:6px;">MSukasha Review (24–48h)</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Our team reviews your documents and verifies your information. You'll receive an SMS update.</p></div></div>
-          <div class="step-item"><div class="step-line"><div class="step-dot" style="background:#22c55e;">✓</div></div><div class="step-body"><h4 style="font-weight:700;margin-bottom:6px;">Badge Activated</h4><p style="font-size:13px;color:var(--muted);line-height:1.7;">Your Verified badge goes live on your profile and all your listings immediately.</p></div></div>
-        </div>
-
-        <div class="card">
-          <div class="card-header"><h3><i class="fas fa-shield-alt" style="color:var(--orange);margin-right:8px;"></i>Start Verification</h3></div>
-          <div class="card-body-pad">
-            <div class="form-group" style="margin-bottom:14px;"><label class="form-label">Account Type</label><select class="form-input"><option>Individual Seller</option><option>Business / Company</option></select></div>
-            <div class="form-group" style="margin-bottom:14px;"><label class="form-label">Full Name (as on CNIC)</label><input type="text" class="form-input" placeholder="Full legal name"></div>
-            <div class="form-group" style="margin-bottom:14px;"><label class="form-label">CNIC Number</label><input type="text" class="form-input" placeholder="XXXXX-XXXXXXX-X"></div>
-            <div class="form-group" style="margin-bottom:14px;"><label class="form-label">Phone Number</label><input type="text" class="form-input" placeholder="+92 3XX XXXXXXX"></div>
-            <div class="form-group" style="margin-bottom:20px;"><label class="form-label">City</label><input type="text" class="form-input" placeholder="Your city"></div>
-            <button class="btn-primary" style="width:100%;" onclick="alert('Application submitted! You will receive an SMS within 24–48 hours.');"><i class="fas fa-paper-plane"></i> Submit Verification Request</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  <div style="text-align:center;max-width:580px;margin:0 auto 48px;">
+    <h2 style="font-size:26px;font-weight:900;margin-bottom:12px;">Get Your MSukasha Verification Badge</h2>
+    <p style="color:var(--muted);line-height:1.8;">Verified suppliers get 4x more inquiries and access to Trade Assurance. Apply in minutes.</p>
   </div>
-</main>
+
+  <div class="section-header"><h2 class="section-title">How It Works</h2></div>
+  <div class="verify-steps">
+    <div class="verify-step"><div class="v-num">1</div><h4 style="font-weight:700;margin-bottom:6px;">Choose Tier</h4><p style="font-size:12px;color:var(--muted);">Select Identity, Business Verified, Gold, or Premium</p></div>
+    <div class="verify-step"><div class="v-num">2</div><h4 style="font-weight:700;margin-bottom:6px;">Submit Documents</h4><p style="font-size:12px;color:var(--muted);">Upload CNIC, NTN, and business registration as required</p></div>
+    <div class="verify-step"><div class="v-num">3</div><h4 style="font-weight:700;margin-bottom:6px;">Review</h4><p style="font-size:12px;color:var(--muted);">Our team reviews within 24–48 hours (or 5–14 days for audits)</p></div>
+    <div class="verify-step"><div class="v-num">4</div><h4 style="font-weight:700;margin-bottom:6px;">Get Badged</h4><p style="font-size:12px;color:var(--muted);">Your verification badge appears on all your listings</p></div>
+  </div>
+
+  <div class="card" style="max-width:680px;margin:0 auto;">
+    <div class="card-header"><h3>Verification Application</h3></div>
+    <div class="card-body-pad">
+      <div class="form-group">
+        <label class="form-label">Select Verification Tier *</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;" id="tier-grid">
+          <label style="border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;transition:all 0.2s;" id="tier-basic">
+            <input type="radio" name="tier" value="basic" style="accent-color:var(--orange);" onchange="selectTier('basic')"> Identity Verified — Free
+          </label>
+          <label style="border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;transition:all 0.2s;" id="tier-business">
+            <input type="radio" name="tier" value="business" style="accent-color:var(--orange);" onchange="selectTier('business')"> Business Verified — PKR 1,500
+          </label>
+          <label style="border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;transition:all 0.2s;" id="tier-gold">
+            <input type="radio" name="tier" value="gold" style="accent-color:var(--orange);" onchange="selectTier('gold')"> Gold Audited — PKR 8,000
+          </label>
+          <label style="border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;transition:all 0.2s;" id="tier-premium">
+            <input type="radio" name="tier" value="premium" style="accent-color:var(--orange);" onchange="selectTier('premium')"> Export Certified — PKR 20,000
+          </label>
+        </div>
+      </div>
+      <form id="verify-form">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-group"><label class="form-label">Business / Full Name *</label><input type="text" class="form-control" required placeholder="Your business or full name"></div>
+          <div class="form-group"><label class="form-label">Phone / WhatsApp *</label><input type="tel" class="form-control" required placeholder="+92 300 0000000"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email Address *</label><input type="email" class="form-control" required placeholder="your@email.com"></div>
+        <div class="form-group"><label class="form-label">Business Category *</label>
+          <select class="form-control" required>
+            <option value="">Select category</option>
+            <option>Electronics</option><option>Textiles & Apparel</option><option>Agriculture</option>
+            <option>Industrial & Steel</option><option>Sports Goods</option><option>Chemicals</option>
+            <option>Packaging</option><option>Food & Beverages</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">City *</label>
+          <select class="form-control" required>
+            <option value="">Select city</option>
+            <option>Karachi</option><option>Lahore</option><option>Faisalabad</option><option>Sialkot</option>
+            <option>Islamabad</option><option>Multan</option><option>Gujranwala</option><option>Peshawar</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Brief Business Description *</label>
+          <textarea class="form-control" rows="3" required placeholder="What does your business do? What products do you supply?" style="resize:vertical;"></textarea>
+        </div>
+        <div class="alert alert-info" style="margin-bottom:16px;"><i class="fas fa-info-circle"></i> After submitting, our team will contact you via WhatsApp to collect required documents (CNIC, NTN, etc.).</div>
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitVerify(event)"><i class="fas fa-shield-alt"></i> Submit Verification Request</button>
+      </form>
+    </div>
+  </div>
+</div></main>
 <footer class="site-footer" id="site-footer"></footer>
 <script src="main.js"></script>
+<script>
+function selectTier(t){
+  ['basic','business','gold','premium'].forEach(id=>{
+    const el=document.getElementById('tier-'+id);
+    if(el) el.style.borderColor = id===t ? 'var(--orange)' : 'var(--border)';
+    if(el) el.style.background = id===t ? 'var(--orange-light)' : '#fff';
+  });
+}
+function submitVerify(e){
+  e.preventDefault();
+  const f=document.getElementById('verify-form');
+  if(!document.querySelector('input[name="tier"]:checked')){showToast('Please select a verification tier.','warning');return;}
+  if(validateForm(f)){showToast('Application submitted! Our team will contact you via WhatsApp within 24 hours.','success');f.reset();}
+}
+</script>
 </body>
 </html>
