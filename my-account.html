@@ -1,58 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Account | MSukasha</title>
   <link rel="icon" type="image/png" href="Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
-    .account-layout{display:grid;grid-template-columns:240px 1fr;gap:24px;padding-bottom:60px;}
-    .account-nav{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;height:fit-content;}
-    .account-nav-header{padding:20px;background:var(--dark);color:#fff;display:flex;align-items:center;gap:12px;}
-    .user-avatar{width:44px;height:44px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
-    .account-nav a{display:flex;align-items:center;gap:10px;padding:12px 20px;font-size:13px;color:var(--text);border-bottom:1px solid #f5f5f5;transition:all var(--transition);}
-    .account-nav a:hover,.account-nav a.active{background:var(--orange-light);color:var(--orange);}
-    .account-nav a i{width:16px;color:var(--muted);}
-    .account-nav a:hover i,.account-nav a.active i{color:var(--orange);}
-    .order-item{display:flex;align-items:center;gap:14px;padding:14px;border-bottom:1px solid #f5f5f5;}
-    .order-img{width:56px;height:56px;background:#f0f2f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#ccc;flex-shrink:0;}
-    @media(max-width:768px){.account-layout{grid-template-columns:1fr;}}
+    .account-layout{display:grid;grid-template-columns:260px 1fr;gap:28px;padding:36px 0 60px;}
+    .account-sidebar{position:sticky;top:100px;height:fit-content;}
+    .account-nav{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+    .account-profile{padding:24px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(135deg,#1a2332,#2d4a6e);}
+    .account-avatar{width:70px;height:70px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;margin:0 auto 12px;}
+    .account-name{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;}
+    .account-email{font-size:12px;color:rgba(255,255,255,0.65);}
+    .account-menu a{display:flex;align-items:center;gap:10px;padding:13px 20px;font-size:13px;font-weight:600;color:var(--text);border-bottom:1px solid #f5f5f5;transition:all var(--transition);}
+    .account-menu a:hover,.account-menu a.active{background:var(--orange-light);color:var(--orange);}
+    .account-menu a i{width:16px;color:var(--muted);}
+    .account-menu a:hover i,.account-menu a.active i{color:var(--orange);}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+    .order-row{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;background:#fff;}
+    .order-icon{width:48px;height:48px;border-radius:10px;background:var(--orange-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+    .stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;}
+    .stat-card .num{font-size:26px;font-weight:900;color:var(--orange);}
+    .stat-card .lbl{font-size:12px;color:var(--muted);}
+    @media(max-width:768px){.account-layout{grid-template-columns:1fr;}.account-sidebar{position:static;}.stat-cards{grid-template-columns:1fr 1fr;}}
   </style>
 </head>
 <body>
 <header class="site-header" id="site-header"></header>
-<div class="page-header"><div class="container"><h1>My Account</h1><div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>My Account</span></div></div></div>
-<main><div class="container" style="padding-top:36px;">
-  <div class="account-layout">
-    <div class="account-nav">
-      <div class="account-nav-header">
-        <div class="user-avatar">A</div>
-        <div><p style="font-weight:700;font-size:14px;">Ali Hassan</p><p style="font-size:11px;opacity:0.7;">ali@example.com</p></div>
+<div class="page-header">
+  <div class="container">
+    <h1>My Account</h1>
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>My Account</span></div>
+  </div>
+</div>
+<main>
+  <div class="container">
+    <div class="account-layout" id="account-layout">
+      <!-- Sidebar -->
+      <div class="account-sidebar">
+        <div class="account-nav">
+          <div class="account-profile">
+            <div class="account-avatar" id="av-initial">U</div>
+            <div class="account-name" id="av-name">User</div>
+            <div class="account-email" id="av-email">user@email.com</div>
+          </div>
+          <div class="account-menu">
+            <a href="#" class="active" onclick="showTab('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="#" onclick="showTab('orders',this)"><i class="fas fa-box"></i> My Orders</a>
+            <a href="wishlist.html"><i class="far fa-heart"></i> Wishlist</a>
+            <a href="messages.html"><i class="fas fa-comment-dots"></i> Messages</a>
+            <a href="#" onclick="showTab('listings',this)"><i class="fas fa-tag"></i> My Listings</a>
+            <a href="#" onclick="showTab('profile',this)"><i class="fas fa-user-edit"></i> Edit Profile</a>
+            <a href="#" onclick="doLogout()" style="color:#ef4444;"><i class="fas fa-sign-out-alt" style="color:#ef4444;"></i> Logout</a>
+          </div>
+        </div>
       </div>
-      <a href="my-account.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-      <a href="track-order.html"><i class="fas fa-box"></i> My Orders</a>
-      <a href="wishlist.html"><i class="far fa-heart"></i> Wishlist</a>
-      <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-      <a href="seller-dashboard.html"><i class="fas fa-store"></i> My Listings</a>
-      <a href="#"><i class="fas fa-user-cog"></i> Profile Settings</a>
-      <a href="login.html"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+
+      <!-- Main Content -->
+      <div>
+        <!-- Dashboard Tab -->
+        <div class="tab-panel active" id="tab-dashboard">
+          <div class="stat-cards">
+            <div class="stat-card"><div class="num" id="stat-orders">0</div><div class="lbl">Total Orders</div></div>
+            <div class="stat-card"><div class="num" id="stat-listings">0</div><div class="lbl">Active Listings</div></div>
+            <div class="stat-card"><div class="num" id="stat-wishlist">0</div><div class="lbl">Wishlist Items</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-bell" style="color:var(--orange);margin-right:8px;"></i>Recent Activity</h3></div>
+            <div class="card-body-pad">
+              <div class="alert alert-info" style="margin-bottom:12px;"><i class="fas fa-check-circle"></i> Account created successfully. Welcome to MSukasha!</div>
+              <p style="font-size:13px;color:var(--muted);">Start by <a href="shop.html" style="color:var(--orange);font-weight:700;">browsing products</a> or <a href="post-free-ad.html" style="color:var(--orange);font-weight:700;">posting a free ad</a>.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div class="tab-panel" id="tab-orders">
+          <div class="card">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+              <h3>My Orders</h3>
+              <a href="track-order.html" style="font-size:13px;color:var(--orange);font-weight:700;"><i class="fas fa-search"></i> Track Order</a>
+            </div>
+            <div class="card-body-pad" id="orders-list">
+              <div style="text-align:center;padding:40px 20px;">
+                <i class="fas fa-box-open" style="font-size:48px;color:var(--border);margin-bottom:16px;display:block;"></i>
+                <p style="color:var(--muted);margin-bottom:16px;">No orders yet.</p>
+                <a href="shop.html" class="btn-primary"><i class="fas fa-store"></i> Start Shopping</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Listings Tab -->
+        <div class="tab-panel" id="tab-listings">
+          <div class="card">
+            <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+              <h3>My Listings</h3>
+              <a href="post-free-ad.html" class="btn-primary" style="font-size:12px;padding:8px 16px;"><i class="fas fa-plus"></i> Post New Ad</a>
+            </div>
+            <div class="card-body-pad">
+              <div style="text-align:center;padding:40px 20px;">
+                <i class="fas fa-camera" style="font-size:48px;color:var(--border);margin-bottom:16px;display:block;"></i>
+                <p style="color:var(--muted);margin-bottom:16px;">No listings yet. Post your first free ad!</p>
+                <a href="post-free-ad.html" class="btn-primary"><i class="fas fa-plus-circle"></i> Post Free Ad</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div class="tab-panel" id="tab-profile">
+          <div class="card">
+            <div class="card-header"><h3>Edit Profile</h3></div>
+            <div class="card-body-pad">
+              <form id="profile-form">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                  <div class="form-group"><label class="form-label">Full Name *</label><input type="text" class="form-control" id="pf-name" required></div>
+                  <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-control" id="pf-phone"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" id="pf-email" readonly style="background:#f9f9f9;"></div>
+                <div class="form-group">
+                  <label class="form-label">City</label>
+                  <select class="form-control" id="pf-city">
+                    <option>Karachi</option><option>Lahore</option><option>Islamabad</option>
+                    <option>Rawalpindi</option><option>Faisalabad</option><option>Multan</option>
+                    <option>Peshawar</option><option>Quetta</option><option>Sialkot</option><option>Other</option>
+                  </select>
+                </div>
+                <button type="button" class="btn-primary" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
-        <div class="card" style="padding:20px;text-align:center;"><span style="font-size:28px;font-weight:800;color:var(--orange);display:block;">3</span><span style="font-size:12px;color:var(--muted);">Active Orders</span></div>
-        <div class="card" style="padding:20px;text-align:center;"><span style="font-size:28px;font-weight:800;color:var(--orange);display:block;">2</span><span style="font-size:12px;color:var(--muted);">Wishlist Items</span></div>
-        <div class="card" style="padding:20px;text-align:center;"><span style="font-size:28px;font-weight:800;color:var(--orange);display:block;">5</span><span style="font-size:12px;color:var(--muted);">Messages</span></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h3>Recent Orders</h3></div>
-        <div class="order-item"><div class="order-img"><i class="fas fa-solar-panel"></i></div><div style="flex:1;"><p style="font-weight:600;font-size:13px;">Solar Panels 545W × 10</p><p style="font-size:12px;color:var(--muted);">Order #MS-2026-001 &bull; May 10, 2026</p></div><span class="badge badge-green">Delivered</span></div>
-        <div class="order-item"><div class="order-img"><i class="fas fa-tshirt"></i></div><div style="flex:1;"><p style="font-weight:600;font-size:13px;">Wholesale T-Shirts × 100</p><p style="font-size:12px;color:var(--muted);">Order #MS-2026-002 &bull; May 15, 2026</p></div><span class="badge badge-orange">In Transit</span></div>
-        <div class="order-item" style="border-bottom:none;"><div class="order-img"><i class="fas fa-headphones"></i></div><div style="flex:1;"><p style="font-weight:600;font-size:13px;">Wireless Earbuds × 50</p><p style="font-size:12px;color:var(--muted);">Order #MS-2026-003 &bull; May 20, 2026</p></div><span class="badge badge-gray">Processing</span></div>
-      </div>
+
+    <!-- Not logged in state -->
+    <div id="not-logged-in" style="display:none;text-align:center;padding:80px 20px;">
+      <i class="fas fa-lock" style="font-size:52px;color:var(--border);margin-bottom:20px;display:block;"></i>
+      <h2 style="font-weight:800;margin-bottom:10px;">Please Sign In</h2>
+      <p style="color:var(--muted);margin-bottom:22px;">You need to be logged in to view your account.</p>
+      <a href="login.html" class="btn-primary" style="margin-right:12px;"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+      <a href="register.html" style="font-size:13px;color:var(--orange);font-weight:700;">Create Account</a>
     </div>
   </div>
-</div></main>
+</main>
 <footer class="site-footer" id="site-footer"></footer>
 <script src="main.js"></script>
-</body></html>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const user = getUser();
+  if (!user) {
+    document.getElementById('account-layout').style.display = 'none';
+    document.getElementById('not-logged-in').style.display = 'block';
+    return;
+  }
+  // Populate UI
+  const initial = (user.name || 'U').charAt(0).toUpperCase();
+  document.getElementById('av-initial').textContent = initial;
+  document.getElementById('av-name').textContent = user.name || 'User';
+  document.getElementById('av-email').textContent = user.email || '';
+  // Profile form
+  if (document.getElementById('pf-name')) document.getElementById('pf-name').value = user.name || '';
+  if (document.getElementById('pf-phone')) document.getElementById('pf-phone').value = user.phone || '';
+  if (document.getElementById('pf-email')) document.getElementById('pf-email').value = user.email || '';
+  if (document.getElementById('pf-city')) document.getElementById('pf-city').value = user.city || 'Karachi';
+  // Stats
+  document.getElementById('stat-wishlist').textContent = getWishlist().length;
+  document.getElementById('stat-orders').textContent = JSON.parse(localStorage.getItem('msukasha_orders') || '[]').length;
+  document.getElementById('stat-listings').textContent = JSON.parse(localStorage.getItem('msukasha_listings') || '[]').length;
+});
+
+function showTab(name, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.account-menu a').forEach(a => a.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+function saveProfile() {
+  const user = getUser() || {};
+  user.name = document.getElementById('pf-name').value;
+  user.phone = document.getElementById('pf-phone').value;
+  user.city = document.getElementById('pf-city').value;
+  setUser(user);
+  document.getElementById('av-name').textContent = user.name;
+  showToast('Profile updated successfully!', 'success');
+}
+
+function doLogout() {
+  if (confirm('Are you sure you want to logout?')) logout();
+}
+</script>
+</body>
+</html>
