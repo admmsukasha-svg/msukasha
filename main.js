@@ -40,7 +40,7 @@ const HEADER_HTML = `
       <button type="submit"><i class="fas fa-search"></i> Search</button>
     </form>
     <div class="header-actions">
-      <a href="my.html" class="hdr-btn">
+      <a href="my-account.html" class="hdr-btn">
         <i class="fas fa-user"></i>
         <span>My Account</span>
       </a>
