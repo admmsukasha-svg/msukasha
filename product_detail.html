@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail | MSukasha</title>
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .detail-layout{display:grid;grid-template-columns:1fr 380px;gap:28px;padding:30px 0 60px;}
+
+    /* ── Image Gallery ── */
+    .gallery{position:sticky;top:90px;height:fit-content;}
+    .main-img-wrap{
+      width:100%;aspect-ratio:4/3;
+      border-radius:var(--radius);
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:#f0f2f5;
+      margin-bottom:10px;
+      position:relative;
+    }
+    .main-img-wrap img{
+      width:100%;height:100%;
+      object-fit:cover;
+      display:block;
+      transition:transform .4s ease;
+    }
+    .main-img-wrap:hover img{transform:scale(1.04);}
+    .thumb-row{display:flex;gap:8px;flex-wrap:wrap;}
+    .thumb{
+      width:70px;height:70px;
+      border-radius:8px;
+      overflow:hidden;
+      border:2px solid var(--border);
+      cursor:pointer;
+      transition:border-color .2s;
+    }
+    .thumb.active,.thumb:hover{border-color:var(--orange);}
+    .thumb img{width:100%;height:100%;object-fit:cover;}
+
+    /* ── Product Info ── */
+    .product-info{margin-bottom:24px;}
+    .product-type-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 14px;border-radius:20px;
+      font-size:11px;font-weight:800;text-transform:uppercase;
+      letter-spacing:.5px;margin-bottom:12px;
+    }
+    .type-b2b{background:var(--orange);color:#fff;}
+    .type-c2c{background:#0099cc;color:#fff;}
+    .product-title{font-size:22px;font-weight:900;color:var(--dark);line-height:1.3;margin-bottom:10px;}
+    .product-rating{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+    .stars{color:#f59e0b;font-size:14px;}
+    .rating-text{font-size:13px;color:var(--muted);}
+    .product-price{font-size:32px;font-weight:900;color:var(--orange);margin-bottom:6px;}
+    .product-price-pkr{font-size:20px;font-weight:900;color:var(--dark);margin-bottom:6px;}
+    .price-note{font-size:13px;color:var(--muted);margin-bottom:18px;}
+
+    /* B2B specific */
+    .moq-row{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;}
+    .moq-box{background:var(--orange-light);border:1px solid #ffd4b8;border-radius:8px;padding:10px 16px;font-size:13px;}
+    .moq-box strong{color:var(--orange);font-size:15px;}
+    .qty-calc{margin-bottom:18px;}
+    .qty-calc label{font-size:13px;font-weight:700;display:block;margin-bottom:7px;}
+    .qty-wrap{display:flex;align-items:center;gap:0;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;width:fit-content;}
+    .qty-wrap button{width:40px;height:40px;border:none;background:#f8f9fa;cursor:pointer;font-size:16px;font-weight:700;transition:background .2s;}
+    .qty-wrap button:hover{background:var(--orange);color:#fff;}
+    .qty-wrap input{width:60px;height:40px;border:none;text-align:center;font-size:15px;font-weight:700;outline:none;}
+    .total-price{font-size:14px;color:var(--muted);margin-top:6px;}
+    .total-price span{color:var(--orange);font-weight:800;}
+
+    /* C2C specific */
+    .condition-badge{display:inline-flex;align-items:center;gap:6px;background:#eafaf1;color:#15803d;border:1px solid #b2e4c5;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:14px;}
+    .location-row{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:14px;}
+    .location-row i{color:var(--orange);}
+
+    /* Action buttons */
+    .action-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+    .btn-inquire{background:var(--orange);color:#fff;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);transition:background .2s;}
+    .btn-inquire:hover{background:var(--orange-dark);}
+    .btn-cart{background:#fff;color:var(--orange);border:2px solid var(--orange);padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);transition:all .2s;}
+    .btn-cart:hover{background:var(--orange-light);}
+    .btn-wishlist{background:#fff;color:var(--muted);border:1px solid var(--border);padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font);transition:all .2s;}
+    .btn-wishlist:hover{border-color:var(--orange);color:var(--orange);}
+
+    /* Seller card */
+    .seller-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+    .seller-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+    .seller-avatar{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#ff6600,#ff9944);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;flex-shrink:0;}
+    .seller-name{font-size:15px;font-weight:800;}
+    .seller-verified{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#15803d;background:#dcfce7;padding:2px 8px;border-radius:20px;margin-top:3px;}
+    .seller-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;padding-top:14px;border-top:1px solid var(--border);}
+    .seller-stat .val{font-size:16px;font-weight:800;color:var(--dark);}
+    .seller-stat .lbl{font-size:10px;color:var(--muted);}
+
+    /* Trust badges */
+    .trust-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+    .trust-badge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:6px;background:#f8f9fa;color:var(--muted);}
+    .trust-badge i{color:var(--orange);}
+
+    /* Tabs */
+    .detail-tabs{margin-top:28px;}
+    .tab-list{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px;}
+    .tab-btn{padding:11px 22px;font-size:14px;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;cursor:pointer;font-family:var(--font);}
+    .tab-btn.active,.tab-btn:hover{color:var(--orange);border-bottom-color:var(--orange);}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;}
+
+    /* Specs table */
+    .specs-table{width:100%;border-collapse:collapse;font-size:14px;}
+    .specs-table tr:nth-child(even) td{background:#f8f9fa;}
+    .specs-table td{padding:11px 14px;border:1px solid var(--border);}
+    .specs-table td:first-child{font-weight:700;width:38%;color:var(--dark);}
+
+    /* Reviews */
+    .review-card{background:#f8f9fa;border-radius:10px;padding:16px;margin-bottom:12px;}
+    .review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+    .reviewer{font-weight:700;font-size:13px;}
+    .review-date{font-size:11px;color:var(--muted);}
+    .review-text{font-size:13px;color:var(--text);line-height:1.7;}
+
+    /* Related */
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
+
+    @media(max-width:900px){
+      .detail-layout{grid-template-columns:1fr;}
+      .gallery{position:static;}
+    }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header">
+  <div class="container">
+    <h1 id="page-heading">Product Detail</h1>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a><span>/</span>
+      <a href="shop.html">Shop</a><span>/</span>
+      <span id="page-cat">Product</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+
+    <!-- Loading (hidden by default) -->
+    <div id="loading" style="display:none;text-align:center;padding:80px 20px;"></div>
+
+    <!-- Product Layout -->
+    <div class="detail-layout" id="detail-layout" style="display:none;">
+
+      <!-- LEFT: Images -->
+      <div>
+        <div class="gallery">
+          <div class="main-img-wrap">
+            <img src="" alt="" id="main-img">
+          </div>
+          <div class="thumb-row" id="thumb-row"></div>
+        </div>
+
+        <!-- Tabs: Description, Specs, Reviews -->
+        <div class="detail-tabs">
+          <div class="tab-list">
+            <button class="tab-btn active" onclick="showTab('desc',this)">Description</button>
+            <button class="tab-btn" onclick="showTab('specs',this)">Specifications</button>
+            <button class="tab-btn" onclick="showTab('reviews',this)">Reviews</button>
+          </div>
+
+          <div class="tab-panel active" id="tab-desc">
+            <p style="font-size:14px;line-height:1.9;color:var(--text);" id="desc-text"></p>
+          </div>
+
+          <div class="tab-panel" id="tab-specs">
+            <table class="specs-table" id="specs-table"></table>
+          </div>
+
+          <div class="tab-panel" id="tab-reviews">
+            <div id="reviews-container"></div>
+          </div>
+        </div>
+
+        <!-- Related Products -->
+        <div style="margin-top:32px;">
+          <div class="section-header">
+            <h2 class="section-title">Related Products</h2>
+            <a href="shop.html" class="see-all">View All <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="related-grid" id="related-grid"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Info + Actions -->
+      <div id="right-panel"></div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<script src="main.js"></script>
+<script src="api.js"></script>
+<script>
+/* ── Same products data as shop.html ── */
+const PRODUCTS = [
+  {id:'p1',name:'Industrial Solar Panels 545W Mono PERC',price:120,unit:'/pc',moq:10,moqLabel:'MOQ: 10 Pieces',type:'b2b',cat:'industrial',location:'Karachi',img:'./images/Book.jpg',imgs:['./images/Book.jpg','https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=90','https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&q=90'],desc:'High efficiency 545W mono PERC solar panels for industrial and commercial use. These panels feature advanced cell technology for maximum power output. Bulk pricing available with custom configurations.',seller:'TechExport Pakistan',sellerCity:'Karachi',sellerVerified:true,rating:4.9,reviews:32,specs:{Brand:'TechExport',Wattage:'545W',Type:'Mono PERC',Efficiency:'21.3%',Warranty:'10 Year Product / 25 Year Performance',Certification:'IEC, MCS, UL',Weight:'28 kg',Dimensions:'2256 × 1133 × 35mm'}},
+  {id:'p2',name:'Wholesale Cotton Plain T-Shirts (Pack of 50)',price:2.5,unit:'/pc',moq:100,moqLabel:'MOQ: 100 Pieces',type:'b2b',cat:'fashion',location:'Faisalabad',img:'./images/T-shirt.jpg',imgs:['./images/T-shirt.jpg','https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=800&q=90'],desc:'Premium quality 180 GSM cotton plain t-shirts for wholesale. Available in all sizes (XS to 5XL) and custom colors. Custom branding/printing available from 200 pieces.',seller:'Faisalabad Fabrics Co.',sellerCity:'Faisalabad',sellerVerified:true,rating:4.8,reviews:58,specs:{Material:'100% Cotton',GSM:'180',Sizes:'XS, S, M, L, XL, XXL, 3XL, 4XL, 5XL',Colors:'All colors available',Collar:'Round / V-Neck / Polo',Packaging:'50 pcs per pack',Certification:'OEKO-TEX',Branding:'Custom printing from 200 pcs'}},
+  {id:'p3',name:'Professional Wireless Earbuds — Bulk Export Grade',price:8.9,unit:'/pc',moq:50,moqLabel:'MOQ: 50 Pieces',type:'b2b',cat:'electronics',location:'Karachi',img:'./images/headphones.jpg',imgs:['./images/headphones.jpg','https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=90'],desc:'Export quality TWS wireless earbuds with charging case. Bluetooth 5.3, 30hr total battery life, IPX5 waterproof. OEM branding and custom packaging available for bulk orders.',seller:'TechExport Pakistan',sellerCity:'Karachi',sellerVerified:true,rating:4.7,reviews:21,specs:{Bluetooth:'5.3',BatteryEarbuds:'6 hours',BatteryCase:'24 hours',Waterproof:'IPX5',Driver:'13mm Dynamic',Connectivity:'Bluetooth / USB-C charging',OEM:'Available from 50 pcs'}},
+  {id:'p4',name:'Custom Logo Power Banks 10,000mAh Wholesale',price:5.2,unit:'/pc',moq:20,moqLabel:'MOQ: 20 Pieces',type:'b2b',cat:'electronics',location:'Lahore',img:'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&q=90',imgs:['https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&q=90'],desc:'10,000mAh slim power banks with custom logo printing. Dual USB-A + USB-C output. Fast charging 18W. Ideal for corporate gifts, resale, or export.',seller:'Lahore Tech Traders',sellerCity:'Lahore',sellerVerified:false,rating:4.6,reviews:14,specs:{Capacity:'10,000 mAh',Input:'USB-C 18W',Output:'Dual USB-A + USB-C',FastCharging:'Yes (18W)',Size:'145 × 68 × 15mm',Weight:'220g',CustomLogo:'Yes (screen print / laser)'}},
+  {id:'p5',name:'Basmati Rice Premium Grade — 50kg Bags',price:4500,unit:'/bag',moq:10,moqLabel:'MOQ: 10 Bags',type:'b2b',cat:'agriculture',location:'Multan',img:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=90',imgs:['https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=90'],desc:'Premium 1121 aged basmati rice in 50kg food-grade polypropylene bags. Long grain, aromatic, export quality. Custom packaging and branding available for bulk export orders.',seller:'Al-Hassan Agri Traders',sellerCity:'Multan',sellerVerified:true,rating:4.7,reviews:19,specs:{Variety:'1121 Extra Long Grain',Age:'1 Year Aged',GrainLength:'8.3mm average',Moisture:'Max 12%',Packaging:'50 kg PP Bags',Origin:'Punjab, Pakistan',Certification:'PSQCA, Export Grade'}},
+  {id:'p9',name:'Used iPhone 12 Pro — 128GB (Water Pack)',price:135000,unit:'',condition:'Excellent (9/10)',type:'c2c',cat:'electronics',location:'DHA, Karachi',img:'https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=800&q=90',imgs:['https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=800&q=90','https://images.unsplash.com/photo-1592286927505-1def25115558?w=800&q=90'],desc:'iPhone 12 Pro 128GB in excellent condition. Battery health 87%. Factory unlocked, works on all networks. Comes with original box, charger, and cable. No repairs, no accidents.',seller:'Ahmed Khan',sellerCity:'DHA, Karachi',sellerPhone:'+92 300 0000000',sellerVerified:false,rating:4.8,reviews:12,postedAgo:'2 hours ago',specs:{Model:'iPhone 12 Pro',Storage:'128 GB',Color:'Pacific Blue',BatteryHealth:'87%',Condition:'Excellent (9/10)',Network:'Factory Unlocked',Accessories:'Original Box, Charger, Cable',FaceID:'Working'}},
+  {id:'p10',name:'Honda CD 70 — 2024 Model (Urgent Sale)',price:115000,unit:'',condition:'Good (8/10)',type:'c2c',cat:'vehicles',location:'Johar Town, Lahore',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=90',imgs:['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=90'],desc:'Honda CD 70 2024 model. First owner, only 5,000 km driven. Engine in perfect condition. Documents 100% clear — registration, insurance all complete. Urgent sale due to relocation.',seller:'Bilal Ahmed',sellerCity:'Johar Town, Lahore',sellerPhone:'+92 321 0000000',sellerVerified:false,rating:4.7,reviews:8,postedAgo:'5 hours ago',specs:{Brand:'Honda',Model:'CD 70',Year:'2024',KMs:'5,000 km',Engine:'70cc',Color:'Black',Registration:'Clear',Insurance:'Valid till Dec 2026'}},
+  {id:'p12',name:'Nikon D5600 DSLR Camera + 18-55mm Lens',price:75000,unit:'',condition:'Like New (10/10)',type:'c2c',cat:'electronics',location:'Peshawar Cantt',img:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=90',imgs:['https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=90','https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=800&q=90'],desc:'Nikon D5600 DSLR camera with 18-55mm VR lens. Very low shutter count (only 3,200). Like new condition, no scratches. Includes camera bag, extra battery, 32GB SD card.',seller:'Imran Photographer',sellerCity:'Peshawar Cantt',sellerPhone:'+92 333 0000000',sellerVerified:false,rating:4.9,reviews:15,postedAgo:'1 day ago',specs:{Brand:'Nikon',Model:'D5600',Sensor:'24.2 MP APS-C',ShutterCount:'~3,200',Lens:'18-55mm VR f/3.5-5.6',Screen:'3.2" Vari-angle',Video:'1080p 60fps',Accessories:'Bag, Extra Battery, 32GB SD'}},
+];
+
+const SAMPLE_REVIEWS = [
+  {name:'Muhammad Ali', rating:5, text:'Excellent quality product. Delivery was fast and packaging was professional. Will order again.', date:'May 2026'},
+  {name:'Sara Ahmed',   rating:4, text:'Good product, matches description. Slight delay in shipping but seller communicated well.', date:'Apr 2026'},
+  {name:'Usman Khan',  rating:5, text:'Very satisfied with the purchase. Seller is responsive and professional.', date:'Apr 2026'},
+];
+
+let currentProduct = null;
+let currentQty = 1;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const id   = getUrlParam('id');
+  const type = getUrlParam('type');
+
+  /* Hide loading spinner immediately */
+  document.getElementById('loading').style.display = 'none';
+
+  /* Try to find in static data first */
+  currentProduct = PRODUCTS.find(p => p.id === id);
+
+  if (currentProduct) {
+    renderProduct(currentProduct);
+    return;
+  }
+
+  /* Not in static data — try backend silently */
+  loadFromBackend(id);
+});
+
+async function loadFromBackend(id) {
+  try {
+    const data = await apiGetProduct(id);
+    if (data.product) {
+      const p = data.product;
+      currentProduct = {
+        id:       p._id,
+        name:     p.title,
+        price:    p.price,
+        unit:     p.unit || '/pc',
+        moq:      p.moq || 1,
+        moqLabel: 'MOQ: ' + (p.moq||1) + ' Pieces',
+        type:     p.type || 'b2b',
+        cat:      p.category || '',
+        location: p.sellerCity || '',
+        img:      p.images?.[0] || '',
+        imgs:     p.images || [],
+        desc:     p.description || '',
+        seller:   p.sellerName || 'Seller',
+        sellerCity: p.sellerCity || '',
+        sellerVerified: false,
+        rating:   4.5, reviews: 0,
+        specs:    {}
+      };
+      renderProduct(currentProduct);
+    } else {
+      showNotFound();
+    }
+  } catch {
+    showNotFound();
+  }
+}
+
+function showNotFound() {
+  document.getElementById('loading').innerHTML = `
+    <i class="fas fa-exclamation-circle" style="font-size:48px;color:var(--border);margin-bottom:16px;display:block;"></i>
+    <h3 style="font-weight:800;margin-bottom:10px;">Product Not Found</h3>
+    <p style="color:var(--muted);margin-bottom:20px;">This product may have been removed or the link is incorrect.</p>
+    <a href="shop.html" class="btn-primary"><i class="fas fa-store"></i> Browse Products</a>`;
+}
+
+function renderProduct(p) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('detail-layout').style.display = 'grid';
+
+  document.title      = p.name + ' | MSukasha';
+  document.getElementById('page-heading').textContent = p.name;
+  document.getElementById('page-cat').textContent     = p.cat || 'Product';
+
+  /* Main image */
+  const mainImg = document.getElementById('main-img');
+  mainImg.src = p.img;
+  mainImg.alt = p.name;
+
+  /* Thumbnails */
+  const imgs = p.imgs?.length ? p.imgs : [p.img];
+  document.getElementById('thumb-row').innerHTML = imgs.map((src,i) => `
+    <div class="thumb ${i===0?'active':''}" onclick="switchImg('${src}',this)">
+      <img src="${src}" alt="Image ${i+1}" loading="lazy">
+    </div>`).join('');
+
+  /* Description */
+  document.getElementById('desc-text').textContent = p.desc || 'No description available.';
+
+  /* Specs */
+  if (p.specs && Object.keys(p.specs).length) {
+    document.getElementById('specs-table').innerHTML = Object.entries(p.specs).map(([k,v]) =>
+      `<tr><td>${k}</td><td>${v}</td></tr>`
+    ).join('');
+  } else {
+    document.getElementById('specs-table').innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:20px;">No specifications available.</td></tr>';
+  }
+
+  /* Reviews */
+  document.getElementById('reviews-container').innerHTML =
+    SAMPLE_REVIEWS.slice(0, p.reviews > 0 ? 3 : 0).map(r => `
+    <div class="review-card">
+      <div class="review-header">
+        <div>
+          <div class="reviewer">${r.name}</div>
+          <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+        </div>
+        <div class="review-date">${r.date}</div>
+      </div>
+      <p class="review-text">${r.text}</p>
+    </div>`).join('') ||
+    '<p style="color:var(--muted);font-size:14px;">No reviews yet. Be the first to review this product!</p>';
+
+  /* Right panel — different for B2B vs C2C */
+  document.getElementById('right-panel').innerHTML = p.type === 'b2b'
+    ? renderB2BPanel(p)
+    : renderC2CPanel(p);
+
+  /* Related products */
+  const related = PRODUCTS.filter(x => x.cat === p.cat && x.id !== p.id).slice(0,4);
+  document.getElementById('related-grid').innerHTML = related.map(r => `
+    <a href="product-detail.html?id=${r.id}&type=${r.type}" style="text-decoration:none;">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
+        <div style="aspect-ratio:4/3;overflow:hidden;background:#f0f2f5;">
+          <img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+        </div>
+        <div style="padding:10px;">
+          <p style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${r.name}</p>
+          <p style="font-size:14px;font-weight:800;color:var(--orange);">${r.type==='b2b'?'$'+r.price.toFixed(2):'Rs. '+r.price.toLocaleString()}</p>
+        </div>
+      </div>
+    </a>`).join('');
+}
+
+function renderB2BPanel(p) {
+  return `
+  <div>
+    <!-- Price & MOQ -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;">
+      <span class="product-type-badge type-b2b"><i class="fas fa-industry"></i> B2B Wholesale</span>
+      <h1 class="product-title">${p.name}</h1>
+      <div class="product-rating">
+        <span class="stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</span>
+        <span class="rating-text">${p.rating} (${p.reviews} reviews)</span>
+      </div>
+      <div class="product-price">$${Number(p.price).toFixed(2)}${p.unit}</div>
+      <p class="price-note">Price per unit. Volume discounts available for large orders.</p>
+
+      <div class="moq-row">
+        <div class="moq-box"><strong>${p.moq || 10}</strong> pieces minimum order</div>
+        <div style="font-size:12px;color:var(--muted);">📦 Ready to ship in 3–7 days</div>
+      </div>
+
+      <div class="qty-calc">
+        <label>Order Quantity (pieces):</label>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <div class="qty-wrap">
+            <button onclick="changeQty(-1)">−</button>
+            <input type="number" id="qty-input" value="${p.moq||10}" min="${p.moq||1}" onchange="updateTotal()">
+            <button onclick="changeQty(1)">+</button>
+          </div>
+          <div class="total-price">Total: <span id="total-price">$${(p.price*(p.moq||10)).toFixed(2)}</span></div>
+        </div>
+      </div>
+
+      <div class="action-btns">
+        <button class="btn-inquire" onclick="window.location.href='contact.html'">
+          <i class="fas fa-envelope"></i> Send Inquiry
+        </button>
+        <button class="btn-cart" onclick="addToCart({id:'${p.id}',name:currentProduct.name,price:${p.price},img:'${p.img}',type:'b2b',unit:'${p.unit}'})">
+          <i class="fas fa-shopping-cart"></i> Add to Cart
+        </button>
+        <button class="btn-wishlist" onclick="addToWishlist({id:'${p.id}',name:currentProduct.name,price:${p.price},img:'${p.img}',type:'b2b'})">
+          <i class="far fa-heart"></i> Save to Wishlist
+        </button>
+      </div>
+
+      <div class="trust-badges">
+        <div class="trust-badge"><i class="fas fa-shield-alt"></i> Trade Assurance</div>
+        <div class="trust-badge"><i class="fas fa-undo"></i> Easy Returns</div>
+        <div class="trust-badge"><i class="fas fa-lock"></i> Secure Payment</div>
+      </div>
+    </div>
+
+    <!-- Seller Card -->
+    <div class="seller-card">
+      <div class="seller-header">
+        <div class="seller-avatar">${(p.seller||'S').charAt(0).toUpperCase()}</div>
+        <div>
+          <div class="seller-name">${p.seller||'Verified Seller'}</div>
+          <div style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="color:var(--orange);"></i> ${p.sellerCity||'Pakistan'}</div>
+          ${p.sellerVerified ? '<div class="seller-verified"><i class="fas fa-check-circle"></i> Business Verified</div>' : ''}
+        </div>
+      </div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="val">${p.rating}★</div><div class="lbl">Rating</div></div>
+        <div class="seller-stat"><div class="val">${p.reviews}+</div><div class="lbl">Reviews</div></div>
+        <div class="seller-stat"><div class="val">B2B</div><div class="lbl">Supplier</div></div>
+      </div>
+      <a href="contact.html" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;padding:10px;background:var(--orange-light);color:var(--orange);border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+        <i class="fas fa-store"></i> View Supplier Profile
+      </a>
+    </div>
+
+    <!-- Shipping Info -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+      <h4 style="font-size:13px;font-weight:800;margin-bottom:12px;"><i class="fas fa-truck" style="color:var(--orange);margin-right:6px;"></i>Shipping & Delivery</h4>
+      <div style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:8px;">
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Nationwide delivery available</div>
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Ships within 3–7 business days</div>
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Real-time shipment tracking</div>
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Trade Assurance on all B2B orders</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderC2CPanel(p) {
+  return `
+  <div>
+    <!-- Price & Details -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:16px;">
+      <span class="product-type-badge type-c2c"><i class="fas fa-tag"></i> Used Item</span>
+      <h1 class="product-title">${p.name}</h1>
+      <div class="product-rating">
+        <span class="stars">${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}</span>
+        <span class="rating-text">${p.rating} (${p.reviews} reviews)</span>
+      </div>
+
+      ${p.condition ? `<div class="condition-badge"><i class="fas fa-check-circle"></i> ${p.condition}</div>` : ''}
+
+      <div class="product-price-pkr">Rs. ${Number(p.price).toLocaleString()}</div>
+      <p class="price-note">Price is ${p.condition?.includes('firm') ? 'firm' : 'negotiable'}. Contact seller for best offer.</p>
+
+      <div class="location-row">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>${p.location}</span>
+        ${p.postedAgo ? `<span style="margin-left:auto;font-size:11px;background:#f0f2f5;padding:3px 8px;border-radius:10px;">${p.postedAgo}</span>` : ''}
+      </div>
+
+      <div class="action-btns">
+        <button class="btn-inquire" onclick="window.location.href='messages.html'">
+          <i class="fas fa-comment-dots"></i> Message Seller
+        </button>
+        <button class="btn-cart" onclick="window.location.href='contact.html'">
+          <i class="fas fa-phone"></i> Call / WhatsApp
+        </button>
+        <button class="btn-wishlist" onclick="addToWishlist({id:'${p.id}',name:currentProduct.name,price:${p.price},img:'${p.img}',type:'c2c'})">
+          <i class="far fa-heart"></i> Save to Wishlist
+        </button>
+      </div>
+
+      <div class="trust-badges">
+        <div class="trust-badge"><i class="fas fa-shield-alt"></i> Safe Trading Tips</div>
+        <div class="trust-badge"><i class="fas fa-eye"></i> Inspect Before Pay</div>
+      </div>
+
+      <div class="alert alert-warning" style="margin-top:12px;font-size:12px;">
+        <i class="fas fa-exclamation-triangle"></i>
+        Always meet in a public place and inspect the item before paying.
+        <a href="safety-tips.html" style="color:var(--orange);font-weight:700;margin-left:4px;">Safety Tips →</a>
+      </div>
+    </div>
+
+    <!-- Seller Card -->
+    <div class="seller-card">
+      <div class="seller-header">
+        <div class="seller-avatar" style="background:linear-gradient(135deg,#0066cc,#44aaff);">${(p.seller||'U').charAt(0).toUpperCase()}</div>
+        <div>
+          <div class="seller-name">${p.seller||'Seller'}</div>
+          <div style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="color:var(--orange);"></i> ${p.sellerCity||p.location||'Pakistan'}</div>
+          ${p.sellerVerified ? '<div class="seller-verified"><i class="fas fa-check-circle"></i> Verified</div>' : '<div style="font-size:11px;color:var(--muted);margin-top:3px;"><i class="fas fa-user"></i> Regular Member</div>'}
+        </div>
+      </div>
+      <div class="seller-stats">
+        <div class="seller-stat"><div class="val">${p.rating}★</div><div class="lbl">Rating</div></div>
+        <div class="seller-stat"><div class="val">${p.reviews}</div><div class="lbl">Sales</div></div>
+        <div class="seller-stat"><div class="val">Fast</div><div class="lbl">Responder</div></div>
+      </div>
+      <a href="messages.html" style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;padding:10px;background:#e0f2fe;color:#0369a1;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">
+        <i class="fas fa-comment-dots"></i> Chat with Seller
+      </a>
+    </div>
+
+    <!-- Safety Tips -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;">
+      <h4 style="font-size:13px;font-weight:800;margin-bottom:12px;"><i class="fas fa-shield-alt" style="color:var(--orange);margin-right:6px;"></i>Buying Safety Tips</h4>
+      <div style="font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:7px;">
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Meet seller in a public place</div>
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Inspect item before paying</div>
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Don't pay in advance to strangers</div>
+        <div><i class="fas fa-check" style="color:#22c55e;margin-right:6px;"></i>Use MSukasha messages for all chats</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function switchImg(src, el) {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function changeQty(delta) {
+  const inp  = document.getElementById('qty-input');
+  const minQ = currentProduct?.moq || 1;
+  const val  = Math.max(minQ, (parseInt(inp.value)||minQ) + delta);
+  inp.value  = val;
+  updateTotal();
+}
+
+function updateTotal() {
+  const qty   = parseInt(document.getElementById('qty-input')?.value) || 1;
+  const price = currentProduct?.price || 0;
+  const el    = document.getElementById('total-price');
+  if (el) el.textContent = '$' + (price * qty).toFixed(2);
+}
+
+function showTab(name, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+}
+</script>
+</body>
+</html>
