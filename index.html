@@ -4,10 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MSukasha | Pakistan's B2B Wholesale & C2C Marketplace</title>
-  <meta name="description" content="MSukasha - Pakistan's leading platform for B2B wholesale sourcing and C2C local classifieds. Buy and sell electronics, fashion, vehicles, and more.">
+  <meta name="description" content="MSukasha - Pakistan's leading platform for B2B wholesale sourcing and C2C local classifieds.">
   <link rel="icon" type="image/png" href="Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Make card-img a proper image container */
+    .card-img {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+      display: block;
+      background: #f0f2f5;
+      cursor: pointer;
+    }
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover .card-img img {
+      transform: scale(1.05);
+    }
+    /* Make whole card clickable */
+    .product-card {
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: #d0d8e4;
+    }
+  </style>
 </head>
 <body>
 
@@ -81,10 +111,10 @@
     </section>
 
     <!-- PLATFORM STATS -->
-    <div class="stats-bar" id="stats-bar">
-      <div class="stat-item"><span class="stat-num" id="stat-suppliers">50,000+</span><span class="stat-label">Verified Suppliers</span></div>
-      <div class="stat-item"><span class="stat-num" id="stat-listings">200,000+</span><span class="stat-label">Active Listings</span></div>
-      <div class="stat-item"><span class="stat-num" id="stat-users">1.2M+</span><span class="stat-label">Registered Users</span></div>
+    <div class="stats-bar">
+      <div class="stat-item"><span class="stat-num">50,000+</span><span class="stat-label">Verified Suppliers</span></div>
+      <div class="stat-item"><span class="stat-num">200,000+</span><span class="stat-label">Active Listings</span></div>
+      <div class="stat-item"><span class="stat-num">1.2M+</span><span class="stat-label">Registered Users</span></div>
       <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">Cities Covered</span></div>
     </div>
 
@@ -95,11 +125,91 @@
         <a href="wholesale.html" class="see-all">See More <i class="fas fa-arrow-right"></i></a>
       </div>
       <div class="product-grid" id="b2b-products">
-        <!-- Loaded from Firebase -->
-        <div class="product-card"><div class="card-img"><i class="fas fa-solar-panel placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Industrial Grade Solar Panels — 545W Mono PERC</p><p class="card-price">$120.00/pc</p><p class="card-moq">MOQ: 10 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-tshirt placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Wholesale Cotton Plain T-Shirts (Pack of 50)</p><p class="card-price">$2.50/pc</p><p class="card-moq">MOQ: 100 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-headphones placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Professional Wireless Earbuds — Bulk Export Grade</p><p class="card-price">$8.90/pc</p><p class="card-moq">MOQ: 50 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-battery-full placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div><div class="card-body"><p class="card-name">Custom Logo Power Banks — 10,000mAh Wholesale</p><p class="card-price">$5.20/pc</p><p class="card-moq">MOQ: 20 Pieces</p></div><div class="card-footer"><a href="contact.html" class="card-btn">Inquire Now</a><a href="cart.html" class="card-btn solid">Buy Now</a></div></div>
+
+        <!-- Product 1 — Solar Panels -->
+        <div class="product-card" onclick="goToDetail('p1','b2b')">
+          <div class="card-img">
+            <img src="./images/solar-panels.jpg" alt="Industrial Solar Panels"
+              onerror="this.src='https://images.unsplash.com/photo-1509391366360-2e959784a276?w=400&q=80'">
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p1',name:'Industrial Solar Panels 545W',price:120,type:'b2b'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Industrial Grade Solar Panels — 545W Mono PERC</p>
+            <p class="card-price">$120.00/pc</p>
+            <p class="card-moq">MOQ: 10 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn" onclick="event.stopPropagation()">Inquire Now</a>
+            <button onclick="event.stopPropagation();addToCart({id:'p1',name:'Industrial Solar Panels 545W',price:120,type:'b2b',img:'./images/solar-panels.jpg'})" class="card-btn solid">Buy Now</button>
+          </div>
+        </div>
+
+        <!-- Product 2 — T-Shirts -->
+        <div class="product-card" onclick="goToDetail('p2','b2b')">
+          <div class="card-img">
+            <img src="./images/t-shirt (2).jpg" alt="Cotton T-Shirts"
+              onerror="this.src='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80'">
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p2',name:'Wholesale Cotton T-Shirts',price:2.5,type:'b2b'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Wholesale Cotton Plain T-Shirts (Pack of 50)</p>
+            <p class="card-price">$2.50/pc</p>
+            <p class="card-moq">MOQ: 100 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn" onclick="event.stopPropagation()">Inquire Now</a>
+            <button onclick="event.stopPropagation();addToCart({id:'p2',name:'Wholesale Cotton T-Shirts',price:2.5,type:'b2b',img:'./images/t-shirt (2).jpg'})" class="card-btn solid">Buy Now</button>
+          </div>
+        </div>
+
+        <!-- Product 3 — Earbuds -->
+        <div class="product-card" onclick="goToDetail('p3','b2b')">
+          <div class="card-img">
+            <img src="./images/earbuds.jpg" alt="Wireless Earbuds"
+              onerror="this.src='https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&q=80'">
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p3',name:'Wireless Earbuds Bulk',price:8.9,type:'b2b'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Professional Wireless Earbuds — Bulk Export Grade</p>
+            <p class="card-price">$8.90/pc</p>
+            <p class="card-moq">MOQ: 50 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn" onclick="event.stopPropagation()">Inquire Now</a>
+            <button onclick="event.stopPropagation();addToCart({id:'p3',name:'Wireless Earbuds Bulk',price:8.9,type:'b2b',img:'./images/earbuds.jpg'})" class="card-btn solid">Buy Now</button>
+          </div>
+        </div>
+
+        <!-- Product 4 — Baseball Kit -->
+        <div class="product-card" onclick="goToDetail('p7','b2b')">
+          <div class="card-img">
+            <img src="./images/Baseball-bat-ball.jpg" alt="Baseball Kit"
+              onerror="this.src='https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=80'">
+            <span class="card-badge badge-b2b">B2B</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p7',name:'Baseball Kit Wholesale',price:5.2,type:'b2b'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Custom Baseball Kit — Wholesale</p>
+            <p class="card-price">$5.20/pc</p>
+            <p class="card-moq">MOQ: 20 Pieces</p>
+          </div>
+          <div class="card-footer">
+            <a href="contact.html" class="card-btn" onclick="event.stopPropagation()">Inquire Now</a>
+            <button onclick="event.stopPropagation();addToCart({id:'p7',name:'Baseball Kit Wholesale',price:5.2,type:'b2b',img:'./images/Baseball-bat-ball.jpg'})" class="card-btn solid">Buy Now</button>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -119,11 +229,95 @@
         <a href="c2c.html" class="see-all" style="color:#0066cc;">View All Ads <i class="fas fa-arrow-right"></i></a>
       </div>
       <div class="product-grid" id="c2c-products">
-        <!-- Loaded from Firebase -->
-        <div class="product-card"><div class="card-img"><i class="fas fa-mobile-alt placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Used iPhone 12 Pro — 128GB (Water Pack)</p><p class="card-price" style="color:var(--dark);">Rs. 135,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> DHA, Karachi</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-motorcycle placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Honda CD 70 — 2024 Model (Urgent Sale)</p><p class="card-price" style="color:var(--dark);">Rs. 115,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> Johar Town, Lahore</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-chair placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Office Desk & Ergonomic Chair Set — Good Condition</p><p class="card-price" style="color:var(--dark);">Rs. 12,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> G-11, Islamabad</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
-        <div class="product-card"><div class="card-img"><i class="fas fa-camera placeholder-icon"></i><span class="card-badge badge-used">USED</span></div><div class="card-body"><p class="card-name">Nikon D5600 DSLR Camera with 18-55mm Lens</p><p class="card-price" style="color:var(--dark);">Rs. 75,000</p><p class="card-location"><i class="fas fa-map-marker-alt"></i> Peshawar Cantt</p></div><div class="card-footer"><a href="messages.html" class="card-btn">Message Seller</a><a href="contact.html" class="card-btn solid">Call Now</a></div></div>
+
+        <!-- C2C 1 — iPhone -->
+        <div class="product-card" onclick="goToDetail('p9','c2c')">
+          <div class="card-img">
+            <img src="./images/iphone.jpg" alt="iPhone 12 Pro"
+              onerror="this.src='https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=400&q=80'">
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p9',name:'Used iPhone 12 Pro',price:135000,type:'c2c'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+              <a href="messages.html" class="card-action-btn" onclick="event.stopPropagation()" title="Message"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Used iPhone 12 Pro — 128GB (Water Pack)</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 135,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> DHA, Karachi</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn" onclick="event.stopPropagation()">Message Seller</a>
+            <a href="contact.html" class="card-btn solid" onclick="event.stopPropagation()">Call Now</a>
+          </div>
+        </div>
+
+        <!-- C2C 2 — Honda CD 70 -->
+        <div class="product-card" onclick="goToDetail('c2c-honda','c2c')">
+          <div class="card-img">
+            <img src="./images/honda.jpg" alt="Honda CD 70"
+              onerror="this.src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80'">
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'c2c-honda',name:'Honda CD 70',price:115000,type:'c2c'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+              <a href="messages.html" class="card-action-btn" onclick="event.stopPropagation()" title="Message"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Honda CD 70 — 2024 Model (Urgent Sale)</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 115,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Johar Town, Lahore</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn" onclick="event.stopPropagation()">Message Seller</a>
+            <a href="contact.html" class="card-btn solid" onclick="event.stopPropagation()">Call Now</a>
+          </div>
+        </div>
+
+        <!-- C2C 3 — Office Chair (used) -->
+        <div class="product-card" onclick="goToDetail('p11','c2c')">
+          <div class="card-img">
+            <img src="./images/office chair.jpg" alt="Office Desk"
+              onerror="this.src='https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&q=80'">
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p11',name:'Office Desk & Chair Set',price:12000,type:'c2c'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+              <a href="messages.html" class="card-action-btn" onclick="event.stopPropagation()" title="Message"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Office Desk & Ergonomic Chair Set — Good Condition</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 12,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> G-11, Islamabad</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn" onclick="event.stopPropagation()">Message Seller</a>
+            <a href="contact.html" class="card-btn solid" onclick="event.stopPropagation()">Call Now</a>
+          </div>
+        </div>
+
+        <!-- C2C 4 — nikon -->
+        <div class="product-card" onclick="goToDetail('p12','c2c')">
+          <div class="card-img">
+            <img src="./images/nikon.jpg" alt="DSLR Camera"
+              onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80'">
+            <span class="card-badge badge-used">USED</span>
+            <div class="card-actions">
+              <button onclick="event.stopPropagation();addToWishlist({id:'p12',name:'Nikon D5600 DSLR Camera',price:75000,type:'c2c'})" class="card-action-btn" title="Wishlist"><i class="far fa-heart"></i></button>
+              <a href="messages.html" class="card-action-btn" onclick="event.stopPropagation()" title="Message"><i class="fas fa-comment"></i></a>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-name">Nikon D5600 DSLR Camera with 18-55mm Lens</p>
+            <p class="card-price" style="color:var(--dark);">Rs. 75,000</p>
+            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Peshawar Cantt</p>
+          </div>
+          <div class="card-footer">
+            <a href="messages.html" class="card-btn" onclick="event.stopPropagation()">Message Seller</a>
+            <a href="contact.html" class="card-btn solid" onclick="event.stopPropagation()">Call Now</a>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -133,7 +327,8 @@
       <div class="card" style="padding:28px 40px;">
         <div style="display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:24px;">
           <div style="text-align:center;">
-            <img src="icone/SECP_logo.png" alt="SECP Registered" style="height:50px;margin:0 auto 8px;" onerror="this.parentElement.innerHTML='<div style=\'font-size:13px;font-weight:700;color:var(--orange);\'>SECP</div><p style=\'font-size:11px;color:var(--muted);\'>SECP Registered</p>'">
+            <img src="icone/SECP_logo.png" alt="SECP Registered" style="height:50px;margin:0 auto 8px;"
+              onerror="this.parentElement.innerHTML='<div style=\'font-size:13px;font-weight:700;color:var(--orange);\'>SECP</div><p style=\'font-size:11px;color:var(--muted);\'>SECP Registered</p>'">
             <p style="font-size:11px;color:var(--muted);">SECP Registered</p>
           </div>
           <div style="text-align:center;"><div style="font-size:28px;color:var(--orange);margin-bottom:6px;"><i class="fas fa-shield-alt"></i></div><p style="font-size:13px;font-weight:700;color:var(--dark);">Trade Assurance</p><p style="font-size:11px;color:var(--muted);">Buyer Protection</p></div>
@@ -149,6 +344,12 @@
 
 <footer class="site-footer" id="site-footer"></footer>
 <script src="main.js"></script>
-<script src="firebase-config.js"></script>
+<script src="api.js"></script>
+<script>
+/* ── Click any product card → go to detail page ── */
+function goToDetail(id, type) {
+  window.location.href = 'product-detail.html?id=' + id + '&type=' + type;
+}
+</script>
 </body>
 </html>
