@@ -8,22 +8,31 @@
    SHARED HEADER & FOOTER INJECTION
    ============================================================ */
 
-const HEADER_HTML = `
+function getPageBase() {
+  return window.location.pathname.includes('/Pages/') ? '../' : 'Pages/';
+}
+
+function getRootBase() {
+  return window.location.pathname.includes('/Pages/') ? '../' : '';
+}
+
+function getHeaderHtml(pageBase, rootBase) {
+  return `
 <div class="header-top">
   <div class="container">
     <div>🇵🇰 Pakistan's #1 B2B Wholesale &amp; C2C Trading Platform</div>
     <div class="header-top-links">
-      <a href="help-center.html"><i class="fas fa-question-circle"></i> Help Center</a>
-      <a href="book-call.html"><i class="fas fa-phone"></i> Book a Free Call</a>
-      <a href="become-partner.html"><i class="fas fa-handshake"></i> Become a Partner</a>
-      <a href="careers.html"><i class="fas fa-briefcase"></i> Careers</a>
+      <a href="${pageBase}help-center.html"><i class="fas fa-question-circle"></i> Help Center</a>
+      <a href="${pageBase}book-call.html"><i class="fas fa-phone"></i> Book a Free Call</a>
+      <a href="${pageBase}become-partner.html"><i class="fas fa-handshake"></i> Become a Partner</a>
+      <a href="${pageBase}careers.html"><i class="fas fa-briefcase"></i> Careers</a>
     </div>
   </div>
 </div>
 <div class="header-main">
   <div class="container">
-    <a href="index.html" class="site-logo">
-      <img src="Logo/logo.png" alt="MSukasha" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+    <a href="${rootBase}index.html" class="site-logo">
+      <img src="${rootBase}Logo/logo.png" alt="MSukasha" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
       <span style="display:none;font-size:22px;font-weight:900;color:#ff6600;">MSukasha</span>
     </a>
     <form class="search-form" onsubmit="handleSearch(event)">
@@ -44,15 +53,15 @@ const HEADER_HTML = `
         <i class="fas fa-user"></i>
         <span>Seller Account</span>
       </a>
-      <a href="wishlist.html" class="hdr-btn">
+      <a href="${pageBase}wishlist.html" class="hdr-btn">
         <i class="far fa-heart"></i>
         <span>Wishlist</span>
       </a>
-      <a href="cart.html" class="hdr-btn">
+      <a href="${pageBase}cart.html" class="hdr-btn">
         <i class="fas fa-shopping-cart"></i>
         <span>Cart <span id="cart-count"></span></span>
       </a>
-      <a href="login.html" class="hdr-btn primary-btn" id="auth-btn">
+      <a href="${pageBase}login.html" class="hdr-btn primary-btn" id="auth-btn">
         <i class="fas fa-user"></i>
         <span id="auth-label">Sign In</span>
       </a>
@@ -61,23 +70,25 @@ const HEADER_HTML = `
 </div>
 <nav class="nav-bar">
   <div class="container">
-    <a href="categories.html" class="all-cats"><i class="fas fa-bars"></i> All Categories</a>
-    <a href="wholesale.html">Wholesale B2B</a>
-    <a href="c2c.html">Used Items (C2C)</a>
-    <a href="trade-assurance.html">Trade Assurance</a>
-    <a href="verified-suppliers.html">Verified Suppliers</a>
-    <a href="logistics-service.html">Logistics</a>
-    <a href="blog.html">Blog</a>
-    <a href="contact.html">Contact</a>
+    <a href="${pageBase}categories.html" class="all-cats"><i class="fas fa-bars"></i> All Categories</a>
+    <a href="${pageBase}wholesale.html">Wholesale B2B</a>
+    <a href="${pageBase}c2c.html">Used Items (C2C)</a>
+    <a href="${pageBase}trade-assurance.html">Trade Assurance</a>
+    <a href="${pageBase}verified-suppliers.html">Verified Suppliers</a>
+    <a href="${pageBase}logistics-service.html">Logistics</a>
+    <a href="${pageBase}blog.html">Blog</a>
+    <a href="${pageBase}contact.html">Contact</a>
   </div>
 </nav>
 `;
+}
 
-const FOOTER_HTML = `
+function getFooterHtml(pageBase, rootBase) {
+  return `
 <div class="container">
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="Logo/logo.png" alt="MSukasha" class="footer-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <img src="${rootBase}Logo/logo.png" alt="MSukasha" class="footer-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <span style="display:none;font-size:20px;font-weight:900;color:#fff;margin-bottom:12px;display:block;">MSukasha</span>
       <p>Pakistan's leading platform for B2B wholesale sourcing and C2C local marketplace. Connecting buyers and sellers nationwide.</p>
       <div class="footer-socials">
@@ -90,42 +101,42 @@ const FOOTER_HTML = `
     <div class="footer-col">
       <h5>Company</h5>
       <div class="footer-links">
-        <a href="about-us.html">About Us</a>
-        <a href="careers.html">Careers</a>
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Contact Us</a>
-        <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+        <a href="${pageBase}about-us.html">About Us</a>
+        <a href="${pageBase}careers.html">Careers</a>
+        <a href="${pageBase}blog.html">Blog</a>
+        <a href="${pageBase}contact.html">Contact Us</a>
+        <a href="${pageBase}terms and conditions.html">Terms &amp; Conditions</a>
       </div>
     </div>
     <div class="footer-col">
       <h5>B2B Services</h5>
       <div class="footer-links">
-        <a href="trade-assurance.html">Trade Assurance</a>
-        <a href="verified-suppliers.html">Verified Suppliers</a>
-        <a href="logistics-service.html">Logistics Service</a>
-        <a href="bulk-import-strategies.html">Bulk Import Guide</a>
-        <a href="b2b-expert.html">B2B Expert</a>
+        <a href="${pageBase}trade-assurance.html">Trade Assurance</a>
+        <a href="${pageBase}verified-suppliers.html">Verified Suppliers</a>
+        <a href="${pageBase}logistics-service.html">Logistics Service</a>
+        <a href="${pageBase}bulk-import-strategies.html">Bulk Import Guide</a>
+        <a href="${pageBase}b2b-expert.html">B2B Expert</a>
       </div>
     </div>
     <div class="footer-col">
       <h5>C2C Marketplace</h5>
       <div class="footer-links">
-        <a href="post-free-ad.html">Post Free Ad</a>
-        <a href="safety-tips.html">Safety Tips</a>
-        <a href="buying-guides.html">Buying Guides</a>
-        <a href="inspecting-used-goods.html">Inspecting Used Goods</a>
-        <a href="safe-bargaining.html">Safe Bargaining</a>
+        <a href="${pageBase}post-free-ad.html">Post Free Ad</a>
+        <a href="${pageBase}safety-tips.html">Safety Tips</a>
+        <a href="${pageBase}buying-guides.html">Buying Guides</a>
+        <a href="${pageBase}inspecting-used-goods.html">Inspecting Used Goods</a>
+        <a href="${pageBase}safe-bargaining.html">Safe Bargaining</a>
       </div>
     </div>
     <div class="footer-col">
       <h5>Support</h5>
       <div class="footer-links">
-        <a href="help-center.html">Help Center</a>
-        <a href="track-order.html">Track Order</a>
-        <a href="book-call.html">Book a Free Call</a>
-        <a href="become-partner.html">Become a Partner</a>
-        <a href="start-verification.html">Vendor Verification</a>
-        <a href="contact.html">Report an Issue</a>
+        <a href="${pageBase}help-center.html">Help Center</a>
+        <a href="${pageBase}track-order.html">Track Order</a>
+        <a href="${pageBase}book-call.html">Book a Free Call</a>
+        <a href="${pageBase}become-partner.html">Become a Partner</a>
+        <a href="${pageBase}start-verification.html">Vendor Verification</a>
+        <a href="${pageBase}contact.html">Report an Issue</a>
       </div>
     </div>
   </div>
@@ -136,6 +147,7 @@ const FOOTER_HTML = `
   </div>
 </div>
 `;
+}
 
 /* ============================================================
    DOM READY
@@ -151,7 +163,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function injectHeader() {
   const el = document.getElementById('site-header');
   if (el) {
-    el.innerHTML = HEADER_HTML;
+    const pageBase = getPageBase();
+    const rootBase = getRootBase();
+    el.innerHTML = getHeaderHtml(pageBase, rootBase);
     // Re-run after injection
     updateCartCount();
     updateAuthButton();
@@ -161,7 +175,11 @@ function injectHeader() {
 
 function injectFooter() {
   const el = document.getElementById('site-footer');
-  if (el) el.innerHTML = FOOTER_HTML;
+  if (el) {
+    const pageBase = getPageBase();
+    const rootBase = getRootBase();
+    el.innerHTML = getFooterHtml(pageBase, rootBase);
+  }
 }
 
 function highlightNav() {
@@ -186,18 +204,19 @@ function setUser(user) {
 function logout() {
   localStorage.removeItem('msukasha_user');
   showToast('Logged out successfully.', 'info');
-  setTimeout(() => window.location.href = 'index.html', 1000);
+  setTimeout(() => window.location.href = `${getRootBase()}index.html`, 1000);
 }
 function updateAuthButton() {
   const user = getUser();
   const btn = document.getElementById('auth-btn');
   const label = document.getElementById('auth-label');
   if (!btn || !label) return;
+  const base = getPageBase();
   if (user) {
-    btn.href = 'my-account.html';
+    btn.href = `${base}my-account.html`;
     label.textContent = user.name ? user.name.split(' ')[0] : 'My Account';
   } else {
-    btn.href = 'login.html';
+    btn.href = `${base}login.html`;
     label.textContent = 'Sign In';
   }
 }
