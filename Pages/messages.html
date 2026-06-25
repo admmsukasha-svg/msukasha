@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages | MSukasha</title>
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .msg-layout{display:grid;grid-template-columns:300px 1fr;gap:0;background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;min-height:520px;}
+    .msg-sidebar{border-right:1px solid var(--border);}
+    .msg-sidebar-header{padding:16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;}
+    .conv-item{padding:14px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background var(--transition);}
+    .conv-item:hover,.conv-item.active{background:var(--orange-light);}
+    .conv-item .conv-name{font-weight:700;font-size:13px;margin-bottom:3px;}
+    .conv-item .conv-preview{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .msg-main{display:flex;flex-direction:column;}
+    .msg-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+    .msg-avatar{width:38px;height:38px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;}
+    .msg-body{flex:1;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
+    .bubble{max-width:60%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;}
+    .bubble.received{background:#f0f2f5;align-self:flex-start;border-bottom-left-radius:4px;}
+    .bubble.sent{background:var(--orange);color:#fff;align-self:flex-end;border-bottom-right-radius:4px;}
+    .msg-footer{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;}
+    .msg-footer input{flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:24px;outline:none;font-size:13px;}
+    .msg-footer input:focus{border-color:var(--orange);}
+    .msg-footer button{background:var(--orange);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:15px;}
+    @media(max-width:768px){.msg-layout{grid-template-columns:1fr;}.msg-sidebar{display:none;}}
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1>Messages</h1><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Messages</span></div></div></div>
+<main><div class="container" style="padding:24px 0 60px;">
+  <div class="msg-layout">
+    <div class="msg-sidebar">
+      <div class="msg-sidebar-header"><i class="fas fa-comments" style="color:var(--orange);margin-right:8px;"></i>Conversations</div>
+      <div class="conv-item active"><div class="conv-name">Ahmed (iPhone Seller)</div><div class="conv-preview">Is the phone still available?</div></div>
+      <div class="conv-item"><div class="conv-name">Solar Panels Supplier</div><div class="conv-preview">We can offer MOQ of 5 units for...</div></div>
+      <div class="conv-item"><div class="conv-name">Furniture Seller</div><div class="conv-preview">Chair is in perfect condition</div></div>
+    </div>
+    <div class="msg-main">
+      <div class="msg-header">
+        <div class="msg-avatar">A</div>
+        <div><p style="font-weight:700;font-size:14px;">Ahmed (iPhone Seller)</p><p style="font-size:12px;color:var(--muted);">Listing: Used iPhone 12 Pro 128GB</p></div>
+      </div>
+      <div class="msg-body" id="msg-body">
+        <div class="bubble received">Hi, is the iPhone still available?</div>
+        <div class="bubble sent">Yes it is! Price is Rs. 135,000 firm.</div>
+        <div class="bubble received">Can we meet in DHA for inspection tomorrow?</div>
+        <div class="bubble sent">Sure, let's meet at Zamzama at 3pm?</div>
+      </div>
+      <div class="msg-footer">
+        <input type="text" id="msg-input" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+</div></main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script>
+function sendMsg(){
+  const inp=document.getElementById('msg-input');
+  const val=inp.value.trim();
+  if(!val)return;
+  const body=document.getElementById('msg-body');
+  const b=document.createElement('div');
+  b.className='bubble sent';b.textContent=val;
+  body.appendChild(b);body.scrollTop=body.scrollHeight;
+  inp.value='';
+}
+</script>
+</body></html>

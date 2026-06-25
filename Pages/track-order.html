@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order | MSukasha</title>
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .track-steps{display:flex;align-items:flex-start;gap:0;margin:36px 0;position:relative;}
+    .track-steps::before{content:'';position:absolute;top:20px;left:20px;right:20px;height:2px;background:var(--border);z-index:0;}
+    .track-step{flex:1;text-align:center;position:relative;z-index:1;}
+    .step-icon{width:40px;height:40px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:16px;color:#fff;}
+    .step-icon.done{background:var(--orange);}
+    .step-icon.current{background:var(--orange);box-shadow:0 0 0 4px rgba(255,102,0,0.2);}
+    .step-label{font-size:12px;font-weight:600;color:var(--muted);}
+    .step-label.done,.step-label.current{color:var(--orange);}
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1>Track Your Order</h1><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Track Order</span></div></div></div>
+<main><div class="container" style="padding:36px 0 60px;">
+  <div class="card" style="max-width:680px;margin:0 auto 28px;">
+    <div class="card-header"><h3>Enter Order Number</h3></div>
+    <div class="card-body-pad">
+      <div style="display:flex;gap:10px;">
+        <input type="text" class="form-control" id="order-input" placeholder="e.g. MS-2026-1234" value="MS-2026-001">
+        <button class="btn-primary" style="white-space:nowrap;padding:11px 22px;" onclick="trackOrder()"><i class="fas fa-search"></i> Track</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="max-width:680px;margin:0 auto;" id="tracking-result">
+    <div class="card-header" style="display:flex;justify-content:space-between;">
+      <h3>Order #MS-2026-001</h3>
+      <span class="badge badge-orange">In Transit</span>
+    </div>
+    <div class="card-body-pad">
+      <div style="margin-bottom:8px;font-size:13px;color:var(--muted);">Solar Panels 545W × 10 &bull; Placed May 10, 2026</div>
+      <div class="track-steps">
+        <div class="track-step"><div class="step-icon done"><i class="fas fa-check"></i></div><div class="step-label done">Order Placed</div></div>
+        <div class="track-step"><div class="step-icon done"><i class="fas fa-check"></i></div><div class="step-label done">Confirmed</div></div>
+        <div class="track-step"><div class="step-icon done"><i class="fas fa-check"></i></div><div class="step-label done">Dispatched</div></div>
+        <div class="track-step"><div class="step-icon current"><i class="fas fa-truck"></i></div><div class="step-label current">In Transit</div></div>
+        <div class="track-step"><div class="step-icon"><i class="fas fa-home"></i></div><div class="step-label">Delivered</div></div>
+      </div>
+      <div class="alert alert-info"><i class="fas fa-map-marker-alt"></i> Last update: Your order is in Karachi Hub, expected delivery May 23, 2026</div>
+    </div>
+  </div>
+</div></main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script>
+function trackOrder(){
+  showToast('Tracking order: ' + document.getElementById('order-input').value, 'info');
+}
+</script>
+</body></html>

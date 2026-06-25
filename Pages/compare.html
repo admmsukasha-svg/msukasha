@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compare Products | MSukasha</title>
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .compare-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 40px; }
+    .compare-table th { background: var(--dark); color: #fff; padding: 16px 20px; text-align: left; font-size: 14px; }
+    .compare-table th:first-child { width: 200px; }
+    .compare-table td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table td:first-child { font-weight: 700; color: var(--muted); font-size: 13px; }
+    .compare-table .yes { color: #22c55e; font-weight: 700; }
+    .compare-table .no { color: #ef4444; font-weight: 700; }
+    .empty-compare { text-align: center; padding: 60px 20px; background: #fff; border: 1px dashed var(--border); border-radius: var(--radius); margin-bottom: 40px; }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1>Compare Products</h1><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Compare</span></div></div></div>
+<main>
+  <div class="container" style="padding:40px 0 70px;">
+
+    <div id="compare-content">
+      <div class="empty-compare" id="empty-state">
+        <i class="fas fa-balance-scale" style="font-size:52px;color:var(--border);margin-bottom:20px;display:block;"></i>
+        <h3 style="font-weight:700;margin-bottom:10px;">No Products to Compare Yet</h3>
+        <p style="color:var(--muted);margin-bottom:22px;">Browse products and click the compare button to add items here. You can compare up to 4 products side by side.</p>
+        <a href="shop.html" class="btn-primary"><i class="fas fa-search"></i> Browse Products</a>
+      </div>
+    </div>
+
+    <div class="section-header"><h2 class="section-title">Example Comparison — Smartphones</h2></div>
+    <div style="overflow-x:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Specification</th>
+            <th><div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:13px;font-weight:600;opacity:0.7;">Used</span><span>Samsung Galaxy A54</span><span style="color:var(--orange);font-weight:800;margin-top:4px;">PKR 42,000</span></div></th>
+            <th><div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:13px;font-weight:600;opacity:0.7;">Used</span><span>Xiaomi Redmi Note 12</span><span style="color:var(--orange);font-weight:800;margin-top:4px;">PKR 28,000</span></div></th>
+            <th><div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:13px;font-weight:600;opacity:0.7;">Used</span><span>iPhone 13</span><span style="color:var(--orange);font-weight:800;margin-top:4px;">PKR 110,000</span></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Display</td><td>6.4" Super AMOLED</td><td>6.67" AMOLED</td><td>6.1" Super Retina XDR</td></tr>
+          <tr><td>RAM</td><td>8 GB</td><td>6 GB</td><td>4 GB</td></tr>
+          <tr><td>Storage</td><td>128 GB</td><td>128 GB</td><td>128 GB</td></tr>
+          <tr><td>Battery</td><td>5000 mAh</td><td>5000 mAh</td><td>3227 mAh</td></tr>
+          <tr><td>Camera</td><td>50MP Triple</td><td>48MP Triple</td><td>12MP Dual</td></tr>
+          <tr><td>5G</td><td class="yes">✓ Yes</td><td class="yes">✓ Yes</td><td class="yes">✓ Yes</td></tr>
+          <tr><td>OS</td><td>Android 14</td><td>Android 13</td><td>iOS 16</td></tr>
+          <tr><td>Face Unlock</td><td class="yes">✓ Yes</td><td class="yes">✓ Yes</td><td class="yes">✓ Face ID</td></tr>
+          <tr><td>Warranty</td><td class="no">No (Used)</td><td class="no">No (Used)</td><td class="no">No (Used)</td></tr>
+          <tr><td>Condition</td><td>9/10 — Like New</td><td>8/10 — Good</td><td>9/10 — Excellent</td></tr>
+          <tr><td>Seller Rating</td><td>⭐ 4.8 (32 reviews)</td><td>⭐ 4.6 (19 reviews)</td><td>⭐ 4.9 (57 reviews)</td></tr>
+          <tr><td></td><td><a href="cart.html" class="btn-primary" style="font-size:12px;padding:8px 16px;display:inline-flex;">Add to Cart</a></td><td><a href="cart.html" class="btn-primary" style="font-size:12px;padding:8px 16px;display:inline-flex;">Add to Cart</a></td><td><a href="cart.html" class="btn-primary" style="font-size:12px;padding:8px 16px;display:inline-flex;">Add to Cart</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center;padding:28px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);">
+      <p style="color:var(--muted);margin-bottom:16px;">Add more products to compare from the shop page.</p>
+      <a href="shop.html" class="btn-primary"><i class="fas fa-plus"></i> Add More Products</a>
+    </div>
+
+  </div>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+</body>
+</html>

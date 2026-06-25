@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | MSukasha</title>
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 50px; }
+    .contact-info-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
+    .contact-icon { width: 48px; height: 48px; background: var(--orange-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contact-icon i { font-size: 20px; color: var(--orange); }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Contact Us</h1>
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span><span>Contact</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="contact-grid">
+      <!-- Contact Info -->
+      <div>
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header"><h3>Get in Touch</h3></div>
+          <div class="card-body-pad">
+            <p style="font-size:14px;color:var(--muted);margin-bottom:28px;">Have a question about B2B sourcing, C2C listings, or need help? Our team is ready to assist you.</p>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <p style="font-weight:700;font-size:14px;margin-bottom:4px;">Email</p>
+                <p style="font-size:13px;color:var(--muted);">supp.msukasha@gmail.com</p>
+                <p style="font-size:13px;color:var(--muted);">adm.msukasha@gmail.com</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="fas fa-phone"></i></div>
+              <div>
+                <p style="font-weight:700;font-size:14px;margin-bottom:4px;">Phone / WhatsApp</p>
+                <p style="font-size:13px;color:var(--muted);">+92 331 3730953</p>
+                <p style="font-size:13px;color:var(--muted);">Mon–Sat, 9am–6pm PKT</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <p style="font-weight:700;font-size:14px;margin-bottom:4px;">Office</p>
+                <p style="font-size:13px;color:var(--muted);">Karachi, Sindh, Pakistan</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <p style="font-weight:700;font-size:14px;margin-bottom:4px;">Business Hours</p>
+                <p style="font-size:13px;color:var(--muted);">Monday – Saturday: 9:00 AM – 6:00 PM PKT</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="card">
+        <div class="card-header"><h3>Send Us a Message</h3></div>
+        <div class="card-body-pad">
+          <form id="contact-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">Full Name *</label>
+                <input type="text" class="form-control" placeholder="Your full name" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address *</label>
+                <input type="email" class="form-control" placeholder="Enter your email address" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" placeholder="Enter phone number in international format, e.g. +92 300 0000000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject *</label>
+              <select class="form-control" required>
+                <option value="">Select a topic</option>
+                <option>B2B Wholesale Inquiry</option>
+                <option>C2C Listing Help</option>
+                <option>Account / Login Issue</option>
+                <option>Trade Assurance Claim</option>
+                <option>Logistics & Shipping</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message *</label>
+              <textarea class="form-control" rows="5" placeholder="Describe your query in detail..." required style="resize:vertical;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;" onclick="submitContact(event)">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script>
+function submitContact(e) {
+  e.preventDefault();
+  const form = document.getElementById('contact-form');
+  if (validateForm(form)) {
+    showToast('Message sent! We\'ll reply within 24 hours.', 'success');
+    form.reset();
+  }
+}
+</script>
+</body>
+</html>

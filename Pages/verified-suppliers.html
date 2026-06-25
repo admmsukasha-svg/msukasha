@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verified Suppliers | MSukasha</title>
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .filter-bar { display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px; }
+    .filter-btn { padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:all var(--transition); }
+    .filter-btn.active,.filter-btn:hover { background:var(--orange);color:#fff;border-color:var(--orange); }
+    .supplier-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin-bottom:48px; }
+    .supplier-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:box-shadow var(--transition); }
+    .supplier-card:hover { box-shadow:var(--shadow-md); }
+    .supplier-header { display:flex;gap:14px;align-items:flex-start;margin-bottom:14px; }
+    .supplier-logo { width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0; }
+    .verified-tag { display:inline-flex;align-items:center;gap:5px;background:#dcfce7;color:#15803d;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:8px; }
+    .supplier-stats { display:flex;gap:16px;border-top:1px solid var(--border);padding-top:14px;margin-top:14px; }
+    .supplier-stat { text-align:center;flex:1; }
+    .supplier-stat .val { font-size:16px;font-weight:800;color:var(--dark); }
+    .supplier-stat .lbl { font-size:11px;color:var(--muted); }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header"><div class="container"><h1>Verified Suppliers</h1><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Verified Suppliers</span></div></div></div>
+<main>
+  <div class="container" style="padding:40px 0 70px;">
+
+    <div class="stats-bar" style="margin-bottom:40px;">
+      <div class="stat-item"><span class="stat-num">50,000+</span><span class="stat-label">Verified Suppliers</span></div>
+      <div class="stat-item"><span class="stat-num">100+</span><span class="stat-label">Product Categories</span></div>
+      <div class="stat-item"><span class="stat-num">All Pakistan</span><span class="stat-label">Coverage</span></div>
+      <div class="stat-item"><span class="stat-num">Trade Assurance</span><span class="stat-label">Protected Orders</span></div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active">All Categories</button>
+      <button class="filter-btn">Electronics</button>
+      <button class="filter-btn">Textiles</button>
+      <button class="filter-btn">Agriculture</button>
+      <button class="filter-btn">Industrial</button>
+      <button class="filter-btn">Sports Goods</button>
+      <button class="filter-btn">Chemicals</button>
+    </div>
+
+    <div class="supplier-grid">
+
+      <div class="supplier-card">
+        <div class="supplier-header">
+          <div class="supplier-logo" style="background:linear-gradient(135deg,#ff6600,#ff9944);">TE</div>
+          <div>
+            <span class="verified-tag"><i class="fas fa-check-circle"></i> Business Verified</span>
+            <h4 style="font-weight:800;font-size:15px;margin-bottom:3px;">TechExport Pakistan</h4>
+            <p style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Karachi, Sindh</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Bulk supplier of consumer electronics, accessories, and mobile peripherals. 15+ years export experience to Middle East and UK.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span class="badge badge-gray">Electronics</span>
+          <span class="badge badge-gray">Mobile Accessories</span>
+          <span class="badge badge-gray">Export</span>
+        </div>
+        <div class="supplier-stats">
+          <div class="supplier-stat"><div class="val">⭐ 4.9</div><div class="lbl">Rating</div></div>
+          <div class="supplier-stat"><div class="val">230+</div><div class="lbl">Orders</div></div>
+          <div class="supplier-stat"><div class="val">MOQ 50</div><div class="lbl">Min Order</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <a href="contact.html" class="btn-primary" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;"><i class="fas fa-envelope"></i> Inquire</a>
+          <a href="shop.html" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;border:1px solid var(--border);border-radius:8px;font-weight:700;color:var(--text);">View Products</a>
+        </div>
+      </div>
+
+      <div class="supplier-card">
+        <div class="supplier-header">
+          <div class="supplier-logo" style="background:linear-gradient(135deg,#0066cc,#44aaff);">FF</div>
+          <div>
+            <span class="verified-tag" style="background:#fef3c7;color:#d97706;"><i class="fas fa-star"></i> Gold Audited</span>
+            <h4 style="font-weight:800;font-size:15px;margin-bottom:3px;">Faisalabad Fabrics Co.</h4>
+            <p style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Faisalabad, Punjab</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Pakistan's leading wholesale fabric supplier. Cotton, polyester, and blended fabrics in bulk. ISO 9001 certified factory with 500+ looms.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span class="badge badge-gray">Textiles</span>
+          <span class="badge badge-gray">Cotton</span>
+          <span class="badge badge-gray">ISO Certified</span>
+        </div>
+        <div class="supplier-stats">
+          <div class="supplier-stat"><div class="val">⭐ 4.8</div><div class="lbl">Rating</div></div>
+          <div class="supplier-stat"><div class="val">580+</div><div class="lbl">Orders</div></div>
+          <div class="supplier-stat"><div class="val">MOQ 100</div><div class="lbl">Min Order</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <a href="contact.html" class="btn-primary" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;"><i class="fas fa-envelope"></i> Inquire</a>
+          <a href="shop.html" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;border:1px solid var(--border);border-radius:8px;font-weight:700;color:var(--text);">View Products</a>
+        </div>
+      </div>
+
+      <div class="supplier-card">
+        <div class="supplier-header">
+          <div class="supplier-logo" style="background:linear-gradient(135deg,#22c55e,#4ade80);">SG</div>
+          <div>
+            <span class="verified-tag"><i class="fas fa-check-circle"></i> Business Verified</span>
+            <h4 style="font-weight:800;font-size:15px;margin-bottom:3px;">Sialkot Sports Goods</h4>
+            <p style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Sialkot, Punjab</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">World-class sports equipment manufacturer. FIFA-approved footballs, cricket bats, gloves, and protective gear. Exporting to 40+ countries.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span class="badge badge-gray">Sports Goods</span>
+          <span class="badge badge-gray">FIFA Approved</span>
+          <span class="badge badge-gray">Export</span>
+        </div>
+        <div class="supplier-stats">
+          <div class="supplier-stat"><div class="val">⭐ 4.9</div><div class="lbl">Rating</div></div>
+          <div class="supplier-stat"><div class="val">410+</div><div class="lbl">Orders</div></div>
+          <div class="supplier-stat"><div class="val">MOQ 20</div><div class="lbl">Min Order</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <a href="contact.html" class="btn-primary" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;"><i class="fas fa-envelope"></i> Inquire</a>
+          <a href="shop.html" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;border:1px solid var(--border);border-radius:8px;font-weight:700;color:var(--text);">View Products</a>
+        </div>
+      </div>
+
+      <div class="supplier-card">
+        <div class="supplier-header">
+          <div class="supplier-logo" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">AH</div>
+          <div>
+            <span class="verified-tag" style="background:#fef3c7;color:#d97706;"><i class="fas fa-star"></i> Gold Audited</span>
+            <h4 style="font-weight:800;font-size:15px;margin-bottom:3px;">Al-Hassan Agri Traders</h4>
+            <p style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Multan, Punjab</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Premium agricultural commodities supplier. Basmati rice, Chaunsa mangoes, cotton bales, and wheat flour in bulk. Certified for export.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span class="badge badge-gray">Agriculture</span>
+          <span class="badge badge-gray">Rice</span>
+          <span class="badge badge-gray">Mangoes</span>
+        </div>
+        <div class="supplier-stats">
+          <div class="supplier-stat"><div class="val">⭐ 4.7</div><div class="lbl">Rating</div></div>
+          <div class="supplier-stat"><div class="val">195+</div><div class="lbl">Orders</div></div>
+          <div class="supplier-stat"><div class="val">MOQ 500kg</div><div class="lbl">Min Order</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <a href="contact.html" class="btn-primary" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;"><i class="fas fa-envelope"></i> Inquire</a>
+          <a href="shop.html" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;border:1px solid var(--border);border-radius:8px;font-weight:700;color:var(--text);">View Products</a>
+        </div>
+      </div>
+
+      <div class="supplier-card">
+        <div class="supplier-header">
+          <div class="supplier-logo" style="background:linear-gradient(135deg,#f59e0b,#fcd34d);">GS</div>
+          <div>
+            <span class="verified-tag"><i class="fas fa-check-circle"></i> Business Verified</span>
+            <h4 style="font-weight:800;font-size:15px;margin-bottom:3px;">Gujranwala Steel Works</h4>
+            <p style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Gujranwala, Punjab</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Structural steel, rebar, angle iron, and sheet metal supplier for construction and industrial buyers. 20,000+ tons annual capacity.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span class="badge badge-gray">Industrial</span>
+          <span class="badge badge-gray">Steel</span>
+          <span class="badge badge-gray">Construction</span>
+        </div>
+        <div class="supplier-stats">
+          <div class="supplier-stat"><div class="val">⭐ 4.6</div><div class="lbl">Rating</div></div>
+          <div class="supplier-stat"><div class="val">340+</div><div class="lbl">Orders</div></div>
+          <div class="supplier-stat"><div class="val">MOQ 1 Ton</div><div class="lbl">Min Order</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <a href="contact.html" class="btn-primary" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;"><i class="fas fa-envelope"></i> Inquire</a>
+          <a href="shop.html" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;border:1px solid var(--border);border-radius:8px;font-weight:700;color:var(--text);">View Products</a>
+        </div>
+      </div>
+
+      <div class="supplier-card">
+        <div class="supplier-header">
+          <div class="supplier-logo" style="background:linear-gradient(135deg,#06b6d4,#67e8f9);">KP</div>
+          <div>
+            <span class="verified-tag"><i class="fas fa-check-circle"></i> Business Verified</span>
+            <h4 style="font-weight:800;font-size:15px;margin-bottom:3px;">Karachi Packaging Solutions</h4>
+            <p style="font-size:12px;color:var(--muted);"><i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>Karachi, Sindh</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Custom printed boxes, polythene bags, bubble wrap, and industrial packaging for e-commerce and manufacturing businesses.</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span class="badge badge-gray">Packaging</span>
+          <span class="badge badge-gray">Custom Print</span>
+          <span class="badge badge-gray">E-commerce</span>
+        </div>
+        <div class="supplier-stats">
+          <div class="supplier-stat"><div class="val">⭐ 4.8</div><div class="lbl">Rating</div></div>
+          <div class="supplier-stat"><div class="val">270+</div><div class="lbl">Orders</div></div>
+          <div class="supplier-stat"><div class="val">MOQ 500</div><div class="lbl">Min Order</div></div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <a href="contact.html" class="btn-primary" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;"><i class="fas fa-envelope"></i> Inquire</a>
+          <a href="shop.html" style="font-size:12px;padding:8px 14px;flex:1;justify-content:center;display:flex;border:1px solid var(--border);border-radius:8px;font-weight:700;color:var(--text);">View Products</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="promo-banner" style="margin-bottom:0;">
+      <div class="promo-text"><h2>Are You a Supplier?</h2><p>Get verified and reach over 1.2 million active buyers on MSukasha.</p></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="start-verification.html" class="btn-primary"><i class="fas fa-shield-alt"></i> Get Verified Now</a>
+        <a href="wholesale.html" class="btn-outline-white"><i class="fas fa-store"></i> List Your Products</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script>
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

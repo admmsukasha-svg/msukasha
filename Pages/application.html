@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Application | MSukasha</title>
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .app-layout{display:grid;grid-template-columns:1fr 320px;gap:28px;padding:36px 0 60px;}
+    .app-steps{display:flex;gap:0;margin-bottom:32px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+    .app-step{flex:1;padding:14px 10px;text-align:center;font-size:12px;font-weight:700;color:var(--muted);border-right:1px solid var(--border);transition:all .2s;}
+    .app-step:last-child{border-right:none;}
+    .app-step.active{background:var(--orange-light);color:var(--orange);}
+    .app-step.done{background:#eafaf1;color:#15803d;}
+    .app-step .sn{width:24px;height:24px;border-radius:50%;background:var(--border);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;}
+    .app-step.active .sn{background:var(--orange);}
+    .app-step.done .sn{background:#22c55e;}
+
+    .skill-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+    .skill-tag{display:inline-flex;align-items:center;gap:6px;background:var(--orange-light);color:var(--orange);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;}
+    .skill-tag button{background:none;border:none;color:var(--orange);cursor:pointer;font-size:13px;line-height:1;padding:0;margin-left:2px;}
+    .skill-input-wrap{display:flex;gap:8px;margin-top:8px;}
+    .skill-input-wrap input{flex:1;padding:9px 14px;border:1px solid var(--border);border-radius:7px;font-size:13px;outline:none;}
+    .skill-input-wrap input:focus{border-color:var(--orange);}
+    .skill-input-wrap button{padding:9px 16px;background:var(--orange);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;}
+
+    .upload-box{border:2px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa;}
+    .upload-box:hover{border-color:var(--orange);background:var(--orange-light);}
+    .upload-box i{font-size:36px;color:var(--muted);margin-bottom:10px;display:block;}
+    .upload-box.has-file{border-color:#22c55e;background:#eafaf1;}
+    .upload-box.has-file i{color:#22c55e;}
+
+    .rating-stars{display:flex;gap:6px;margin-top:6px;}
+    .star{font-size:22px;cursor:pointer;color:#d1d5db;transition:color .15s;}
+    .star.active{color:#f59e0b;}
+
+    .sidebar-role-card{background:linear-gradient(135deg,#1a2332,#2d4a6e);color:#fff;border-radius:var(--radius);padding:24px;margin-bottom:16px;}
+    .sidebar-role-card h4{font-size:15px;font-weight:800;margin-bottom:10px;}
+    .sidebar-meta{display:flex;flex-direction:column;gap:8px;}
+    .sidebar-meta span{font-size:12px;opacity:.85;display:flex;align-items:center;gap:7px;}
+
+    .progress-bar-wrap{background:var(--border);border-radius:10px;height:6px;margin-bottom:28px;overflow:hidden;}
+    .progress-bar-fill{height:100%;background:var(--orange);border-radius:10px;transition:width .4s ease;}
+
+    @media(max-width:768px){
+      .app-layout{grid-template-columns:1fr;}
+      .app-steps{flex-wrap:wrap;}
+      .app-step{min-width:50%;border-bottom:1px solid var(--border);}
+    }
+  </style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<div class="page-header">
+  <div class="container">
+    <h1 id="page-heading">Job Application</h1>
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <a href="careers.html">Careers</a><span>/</span>
+      <span id="breadcrumb-role">Apply</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="app-layout">
+
+      <!-- LEFT: Form -->
+      <div>
+        <!-- Steps indicator -->
+        <div class="app-steps" id="app-steps">
+          <div class="app-step active" id="step-1"><div class="sn">1</div>Personal Info</div>
+          <div class="app-step" id="step-2"><div class="sn">2</div>Experience</div>
+          <div class="app-step" id="step-3"><div class="sn">3</div>Skills & CV</div>
+          <div class="app-step" id="step-4"><div class="sn">4</div>Questions</div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progress-fill" style="width:25%;"></div>
+        </div>
+
+        <!-- PANEL 1: Personal Info -->
+        <div id="panel-1">
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-user" style="color:var(--orange);margin-right:8px;"></i>Personal Information</h3></div>
+            <div class="card-body-pad">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">First Name *</label>
+                  <input type="text" class="form-control" id="p1-fname" placeholder="Ali" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Last Name *</label>
+                  <input type="text" class="form-control" id="p1-lname" placeholder="Khan" required>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Email Address *</label>
+                  <input type="email" class="form-control" id="p1-email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone / WhatsApp *</label>
+                  <input type="tel" class="form-control" id="p1-phone" placeholder="+92 300 0000000" required>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">City *</label>
+                  <select class="form-control" id="p1-city" required>
+                    <option value="">Select city</option>
+                    <option>Karachi</option><option>Lahore</option><option>Islamabad</option>
+                    <option>Rawalpindi</option><option>Faisalabad</option><option>Multan</option>
+                    <option>Peshawar</option><option>Quetta</option><option>Sialkot</option>
+                    <option>Gujranwala</option><option>Hyderabad</option><option>Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nationality</label>
+                  <input type="text" class="form-control" id="p1-nationality" placeholder="Pakistani" value="Pakistani">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">LinkedIn Profile <span style="color:var(--muted);font-weight:400;">(Optional)</span></label>
+                <input type="url" class="form-control" id="p1-linkedin" placeholder="https://linkedin.com/in/yourprofile">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Portfolio / GitHub / Website <span style="color:var(--muted);font-weight:400;">(Optional)</span></label>
+                <input type="url" class="form-control" id="p1-portfolio" placeholder="https://yourportfolio.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">How did you hear about this role? *</label>
+                <select class="form-control" id="p1-source" required>
+                  <option value="">Select an option</option>
+                  <option>MSukasha Website</option>
+                  <option>LinkedIn</option>
+                  <option>Facebook / Instagram</option>
+                  <option>Rozee.pk / Indeed</option>
+                  <option>Friend or Colleague Referral</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                <button class="btn-primary" style="padding:12px 28px;" onclick="nextPanel(1)">Next: Experience <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 2: Experience & Education -->
+        <div id="panel-2" style="display:none;">
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-briefcase" style="color:var(--orange);margin-right:8px;"></i>Experience & Education</h3></div>
+            <div class="card-body-pad">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Total Years of Experience *</label>
+                  <select class="form-control" id="p2-exp" required>
+                    <option value="">Select experience</option>
+                    <option>Fresher (0 years)</option>
+                    <option>Less than 1 year</option>
+                    <option>1–2 years</option>
+                    <option>2–4 years</option>
+                    <option>4–6 years</option>
+                    <option>6–10 years</option>
+                    <option>10+ years</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Current / Last Job Title</label>
+                  <input type="text" class="form-control" id="p2-current-title" placeholder="e.g. Software Engineer">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Current / Last Company</label>
+                <input type="text" class="form-control" id="p2-current-company" placeholder="Company name (or N/A if fresher)">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Highest Education *</label>
+                  <select class="form-control" id="p2-edu" required>
+                    <option value="">Select qualification</option>
+                    <option>Matriculation (SSC)</option>
+                    <option>Intermediate (HSSC / FA / FSc)</option>
+                    <option>Bachelor's Degree (BA / BSc / BCS / BE)</option>
+                    <option>Master's Degree (MA / MSc / MBA / MS)</option>
+                    <option>PhD / Doctorate</option>
+                    <option>Diploma / Certificate</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Field of Study</label>
+                  <input type="text" class="form-control" id="p2-field" placeholder="e.g. Computer Science, Business Administration">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">University / Institute</label>
+                <input type="text" class="form-control" id="p2-uni" placeholder="e.g. University of Karachi, LUMS, NED University">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group">
+                  <label class="form-label">Expected Monthly Salary (PKR) *</label>
+                  <select class="form-control" id="p2-salary" required>
+                    <option value="">Select range</option>
+                    <option>Below PKR 30,000</option>
+                    <option>PKR 30,000 – 50,000</option>
+                    <option>PKR 50,000 – 80,000</option>
+                    <option>PKR 80,000 – 120,000</option>
+                    <option>PKR 120,000 – 200,000</option>
+                    <option>PKR 200,000+</option>
+                    <option>Open to Discussion</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Earliest Start Date *</label>
+                  <select class="form-control" id="p2-start" required>
+                    <option value="">Select availability</option>
+                    <option>Immediately</option>
+                    <option>Within 2 weeks</option>
+                    <option>Within 1 month</option>
+                    <option>Within 2 months</option>
+                    <option>After 2 months</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Work Preference *</label>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
+                  <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;padding:9px 16px;border:1px solid var(--border);border-radius:8px;font-weight:700;">
+                    <input type="radio" name="work-mode" value="On-site" style="accent-color:var(--orange);"> On-site
+                  </label>
+                  <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;padding:9px 16px;border:1px solid var(--border);border-radius:8px;font-weight:700;">
+                    <input type="radio" name="work-mode" value="Remote" style="accent-color:var(--orange);"> Remote
+                  </label>
+                  <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;padding:9px 16px;border:1px solid var(--border);border-radius:8px;font-weight:700;">
+                    <input type="radio" name="work-mode" value="Hybrid" style="accent-color:var(--orange);"> Hybrid
+                  </label>
+                  <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;padding:9px 16px;border:1px solid var(--border);border-radius:8px;font-weight:700;">
+                    <input type="radio" name="work-mode" value="Flexible" style="accent-color:var(--orange);"> Flexible
+                  </label>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;justify-content:space-between;margin-top:8px;">
+                <button onclick="prevPanel(2)" style="padding:11px 22px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;"><i class="fas fa-arrow-left"></i> Back</button>
+                <button class="btn-primary" style="padding:12px 28px;" onclick="nextPanel(2)">Next: Skills & CV <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 3: Skills & CV Upload -->
+        <div id="panel-3" style="display:none;">
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-tools" style="color:var(--orange);margin-right:8px;"></i>Skills & CV Upload</h3></div>
+            <div class="card-body-pad">
+
+              <!-- Skills -->
+              <div class="form-group">
+                <label class="form-label">Your Key Skills *</label>
+                <p style="font-size:12px;color:var(--muted);margin-bottom:6px;">Type a skill and press Enter or click Add. Add at least 3 skills.</p>
+                <div class="skill-input-wrap">
+                  <input type="text" id="skill-input" placeholder="e.g. React.js, Digital Marketing, Sales..." onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill();}">
+                  <button onclick="addSkill()"><i class="fas fa-plus"></i> Add</button>
+                </div>
+                <div class="skill-tags" id="skill-tags"></div>
+              </div>
+
+              <!-- Language Skills -->
+              <div class="form-group" style="margin-top:20px;">
+                <label class="form-label">Language Proficiency</label>
+                <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;" id="lang-ratings">
+                  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                    <span style="font-size:13px;font-weight:700;min-width:80px;">Urdu</span>
+                    <div class="rating-stars" data-lang="urdu">
+                      <span class="star active" onclick="rateLang('urdu',1)">★</span>
+                      <span class="star active" onclick="rateLang('urdu',2)">★</span>
+                      <span class="star active" onclick="rateLang('urdu',3)">★</span>
+                      <span class="star active" onclick="rateLang('urdu',4)">★</span>
+                      <span class="star active" onclick="rateLang('urdu',5)">★</span>
+                    </div>
+                    <span style="font-size:11px;color:var(--muted);" id="urdu-label">Native</span>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                    <span style="font-size:13px;font-weight:700;min-width:80px;">English</span>
+                    <div class="rating-stars" data-lang="english">
+                      <span class="star active" onclick="rateLang('english',1)">★</span>
+                      <span class="star active" onclick="rateLang('english',2)">★</span>
+                      <span class="star active" onclick="rateLang('english',3)">★</span>
+                      <span class="star" onclick="rateLang('english',4)">★</span>
+                      <span class="star" onclick="rateLang('english',5)">★</span>
+                    </div>
+                    <span style="font-size:11px;color:var(--muted);" id="english-label">Good</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CV Upload -->
+              <div class="form-group" style="margin-top:20px;">
+                <label class="form-label">Upload Your CV / Resume *</label>
+                <div class="upload-box" id="cv-upload-box" onclick="document.getElementById('cv-file').click()">
+                  <i class="fas fa-file-pdf" id="cv-icon"></i>
+                  <p style="font-weight:700;margin-bottom:4px;" id="cv-text">Click to Upload CV</p>
+                  <p style="font-size:12px;color:var(--muted);">PDF, DOC, or DOCX — Max 5MB</p>
+                </div>
+                <input type="file" id="cv-file" accept=".pdf,.doc,.docx" style="display:none;" onchange="handleCVUpload(this)">
+              </div>
+
+              <!-- Cover Letter -->
+              <div class="form-group">
+                <label class="form-label">Cover Letter <span style="color:var(--muted);font-weight:400;">(Optional but recommended)</span></label>
+                <textarea class="form-control" id="p3-cover" rows="5" placeholder="Tell us why you're interested in MSukasha and why you'd be a great fit for this role..." style="resize:vertical;"></textarea>
+              </div>
+
+              <div style="display:flex;gap:10px;justify-content:space-between;margin-top:8px;">
+                <button onclick="prevPanel(3)" style="padding:11px 22px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;"><i class="fas fa-arrow-left"></i> Back</button>
+                <button class="btn-primary" style="padding:12px 28px;" onclick="nextPanel(3)">Next: Final Questions <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 4: Final Questions & Submit -->
+        <div id="panel-4" style="display:none;">
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-question-circle" style="color:var(--orange);margin-right:8px;"></i>Final Questions</h3></div>
+            <div class="card-body-pad">
+              <div class="form-group">
+                <label class="form-label">Why do you want to work at MSukasha? *</label>
+                <textarea class="form-control" id="q1" rows="4" required placeholder="Share what excites you about MSukasha's mission and this specific role..." style="resize:vertical;"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Describe a challenge you solved at work (or a project you're proud of) *</label>
+                <textarea class="form-control" id="q2" rows="4" required placeholder="Be specific — what was the problem, what did you do, and what was the result?" style="resize:vertical;"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Where do you see yourself in 3 years?</label>
+                <textarea class="form-control" id="q3" rows="3" placeholder="Optional — but we love ambitious thinkers." style="resize:vertical;"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Do you have any questions for us?</label>
+                <textarea class="form-control" id="q4" rows="3" placeholder="Optional — any questions about the role, team, or company?" style="resize:vertical;"></textarea>
+              </div>
+
+              <!-- Referral -->
+              <div class="form-group">
+                <label class="form-label">Referred by an MSukasha Employee? <span style="color:var(--muted);font-weight:400;">(Optional)</span></label>
+                <input type="text" class="form-control" id="q-referral" placeholder="Enter their full name or employee ID">
+              </div>
+
+              <!-- Agreement -->
+              <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;cursor:pointer;margin-bottom:22px;line-height:1.6;">
+                <input type="checkbox" id="app-agree" style="accent-color:var(--orange);margin-top:2px;" required>
+                I confirm that all information provided in this application is accurate and true. I agree to MSukasha's <a href="terms and conditions.html" style="color:var(--orange);" target="_blank">Terms & Conditions</a> and consent to processing of my personal data for recruitment purposes.
+              </label>
+
+              <div style="display:flex;gap:10px;justify-content:space-between;">
+                <button onclick="prevPanel(4)" style="padding:11px 22px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:14px;font-weight:700;cursor:pointer;"><i class="fas fa-arrow-left"></i> Back</button>
+                <button class="btn-primary" style="padding:13px 32px;font-size:15px;" onclick="submitApplication()">
+                  <i class="fas fa-paper-plane"></i> Submit Application
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUCCESS STATE -->
+        <div id="panel-success" style="display:none;text-align:center;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:60px 30px;">
+          <div style="width:90px;height:90px;background:#eafaf1;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;">
+            <i class="fas fa-check-circle" style="font-size:42px;color:#22c55e;"></i>
+          </div>
+          <h2 style="font-size:24px;font-weight:900;margin-bottom:10px;">Application Submitted!</h2>
+          <p style="color:var(--muted);margin-bottom:6px;">Thank you for applying to MSukasha. We've received your application for:</p>
+          <p style="font-weight:800;font-size:16px;color:var(--orange);margin-bottom:6px;" id="success-role"></p>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Application ID: <strong id="success-id"></strong></p>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:28px;">Our HR team will review your application and reach out via email or WhatsApp within <strong>5–7 business days</strong>. If shortlisted, we'll schedule a brief introductory call.</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <a href="careers.html" class="btn-primary"><i class="fas fa-briefcase"></i> View More Roles</a>
+            <a href="../index.html" style="padding:11px 22px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-weight:700;background:#fff;color:var(--text);"><i class="fas fa-home"></i> Go to Homepage</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside>
+        <div class="sidebar-role-card" id="sidebar-role-card">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.7;margin-bottom:10px;">Applying For</div>
+          <h4 id="sidebar-role-title">Loading...</h4>
+          <div class="sidebar-meta" id="sidebar-role-meta"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-body-pad">
+            <h5 style="font-weight:800;margin-bottom:14px;font-size:13px;">Application Tips</h5>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><i class="fas fa-lightbulb" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><span>Be specific and honest — generic answers don't stand out.</span></div>
+              <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><i class="fas fa-lightbulb" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><span>Keep your CV to 1–2 pages and PDF format works best.</span></div>
+              <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><i class="fas fa-lightbulb" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><span>A strong cover letter significantly increases your chances.</span></div>
+              <div style="display:flex;gap:8px;font-size:12px;color:var(--muted);"><i class="fas fa-lightbulb" style="color:var(--orange);margin-top:2px;flex-shrink:0;"></i><span>Use numbers to describe your achievements wherever possible.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body-pad">
+            <h5 style="font-weight:800;margin-bottom:10px;font-size:13px;">Our Hiring Process</h5>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;">1</div>
+                <div><strong style="font-size:12px;">Application Review</strong><p style="font-size:11px;color:var(--muted);">5–7 business days</p></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;">2</div>
+                <div><strong style="font-size:12px;">Intro Call (15 min)</strong><p style="font-size:11px;color:var(--muted);">WhatsApp or phone</p></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;">3</div>
+                <div><strong style="font-size:12px;">Skills Assessment</strong><p style="font-size:11px;color:var(--muted);">Short task or test</p></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;">4</div>
+                <div><strong style="font-size:12px;">Final Interview</strong><p style="font-size:11px;color:var(--muted);">With team lead</p></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:24px;height:24px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;">✓</div>
+                <div><strong style="font-size:12px;">Offer & Onboarding</strong><p style="font-size:11px;color:var(--muted);">Welcome to MSukasha!</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script>
+/* ---- Role from URL ---- */
+const JOBS_DATA = {
+  j1:{title:'Full Stack Developer (React + Node.js)',location:'Karachi',type:'Full Time',mode:'Hybrid',exp:'2–4 years'},
+  j2:{title:'Mobile App Developer (React Native)',location:'Anywhere in Pakistan',type:'Full Time',mode:'Remote',exp:'1–3 years'},
+  j3:{title:'UI/UX Designer',location:'Karachi',type:'Full Time',mode:'Hybrid',exp:'2+ years'},
+  j4:{title:'Supplier Verification Officer',location:'Karachi / Lahore',type:'Full Time',mode:'On-site',exp:'1–2 years'},
+  j5:{title:'Logistics Coordinator',location:'Karachi',type:'Full Time',mode:'On-site',exp:'1–3 years'},
+  j6:{title:'B2B Sales Executive',location:'Lahore / Faisalabad',type:'Full Time',mode:'Hybrid',exp:'1–3 years'},
+  j7:{title:'Business Development Manager',location:'Karachi',type:'Full Time',mode:'Hybrid',exp:'3–5 years'},
+  j8:{title:'Digital Marketing Executive',location:'Anywhere in Pakistan',type:'Full Time',mode:'Remote',exp:'1–2 years'},
+  j9:{title:'Content Writer (English & Urdu)',location:'Anywhere in Pakistan',type:'Part Time',mode:'Remote',exp:'1+ year'},
+  j10:{title:'Customer Support Agent',location:'Karachi',type:'Full Time',mode:'On-site',exp:'0–1 year'},
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const roleParam = params.get('role') || 'Open Application';
+  const idParam = params.get('id') || '';
+  const job = JOBS_DATA[idParam];
+  const roleTitle = job ? job.title : decodeURIComponent(roleParam);
+
+  document.getElementById('page-heading').textContent = 'Apply — ' + roleTitle;
+  document.getElementById('breadcrumb-role').textContent = roleTitle;
+  document.getElementById('sidebar-role-title').textContent = roleTitle;
+
+  const meta = document.getElementById('sidebar-role-meta');
+  if (job) {
+    meta.innerHTML = `
+      <span><i class="fas fa-map-marker-alt"></i> ${job.location}</span>
+      <span><i class="fas fa-briefcase"></i> ${job.exp} experience</span>
+      <span><i class="fas fa-clock"></i> ${job.type}</span>
+      <span><i class="fas fa-laptop-house"></i> ${job.mode}</span>`;
+  } else {
+    meta.innerHTML = `<span><i class="fas fa-envelope"></i> Open Application</span>`;
+  }
+});
+
+/* ---- Step Navigation ---- */
+let currentPanel = 1;
+
+function nextPanel(from) {
+  if (from === 1) {
+    const fname = document.getElementById('p1-fname').value.trim();
+    const lname = document.getElementById('p1-lname').value.trim();
+    const email = document.getElementById('p1-email').value.trim();
+    const phone = document.getElementById('p1-phone').value.trim();
+    const city  = document.getElementById('p1-city').value;
+    const src   = document.getElementById('p1-source').value;
+    if (!fname || !lname || !email || !phone || !city || !src) {
+      alert('Please fill all required fields.'); return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Please enter a valid email address.'); return;
+    }
+  }
+  if (from === 2) {
+    if (!document.getElementById('p2-exp').value ||
+        !document.getElementById('p2-edu').value ||
+        !document.getElementById('p2-salary').value ||
+        !document.getElementById('p2-start').value) {
+      alert('Please fill all required fields.'); return;
+    }
+    if (!document.querySelector('input[name="work-mode"]:checked')) {
+      alert('Please select your work preference.'); return;
+    }
+  }
+  if (from === 3) {
+    const tags = document.querySelectorAll('.skill-tag');
+    if (tags.length < 3) {
+      alert('Please add at least 3 skills.'); return;
+    }
+  }
+  goPanel(from + 1);
+}
+
+function prevPanel(current) { goPanel(current - 1); }
+
+function goPanel(n) {
+  for (let i = 1; i <= 4; i++) {
+    const p = document.getElementById('panel-' + i);
+    const s = document.getElementById('step-' + i);
+    if (p) p.style.display = (i === n) ? 'block' : 'none';
+    if (s) {
+      s.classList.remove('active', 'done');
+      if (i === n) s.classList.add('active');
+      else if (i < n) s.classList.add('done');
+    }
+  }
+  const pct = {1:25, 2:50, 3:75, 4:100};
+  document.getElementById('progress-fill').style.width = pct[n] + '%';
+  currentPanel = n;
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* ---- Skills ---- */
+let skills = [];
+function addSkill() {
+  const inp = document.getElementById('skill-input');
+  const val = inp.value.trim();
+  if (!val) return;
+  if (skills.includes(val)) { alert('Skill already added.'); inp.value=''; return; }
+  skills.push(val);
+  renderSkills();
+  inp.value = '';
+  inp.focus();
+}
+function removeSkill(s) {
+  skills = skills.filter(x => x !== s);
+  renderSkills();
+}
+function renderSkills() {
+  document.getElementById('skill-tags').innerHTML = skills.map(s =>
+    `<span class="skill-tag">${s}<button onclick="removeSkill('${s.replace(/'/g,"\\'")}')">×</button></span>`
+  ).join('');
+}
+
+/* ---- Language Rating ---- */
+const langLevels = ['','Beginner','Elementary','Conversational','Good','Native'];
+const langRatings = {urdu: 5, english: 3};
+function rateLang(lang, n) {
+  langRatings[lang] = n;
+  const stars = document.querySelectorAll(`.rating-stars[data-lang="${lang}"] .star`);
+  stars.forEach((s, i) => s.classList.toggle('active', i < n));
+  const lbl = document.getElementById(lang + '-label');
+  if (lbl) lbl.textContent = langLevels[n] || '';
+}
+
+/* ---- CV Upload ---- */
+function handleCVUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('File too large. Max 5MB allowed.'); return; }
+  const box = document.getElementById('cv-upload-box');
+  const icon = document.getElementById('cv-icon');
+  const text = document.getElementById('cv-text');
+  box.classList.add('has-file');
+  icon.className = 'fas fa-check-circle';
+  text.textContent = '✓ ' + file.name;
+}
+
+/* ---- SUBMIT APPLICATION TO MONGODB BACKEND ---- */
+function submitApplication() {
+  const agree = document.getElementById('app-agree').checked;
+  const q1 = document.getElementById('q1').value.trim();
+  const q2 = document.getElementById('q2').value.trim();
+  if (!q1 || !q2) { alert('Please answer the required questions.'); return; }
+  if (!agree) { alert('Please accept the terms to continue.'); return; }
+
+  const roleTitle = document.getElementById('sidebar-role-title').textContent;
+
+  // Pure form ka data object mein convert kiya
+  const formData = {
+    role: roleTitle,
+    firstName: document.getElementById('p1-fname').value,
+    lastName: document.getElementById('p1-lname').value,
+    email: document.getElementById('p1-email').value,
+    phone: document.getElementById('p1-phone').value,
+    city: document.getElementById('p1-city').value,
+    nationality: document.getElementById('p1-nationality').value,
+    linkedin: document.getElementById('p1-linkedin').value,
+    portfolio: document.getElementById('p1-portfolio').value,
+    source: document.getElementById('p1-source').value,
+    experience: document.getElementById('p2-exp').value,
+    currentTitle: document.getElementById('p2-current-title').value,
+    currentCompany: document.getElementById('p2-current-company').value,
+    education: document.getElementById('p2-edu').value,
+    fieldOfStudy: document.getElementById('p2-field').value,
+    university: document.getElementById('p2-uni').value,
+    expectedSalary: document.getElementById('p2-salary').value,
+    startDate: document.getElementById('p2-start').value,
+    workMode: document.querySelector('input[name="work-mode"]:checked')?.value || 'On-site',
+    skills: skills,
+    languages: langRatings,
+    coverLetter: document.getElementById('p3-cover').value,
+    answers: { q1, q2, q3: document.getElementById('q3').value, q4: document.getElementById('q4').value },
+    referredBy: document.getElementById('q-referral').value
+  };
+
+  // Node.js Backend API ko data POST karne ke liye fetch call
+  fetch('http://localhost:5000/api/applications', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      // Agar backend par save ho gya to hum UI change kar dein gy
+      for (let i = 1; i <= 4; i++) {
+        const p = document.getElementById('panel-' + i);
+        const s = document.getElementById('step-' + i);
+        if (p) p.style.display = 'none';
+        if (s) { s.classList.remove('active'); s.classList.add('done'); }
+      }
+      document.getElementById('progress-fill').style.width = '100%';
+      document.getElementById('success-role').textContent = roleTitle;
+      document.getElementById('success-id').textContent = data.appId; // ID server se aayegi
+      document.getElementById('panel-success').style.display = 'block';
+      document.getElementById('sidebar-role-card').style.display = 'none';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      alert('Database Error: ' + data.message);
+    }
+  })
+  .catch(err => {
+    console.error('Error:', err);
+    alert('Backend Server chal nahi raha ya connect nahi ho pa raha!');
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop | MSukasha Marketplace</title>
+  <meta name="description" content="Browse thousands of B2B wholesale products and C2C local listings on MSukasha — Pakistan's leading marketplace.">
+  <link rel="icon" type="image/png" href="../Favicon/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .shop-layout { display: flex; gap: 24px; margin-bottom: 50px; }
+    .shop-sidebar { flex: 0 0 260px; }
+    .shop-main { flex: 1; min-width: 0; }
+    .product-card { cursor: pointer; }
+    .filter-card { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; }
+    .filter-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--dark); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .market-tabs { display: flex; background: #f0f2f5; border-radius: 8px; padding: 4px; margin-bottom: 16px; gap: 4px; }
+    .market-tab { flex: 1; padding: 10px; text-align: center; border-radius: 6px; font-size: 13px; font-weight: 700; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all var(--transition); }
+    .market-tab.active-b2b { background: var(--orange); color: #fff; }
+    .market-tab.active-c2c { background: #0066cc; color: #fff; }
+    .filter-check { display: flex; flex-direction: column; gap: 9px; }
+    .filter-check label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); cursor: pointer; }
+    .filter-check input[type=checkbox] { accent-color: var(--orange); width: 15px; height: 15px; }
+    .price-range { display: flex; gap: 10px; align-items: center; }
+    .price-range input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; }
+    .price-range input:focus { border-color: var(--orange); }
+    .shop-toolbar { background: #fff; border-radius: var(--radius); border: 1px solid var(--border); padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .results-count { font-size: 14px; color: var(--muted); }
+    .sort-select { padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; background: #fff; cursor: pointer; }
+    .sort-select:focus { border-color: var(--orange); }
+    @media (max-width: 768px) { .shop-layout { flex-direction: column; } .shop-sidebar { flex: none; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Shop All Products</h1>
+    <div class="breadcrumb">
+      <a href="../index.html">Home</a><span>/</span>
+      <span>Shop</span>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="shop-layout">
+
+      <!-- SIDEBAR -->
+      <aside class="shop-sidebar">
+        <!-- Market Switcher -->
+        <div class="filter-card">
+          <div class="filter-title"><i class="fas fa-exchange-alt"></i> Marketplace</div>
+          <div class="market-tabs">
+            <button class="market-tab active-b2b" id="tab-b2b" onclick="switchTab('b2b')"><i class="fas fa-industry"></i> B2B</button>
+            <button class="market-tab" id="tab-c2c" onclick="switchTab('c2c')"><i class="fas fa-users"></i> C2C</button>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="filter-card">
+          <div class="filter-title"><i class="fas fa-list"></i> Categories</div>
+          <div class="filter-check">
+            <label><input type="checkbox" checked> Electronics</label>
+            <label><input type="checkbox"> Fashion & Apparel</label>
+            <label><input type="checkbox"> Home & Living</label>
+            <label><input type="checkbox"> Vehicles</label>
+            <label><input type="checkbox"> Industrial</label>
+            <label><input type="checkbox"> Agriculture</label>
+            <label><input type="checkbox"> Sports & Fitness</label>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div class="filter-card">
+          <div class="filter-title"><i class="fas fa-tag"></i> Price Range</div>
+          <div class="price-range">
+            <input type="number" placeholder="Min" id="price-min">
+            <span style="color:var(--muted);">—</span>
+            <input type="number" placeholder="Max" id="price-max">
+          </div>
+          <button onclick="applyFilter()" style="margin-top:12px;width:100%;padding:9px;background:var(--orange);color:#fff;border:none;border-radius:7px;font-weight:700;font-size:13px;cursor:pointer;">Apply Filter</button>
+        </div>
+
+        <!-- Condition -->
+        <div class="filter-card" id="condition-filter">
+          <div class="filter-title"><i class="fas fa-star"></i> Condition</div>
+          <div class="filter-check">
+            <label><input type="checkbox" checked> New</label>
+            <label><input type="checkbox" checked> Like New</label>
+            <label><input type="checkbox"> Good</label>
+            <label><input type="checkbox"> Fair</label>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="filter-card">
+          <div class="filter-title"><i class="fas fa-map-marker-alt"></i> Location</div>
+          <div class="filter-check">
+            <label><input type="checkbox"> Karachi</label>
+            <label><input type="checkbox"> Lahore</label>
+            <label><input type="checkbox"> Islamabad</label>
+            <label><input type="checkbox"> Rawalpindi</label>
+            <label><input type="checkbox"> Peshawar</label>
+            <label><input type="checkbox"> Quetta</label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="shop-main">
+        <div class="shop-toolbar">
+          <p class="results-count">Showing <strong>48</strong> products</p>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <label style="font-size:13px;color:var(--muted);">Sort by:</label>
+            <select class="sort-select" onchange="sortProducts(this.value)">
+              <option value="relevance">Most Relevant</option>
+              <option value="newest">Newest First</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="product-grid">
+          <!-- B2B Products -->
+<div class="product-card" data-type="b2b" onclick="window.location.href='product-detail.html?id=p1&type=b2b'">
+            <div class="card-img"><i class="fas fa-solar-panel placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div>
+            <div class="card-body">
+              <p class="card-name">Industrial Solar Panels 545W Mono PERC</p>
+              <p class="card-price">$120.00/pc</p>
+              <p class="card-moq">MOQ: 10 Pieces</p>
+            </div>
+            <div class="card-footer"><a href="contact.html" class="card-btn">Inquire</a><a href="cart.html" class="card-btn solid">Buy</a></div>
+          </div>
+
+          <div class="product-card" data-type="b2b" onclick="window.location.href='product-detail.html?id=p2&type=b2b'">
+            <div class="card-img"><i class="fas fa-tshirt placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div>
+            <div class="card-body">
+              <p class="card-name">Wholesale Cotton T-Shirts (Pack of 50)</p>
+              <p class="card-price">$2.50/pc</p>
+              <p class="card-moq">MOQ: 100 Pieces</p>
+            </div>
+            <div class="card-footer"><a href="contact.html" class="card-btn">Inquire</a><a href="cart.html" class="card-btn solid">Buy</a></div>
+          </div>
+
+          <div class="product-card" data-type="b2b" onclick="window.location.href='product-detail.html?id=p3&type=b2b'">
+            <div class="card-img"><i class="fas fa-headphones placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div>
+            <div class="card-body">
+              <p class="card-name">Professional Wireless Earbuds Bulk Export</p>
+              <p class="card-price">$8.90/pc</p>
+              <p class="card-moq">MOQ: 50 Pieces</p>
+            </div>
+            <div class="card-footer"><a href="contact.html" class="card-btn">Inquire</a><a href="cart.html" class="card-btn solid">Buy</a></div>
+          </div>
+
+          <div class="product-card" data-type="b2b" onclick="window.location.href='product-detail.html?id=p7&type=b2b'">
+            <div class="card-img"><i class="fas fa-battery-full placeholder-icon"></i><span class="card-badge badge-b2b">B2B</span></div>
+            <div class="card-body">
+              <p class="card-name">Custom Logo Power Banks 10,000mAh</p>
+              <p class="card-price">$5.20/pc</p>
+              <p class="card-moq">MOQ: 20 Pieces</p>
+            </div>
+            <div class="card-footer"><a href="contact.html" class="card-btn">Inquire</a><a href="cart.html" class="card-btn solid">Buy</a></div>
+          </div>
+
+          <!-- C2C Products -->
+          <div class="product-card" data-type="c2c" onclick="window.location.href='product-detail.html?id=p9&type=c2c'">
+            <div class="card-img"><i class="fas fa-mobile-alt placeholder-icon"></i><span class="card-badge badge-used">USED</span></div>
+            <div class="card-body">
+              <p class="card-name">Used iPhone 12 Pro — 128GB (Water Pack)</p>
+              <p class="card-price" style="color:var(--dark);">Rs. 135,000</p>
+              <p class="card-location"><i class="fas fa-map-marker-alt"></i> DHA, Karachi</p>
+            </div>
+            <div class="card-footer"><a href="messages.html" class="card-btn">Message</a><a href="contact.html" class="card-btn solid">Call</a></div>
+          </div>
+
+          <div class="product-card" data-type="c2c" onclick="window.location.href='product-detail.html?id=c2c-honda&type=c2c'">
+            <div class="card-img"><i class="fas fa-motorcycle placeholder-icon"></i><span class="card-badge badge-used">USED</span></div>
+            <div class="card-body">
+              <p class="card-name">Honda CD 70 — 2024 Model (Urgent Sale)</p>
+              <p class="card-price" style="color:var(--dark);">Rs. 115,000</p>
+              <p class="card-location"><i class="fas fa-map-marker-alt"></i> Johar Town, Lahore</p>
+            </div>
+            <div class="card-footer"><a href="messages.html" class="card-btn">Message</a><a href="contact.html" class="card-btn solid">Call</a></div>
+          </div>
+
+          <div class="product-card" data-type="c2c" onclick="window.location.href='product-detail.html?id=p11&type=c2c'">
+            <div class="card-img"><i class="fas fa-chair placeholder-icon"></i><span class="card-badge badge-used">USED</span></div>
+            <div class="card-body">
+              <p class="card-name">Office Desk & Ergonomic Chair Set</p>
+              <p class="card-price" style="color:var(--dark);">Rs. 12,000</p>
+              <p class="card-location"><i class="fas fa-map-marker-alt"></i> G-11, Islamabad</p>
+            </div>
+            <div class="card-footer"><a href="messages.html" class="card-btn">Message</a><a href="contact.html" class="card-btn solid">Call</a></div>
+          </div>
+
+          <div class="product-card" data-type="c2c" onclick="window.location.href='product-detail.html?id=p12&type=c2c'">
+            <div class="card-img"><i class="fas fa-camera placeholder-icon"></i><span class="card-badge badge-used">USED</span></div>
+            <div class="card-body">
+              <p class="card-name">Nikon D5600 DSLR Camera with 18-55mm Lens</p>
+              <p class="card-price" style="color:var(--dark);">Rs. 75,000</p>
+              <p class="card-location"><i class="fas fa-map-marker-alt"></i> Peshawar Cantt</p>
+            </div>
+            <div class="card-footer"><a href="messages.html" class="card-btn">Message</a><a href="contact.html" class="card-btn solid">Call</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script>
+let currentTab = 'b2b';
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-b2b').className = 'market-tab' + (tab === 'b2b' ? ' active-b2b' : '');
+  document.getElementById('tab-c2c').className = 'market-tab' + (tab === 'c2c' ? ' active-c2c' : '');
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.style.display = (card.dataset.type === tab) ? 'block' : 'none';
+  });
+}
+function applyFilter() { showToast('Filters applied!', 'info'); }
+function sortProducts(val) { showToast('Sorted by: ' + val, 'info'); }
+// Initialize showing all products
+document.addEventListener('DOMContentLoaded', function() {
+  // Show all by default on load
+});
+</script>
+</body>
+</html>
