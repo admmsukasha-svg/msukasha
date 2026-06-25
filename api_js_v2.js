@@ -1,10 +1,11 @@
 /**
  * MSukasha — api.js v2
- * Works on BOTH msukasha.com AND sellermsukasha.com
- * Place AFTER main.js on every HTML page
+ * Works as a local auth helper for the static site.
+ * Place AFTER main.js on every HTML page.
  */
 
 const API = "https://msukasha-backend-git-main-msukasha.vercel.app";
+const USE_REMOTE_API = false;
 
 /* ============================================================
    TOKEN & USER HELPERS
@@ -12,6 +13,21 @@ const API = "https://msukasha-backend-git-main-msukasha.vercel.app";
 function getToken()    { return localStorage.getItem("ms_token") || ""; }
 function setToken(t)   { localStorage.setItem("ms_token", t); }
 function removeToken() { localStorage.removeItem("ms_token"); }
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem('msukasha_user') || 'null'); } catch { return null; }
+}
+function setUser(user) {
+  if (!user) return;
+  localStorage.setItem('msukasha_user', JSON.stringify(user));
+}
+
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem('msukasha_users') || '[]'); } catch { return []; }
+}
+function saveUsers(users) {
+  localStorage.setItem('msukasha_users', JSON.stringify(users));
+}
 
 function authHeaders() {
   return {
@@ -24,6 +40,9 @@ function authHeaders() {
    BASE FETCH
    ============================================================ */
 async function apiFetch(path, options = {}) {
+  if (!USE_REMOTE_API) {
+    throw new Error('Remote API disabled.');
+  }
   try {
     const res  = await fetch(API + path, options);
     const data = await res.json();
@@ -34,14 +53,79 @@ async function apiFetch(path, options = {}) {
   }
 }
 
+function makeSessionToken(email) {
+  return 'msukasha_' + email.trim().toLowerCase() + '_' + Date.now();
+}
+
+function createLocalUser({ firstName = '', lastName = '', name = '', email, password, phone = '', city = '', role = 'buyer', accountType = 'buyer' }) {
+  const fullName = name || `${firstName} ${lastName}`.trim();
+  const normalizedEmail = (email || '').trim().toLowerCase();
+  return {
+    uid: 'local_' + normalizedEmail,
+    name: fullName || normalizedEmail,
+    firstName: firstName.trim() || fullName.split(' ')[0] || '',
+    lastName: lastName.trim() || fullName.split(' ').slice(1).join(' ') || '',
+    email: normalizedEmail,
+    phone: phone.trim(),
+    city: city || '',
+    role: role || accountType || 'buyer',
+    accountType: accountType || role || 'buyer',
+    password: password,
+    createdAt: new Date().toISOString(),
+    orders: [],
+    wishlist: [],
+    messages: [],
+    profile: {
+      about: '',
+      address: '',
+      joinedAt: new Date().toISOString(),
+    }
+  };
+}
+
+function registerLocalUser(data) {
+  const users = getUsers();
+  const email = (data.email || '').trim().toLowerCase();
+  if (!email || !data.password) {
+    throw new Error('Email and password are required.');
+  }
+  if (users.some(user => user.email === email)) {
+    throw new Error('This email is already registered.');
+  }
+  const user = createLocalUser(data);
+  users.push(user);
+  saveUsers(users);
+  setToken(makeSessionToken(email));
+  setUser(user);
+  return { token: getToken(), user };
+}
+
+function loginLocalUser(email, password) {
+  const users = getUsers();
+  const normalizedEmail = (email || '').trim().toLowerCase();
+  const user = users.find(u => u.email === normalizedEmail);
+  if (!user) {
+    throw new Error('No account found with that email. Please register first.');
+  }
+  if (user.password !== password) {
+    throw new Error('Incorrect password. Please try again.');
+  }
+  setToken(makeSessionToken(normalizedEmail));
+  setUser(user);
+  return { token: getToken(), user };
+}
+
 /* ============================================================
    AUTH
    ============================================================ */
-async function apiRegister({ name, email, password, phone, city, role }) {
+async function apiRegister(payload) {
+  if (!USE_REMOTE_API) {
+    return registerLocalUser(payload);
+  }
   const data = await apiFetch("/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password, phone, city, role })
+    body: JSON.stringify(payload)
   });
   setToken(data.token);
   setUser(data.user);
@@ -49,6 +133,12 @@ async function apiRegister({ name, email, password, phone, city, role }) {
 }
 
 async function apiLogin(email, password) {
+  if (!USE_REMOTE_API) {
+    const data = loginLocalUser(email, password);
+    await syncCartFromDB(data.user.uid);
+    await syncWishlistFromDB(data.user.uid);
+    return data;
+  }
   const data = await apiFetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -69,7 +159,6 @@ function apiLogout() {
   localStorage.removeItem("msukasha_cart");
   localStorage.removeItem("msukasha_wishlist");
   showToast("Logged out successfully.", "info");
-  // Redirect based on which site
   const isSeller = window.location.hostname.includes("sellermsukasha");
   setTimeout(() => {
     window.location.href = isSeller ? "seller-login.html" : "index.html";
@@ -78,6 +167,9 @@ function apiLogout() {
 
 async function apiGetMe() {
   if (!getToken()) return null;
+  const user = getUser();
+  if (user) return user;
+  if (!USE_REMOTE_API) return null;
   try {
     const data = await apiFetch("/api/me", { headers: authHeaders() });
     setUser(data.user);
@@ -90,19 +182,24 @@ async function apiGetMe() {
 }
 
 async function apiUpdateProfile(profileData) {
-  const data = await apiFetch("/api/me", {
-    method: "PUT",
-    headers: authHeaders(),
-    body: JSON.stringify(profileData)
-  });
-  setUser(data.user);
-  return data;
+  const user = getUser();
+  if (!user) throw new Error('Not logged in');
+  const updated = { ...user, profile: { ...user.profile, ...profileData } };
+  setUser(updated);
+  const users = getUsers();
+  const index = users.findIndex(u => u.email === user.email);
+  if (index !== -1) {
+    users[index] = updated;
+    saveUsers(users);
+  }
+  return { user: updated };
 }
 
 /* ============================================================
    CART — per user, synced to MongoDB
    ============================================================ */
 async function syncCartToDB() {
+  if (!USE_REMOTE_API) return;
   const user = getUser();
   if (!user || !getToken()) return;
   try {
@@ -115,6 +212,7 @@ async function syncCartToDB() {
 }
 
 async function syncCartFromDB(uid) {
+  if (!USE_REMOTE_API) return;
   if (!getToken()) return;
   try {
     const data = await apiFetch("/api/cart/" + uid, { headers: authHeaders() });
