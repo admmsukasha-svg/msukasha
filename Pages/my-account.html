@@ -55,12 +55,23 @@
 <script src="../main.js"></script>
 <script src="../api.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const user = getUser();
-  if (!getToken() || !user) {
+  if (!getToken()) {
     window.location.href = 'login.html';
     return;
   }
+
+  if (!user) {
+    const freshUser = await apiGetMe();
+    if (!freshUser) {
+      window.location.href = 'login.html';
+      return;
+    }
+    fillAccount(freshUser);
+    return;
+  }
+
   fillAccount(user);
 });
 
