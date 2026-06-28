@@ -4,8 +4,8 @@
  * Place AFTER main.js on every HTML page.
  */
 
-const API = "https://msukasha-backend-git-main-msukasha.vercel.app";
-const USE_REMOTE_API = false;
+const API = (window.MSUKASHA_API_BASE || localStorage.getItem("msukasha_api_base") || "https://msukasha-backend-git-main-msukasha.vercel.app").replace(/\/$/, "");
+const USE_REMOTE_API = true;
 
 /* ============================================================
    TOKEN & USER HELPERS
@@ -39,16 +39,36 @@ function authHeaders() {
 /* ============================================================
    BASE FETCH
    ============================================================ */
+function buildApiUrl(path) {
+  return `${API}${path.startsWith('/') ? '' : '/'}${path.replace(/^\/+/, '')}`;
+}
+
+function normalizeAuthResult(data, fallbackUser = null) {
+  const token = data?.token || data?.accessToken || data?.jwt || data?.authToken || '';
+  const user = data?.user || data?.profile || data?.data || fallbackUser || null;
+  return { token, user };
+}
+
 async function apiFetch(path, options = {}) {
   if (!USE_REMOTE_API) {
     throw new Error('Remote API disabled.');
   }
+  const url = buildApiUrl(path);
+  const headers = {
+    Accept: 'application/json',
+    ...(options.headers || {})
+  };
+
   try {
-    const res  = await fetch(API + path, options);
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Request failed");
+    const res = await fetch(url, { ...options, headers });
+    const text = await res.text();
+    let data = {};
+    if (text) {
+      try { data = JSON.parse(text); } catch { data = { message: text }; }
+    }
+    if (!res.ok) throw new Error(data.error || data.message || data.detail || 'Request failed');
     return data;
-  } catch(e) {
+  } catch (e) {
     throw e;
   }
 }
@@ -119,38 +139,44 @@ function loginLocalUser(email, password) {
    AUTH
    ============================================================ */
 async function apiRegister(payload) {
-  if (!USE_REMOTE_API) {
+  try {
+    const data = await apiFetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const auth = normalizeAuthResult(data);
+    if (auth.token) setToken(auth.token);
+    if (auth.user) setUser(auth.user);
+    return auth;
+  } catch (error) {
+    console.warn("Remote register failed, using local fallback:", error.message);
     return registerLocalUser(payload);
   }
-  const data = await apiFetch("/api/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-  setToken(data.token);
-  setUser(data.user);
-  return data;
 }
 
 async function apiLogin(email, password) {
-  if (!USE_REMOTE_API) {
+  try {
+    const data = await apiFetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const auth = normalizeAuthResult(data);
+    if (auth.token) setToken(auth.token);
+    if (auth.user) setUser(auth.user);
+    if (auth.user?.uid) {
+      await syncCartFromDB(auth.user.uid);
+      await syncWishlistFromDB(auth.user.uid);
+    }
+    return auth;
+  } catch (error) {
+    console.warn("Remote login failed, using local fallback:", error.message);
     const data = loginLocalUser(email, password);
     await syncCartFromDB(data.user.uid);
     await syncWishlistFromDB(data.user.uid);
     return data;
   }
-  const data = await apiFetch("/api/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  });
-  setToken(data.token);
-  setUser(data.user);
-  if (data.user?.uid) {
-    await syncCartFromDB(data.user.uid);
-    await syncWishlistFromDB(data.user.uid);
-  }
-  return data;
 }
 
 function apiLogout() {
@@ -172,8 +198,9 @@ async function apiGetMe() {
   if (!USE_REMOTE_API) return null;
   try {
     const data = await apiFetch("/api/me", { headers: authHeaders() });
-    setUser(data.user);
-    return data.user;
+    const auth = normalizeAuthResult(data);
+    if (auth.user) setUser(auth.user);
+    return auth.user;
   } catch {
     removeToken();
     localStorage.removeItem("msukasha_user");
