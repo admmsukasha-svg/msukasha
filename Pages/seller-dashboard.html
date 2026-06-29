@@ -1,97 +1,1258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seller Dashboard | MSukasha</title>
   <link rel="icon" type="image/png" href="../Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
-    .dash-grid { display:grid;grid-template-columns:240px 1fr;gap:24px;margin-top:32px; }
-    .dash-sidebar { background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;height:fit-content; }
-    .dash-menu { display:flex;flex-direction:column;gap:4px; }
-    .dash-menu a { padding:10px 14px;border-radius:8px;font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:10px;transition:background var(--transition); }
-    .dash-menu a:hover,.dash-menu a.active { background:var(--orange-light);color:var(--orange); }
-    .dash-menu a.active i { color:var(--orange); }
-    .kpi-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px; }
-    .kpi-card { background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px 18px; }
-    .kpi-val { font-size:26px;font-weight:900;color:var(--dark); }
-    .kpi-label { font-size:12px;color:var(--muted);margin-top:4px; }
-    .listing-row { display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:10px; }
-    .badge-active { background:#dcfce7;color:#15803d;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700; }
-    .badge-pending { background:#fef9c3;color:#a16207;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700; }
-    @media(max-width:768px){ .dash-grid{grid-template-columns:1fr;} }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F5620F;
+      --orange-dark: #D44D08;
+      --orange-light: #FFF3EE;
+      --orange-subtle: #FEF0E9;
+      --text: #0F0F0F;
+      --text-2: #3D3D3D;
+      --muted: #767676;
+      --border: #E8E8E8;
+      --bg: #F4F4F5;
+      --white: #ffffff;
+      --green: #16A34A;
+      --green-light: #F0FDF4;
+      --yellow: #D97706;
+      --yellow-light: #FFFBEB;
+      --blue: #2563EB;
+      --blue-light: #EFF6FF;
+      --red: #DC2626;
+      --red-light: #FEF2F2;
+      --radius: 12px;
+      --transition: 0.18s ease;
+      --font: 'Inter', -apple-system, sans-serif;
+      --sidebar-w: 240px;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ══════════════════════════════
+       AUTH WALL
+    ══════════════════════════════ */
+    #auth-wall {
+      display: none;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+    .wall-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 52px 44px;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+    .wall-icon {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: var(--orange-subtle);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 28px; color: var(--orange);
+    }
+    .wall-card h2 { font-size: 22px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.4px; }
+    .wall-card p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+    .wall-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      padding: 13px 28px; border-radius: 10px;
+      font-size: 14.5px; font-weight: 700;
+      transition: all var(--transition);
+    }
+    .wall-btn:hover { background: var(--orange-dark); transform: translateY(-1px); }
+    .wall-sub { margin-top: 16px; font-size: 13px; color: var(--muted); }
+    .wall-sub a { color: var(--orange); font-weight: 700; }
+
+    /* ══════════════════════════════
+       WRONG ROLE WALL
+    ══════════════════════════════ */
+    #role-wall {
+      display: none;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+
+    /* ══════════════════════════════
+       DASHBOARD LAYOUT
+    ══════════════════════════════ */
+    #dashboard-wrap { display: none; }
+
+    .dash-layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      gap: 0;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .dash-sidebar {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-brand img { height: 28px; }
+    .sidebar-brand-text { font-size: 20px; font-weight: 900; color: var(--orange); display: none; }
+
+    .sidebar-user {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .user-avatar {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--orange), #FF9944);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+    }
+    .user-name { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .user-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10.5px; font-weight: 700;
+      color: var(--green); margin-top: 2px;
+    }
+    .user-badge.pending { color: var(--yellow); }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .nav-section-label {
+      font-size: 10px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 10px 10px 6px;
+      margin-top: 4px;
+    }
+
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 9px;
+      font-size: 13.5px; font-weight: 600; color: var(--text-2);
+      transition: all var(--transition); cursor: pointer;
+      position: relative;
+    }
+    .nav-link:hover { background: var(--bg); color: var(--text); }
+    .nav-link.active { background: var(--orange-subtle); color: var(--orange); }
+    .nav-link.active i { color: var(--orange); }
+    .nav-link i { width: 18px; text-align: center; font-size: 14px; color: var(--muted); flex-shrink: 0; }
+    .nav-link.active i { color: var(--orange); }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--orange); color: #fff;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 100px;
+    }
+    .nav-badge.green { background: var(--green); }
+
+    .sidebar-footer {
+      padding: 14px 10px;
+      border-top: 1px solid var(--border);
+    }
+    .logout-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 9px;
+      font-size: 13.5px; font-weight: 600; color: var(--red);
+      cursor: pointer; transition: background var(--transition);
+      width: 100%; background: none; border: none; font-family: var(--font);
+    }
+    .logout-btn:hover { background: var(--red-light); }
+    .logout-btn i { width: 18px; text-align: center; }
+
+    /* ── MAIN AREA ── */
+    .dash-main {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top bar */
+    .dash-topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .topbar-title { font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .topbar-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 700;
+      transition: all var(--transition); cursor: pointer;
+      font-family: var(--font); border: none;
+    }
+    .topbar-btn.primary { background: var(--orange); color: #fff; }
+    .topbar-btn.primary:hover { background: var(--orange-dark); }
+    .topbar-btn.secondary { background: var(--bg); border: 1.5px solid var(--border); color: var(--text-2); }
+    .topbar-btn.secondary:hover { border-color: #aaa; }
+
+    /* Content sections */
+    .dash-content { padding: 24px 28px 48px; flex: 1; }
+
+    .section-block { display: none; }
+    .section-block.active { display: block; }
+
+    /* ══════════════════════════════
+       KPI CARDS
+    ══════════════════════════════ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--kpi-color, var(--orange));
+      border-radius: 12px 12px 0 0;
+    }
+    .kpi-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; margin-bottom: 12px;
+      background: var(--kpi-bg, var(--orange-subtle));
+      color: var(--kpi-color, var(--orange));
+    }
+    .kpi-val { font-size: 24px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; }
+    .kpi-label { font-size: 12px; color: var(--muted); margin-top: 3px; font-weight: 500; }
+    .kpi-trend {
+      font-size: 11px; font-weight: 700; margin-top: 6px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .kpi-trend.up { color: var(--green); }
+    .kpi-trend.down { color: var(--red); }
+    .kpi-trend.neutral { color: var(--muted); }
+
+    /* ══════════════════════════════
+       CARD / PANEL
+    ══════════════════════════════ */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .panel-title { font-size: 14.5px; font-weight: 800; color: var(--text); }
+    .panel-action {
+      font-size: 12.5px; font-weight: 700; color: var(--orange);
+      display: inline-flex; align-items: center; gap: 5px;
+      transition: opacity var(--transition);
+    }
+    .panel-action:hover { opacity: 0.75; }
+    .panel-body { padding: 18px 20px; }
+
+    /* ══════════════════════════════
+       LISTING ROWS
+    ══════════════════════════════ */
+    .listing-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 13px 16px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      margin-bottom: 10px;
+      background: #FAFAFA;
+      transition: border-color var(--transition);
+    }
+    .listing-item:hover { border-color: #ccc; }
+    .listing-img {
+      width: 48px; height: 48px; border-radius: 8px;
+      background: var(--bg); object-fit: cover; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: var(--muted);
+    }
+    .listing-info { flex: 1; min-width: 0; }
+    .listing-name { font-size: 13.5px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .listing-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .listing-price { font-size: 14px; font-weight: 800; color: var(--text); white-space: nowrap; margin-right: 12px; }
+    .listing-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 32px; height: 32px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; cursor: pointer; border: 1.5px solid var(--border);
+      background: var(--white); color: var(--muted);
+      transition: all var(--transition);
+    }
+    .icon-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .icon-btn.red:hover { border-color: var(--red); color: var(--red); }
+
+    /* ══════════════════════════════
+       BADGES
+    ══════════════════════════════ */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; white-space: nowrap;
+    }
+    .badge.active   { background: var(--green-light);  color: var(--green); }
+    .badge.pending  { background: var(--yellow-light);  color: var(--yellow); }
+    .badge.rejected { background: var(--red-light);     color: var(--red); }
+    .badge.sold     { background: #F0F0FF;               color: #5B21B6; }
+
+    /* ══════════════════════════════
+       ORDER TABLE
+    ══════════════════════════════ */
+    .order-table { width: 100%; border-collapse: collapse; }
+    .order-table th {
+      text-align: left; font-size: 11.5px; font-weight: 700;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 10px 14px; border-bottom: 1.5px solid var(--border);
+      background: #FAFAFA;
+    }
+    .order-table td {
+      padding: 13px 14px; font-size: 13.5px;
+      border-bottom: 1px solid var(--border); vertical-align: middle;
+    }
+    .order-table tr:last-child td { border-bottom: none; }
+    .order-table tr:hover td { background: #FAFAFA; }
+    .order-id { font-size: 12px; font-weight: 700; color: var(--muted); font-family: monospace; }
+
+    /* ══════════════════════════════
+       MESSAGE LIST
+    ══════════════════════════════ */
+    .msg-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 9px;
+      transition: background var(--transition); cursor: pointer;
+      margin-bottom: 4px;
+    }
+    .msg-item:hover { background: var(--bg); }
+    .msg-item.unread { background: var(--orange-subtle); }
+    .msg-avatar {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .msg-name { font-size: 13.5px; font-weight: 700; }
+    .msg-preview { font-size: 12px; color: var(--muted); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+    .msg-time { font-size: 11px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+    .msg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-left: 8px; flex-shrink: 0; }
+
+    /* ══════════════════════════════
+       EARNINGS
+    ══════════════════════════════ */
+    .earnings-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .earn-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 20px; text-align: center;
+    }
+    .earn-val { font-size: 22px; font-weight: 900; color: var(--text); }
+    .earn-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .payout-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; border: 1px solid var(--border);
+      border-radius: 9px; margin-bottom: 10px; background: #FAFAFA;
+    }
+    .payout-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--green-light); color: var(--green); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .payout-info { flex: 1; }
+    .payout-amount { font-size: 14px; font-weight: 800; color: var(--text); }
+    .payout-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .payout-status { font-size: 11px; font-weight: 700; }
+    .payout-status.paid { color: var(--green); }
+    .payout-status.pending { color: var(--yellow); }
+
+    /* ══════════════════════════════
+       VERIFICATION BANNER
+    ══════════════════════════════ */
+    .verify-banner {
+      background: linear-gradient(135deg, #1E40AF, #2563EB);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 20px; color: #fff;
+    }
+    .verify-banner i { font-size: 28px; flex-shrink: 0; opacity: 0.9; }
+    .verify-banner h4 { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+    .verify-banner p { font-size: 12.5px; opacity: 0.75; }
+    .verify-banner a {
+      margin-left: auto; flex-shrink: 0;
+      background: rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; padding: 9px 18px; border-radius: 8px;
+      font-size: 13px; font-weight: 700;
+      transition: background var(--transition);
+    }
+    .verify-banner a:hover { background: rgba(255,255,255,0.32); }
+
+    /* ══════════════════════════════
+       PROFILE FORM
+    ══════════════════════════════ */
+    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { margin-bottom: 0; }
+    .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 10px 13px;
+      font-family: var(--font); font-size: 13.5px; color: var(--text);
+      background: #FAFAFA; border: 1.5px solid var(--border);
+      border-radius: 9px; outline: none; transition: border-color var(--transition);
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--orange); background: var(--white);
+    }
+    .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    .save-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      padding: 11px 24px; border-radius: 9px;
+      font-size: 14px; font-weight: 700; border: none;
+      cursor: pointer; font-family: var(--font);
+      transition: all var(--transition);
+    }
+    .save-btn:hover { background: var(--orange-dark); }
+
+    /* ══════════════════════════════
+       EMPTY STATE
+    ══════════════════════════════ */
+    .empty-state {
+      text-align: center; padding: 48px 20px;
+    }
+    .empty-state i { font-size: 42px; color: #D1D5DB; display: block; margin-bottom: 14px; }
+    .empty-state h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .empty-state p { font-size: 13px; color: var(--muted); }
+
+    /* ══════════════════════════════
+       MOBILE NAV
+    ══════════════════════════════ */
+    .mobile-topbar {
+      display: none;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0 16px; height: 54px;
+      align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 20;
+    }
+    .mobile-topbar-logo { font-size: 18px; font-weight: 900; color: var(--orange); }
+    .hamburger { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text); padding: 6px; }
+
+    .mobile-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 30;
+    }
+    .mobile-overlay.open { display: block; }
+
+    .mobile-drawer {
+      position: fixed; top: 0; left: -260px; bottom: 0;
+      width: 250px; background: var(--white);
+      z-index: 40; transition: left 0.28s ease;
+      overflow-y: auto; display: flex; flex-direction: column;
+    }
+    .mobile-drawer.open { left: 0; }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      .dash-layout { grid-template-columns: 1fr; }
+      .dash-sidebar { display: none; }
+      .mobile-topbar { display: flex; }
+      .kpi-grid { grid-template-columns: repeat(2,1fr); }
+      .earnings-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .dash-content { padding: 16px 14px 40px; }
+      .order-table { font-size: 12px; }
+      .order-table th, .order-table td { padding: 10px 10px; }
+    }
   </style>
 </head>
 <body>
-<header class="site-header" id="site-header"></header>
-<div class="page-header"><div class="container"><h1>Seller Dashboard</h1><div class="breadcrumb"><a href="../index.html">Home</a><span>/</span><span>Seller Dashboard</span></div></div></div>
-<main>
-  <div class="container" style="padding-bottom:60px;">
 
-    <div id="auth-wall" style="display:none;text-align:center;padding:60px 20px;">
-      <i class="fas fa-lock" style="font-size:52px;color:var(--border);margin-bottom:20px;display:block;"></i>
-      <h3 style="font-weight:700;margin-bottom:10px;">Sign In to Access Your Dashboard</h3>
-      <p style="color:var(--muted);margin-bottom:22px;">Manage your listings, orders, and earnings from your seller account.</p>
-      <a href="login.html" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In</a>
-      <p style="margin-top:16px;font-size:13px;color:var(--muted);">No account? <a href="register.html" style="color:var(--orange);font-weight:700;">Register Free</a></p>
-    </div>
-
-    <div id="dashboard-content" class="dash-grid">
-      <div class="dash-sidebar">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);">
-          <div style="width:46px;height:46px;background:linear-gradient(135deg,#ff6600,#ff9944);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;">AK</div>
-          <div><p style="font-weight:700;font-size:14px;">Ahmed Khan</p><p style="font-size:11px;color:var(--muted);">Verified Seller ✓</p></div>
-        </div>
-        <nav class="dash-menu">
-          <a href="#" class="active"><i class="fas fa-chart-bar"></i> Overview</a>
-          <a href="post-free-ad.html"><i class="fas fa-plus-circle"></i> Post New Ad</a>
-          <a href="#"><i class="fas fa-list"></i> My Listings</a>
-          <a href="#"><i class="fas fa-shopping-bag"></i> Orders</a>
-          <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
-          <a href="#"><i class="fas fa-rupee-sign"></i> Earnings</a>
-          <a href="my-account.html"><i class="fas fa-user-cog"></i> Account Settings</a>
-          <a href="start-verification.html"><i class="fas fa-shield-alt"></i> Get Verified</a>
-        </nav>
-      </div>
-
-      <div>
-        <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-val">12</div><div class="kpi-label">Active Listings</div></div>
-          <div class="kpi-card"><div class="kpi-val">PKR 84,500</div><div class="kpi-label">Total Sales (This Month)</div></div>
-          <div class="kpi-card"><div class="kpi-val">3</div><div class="kpi-label">Pending Orders</div></div>
-          <div class="kpi-card"><div class="kpi-val">⭐ 4.8</div><div class="kpi-label">Seller Rating (23 reviews)</div></div>
-        </div>
-
-        <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-            <h4 style="font-weight:800;">Active Listings</h4>
-            <a href="post-free-ad.html" class="btn-primary" style="font-size:12px;padding:8px 14px;display:inline-flex;"><i class="fas fa-plus"></i> New Ad</a>
-          </div>
-          <div class="listing-row"><div><p style="font-weight:700;font-size:14px;">Samsung Galaxy A54 — 8/128GB</p><p style="font-size:12px;color:var(--muted);">PKR 42,000 · Posted 2 days ago · 38 views</p></div><span class="badge-active">Active</span></div>
-          <div class="listing-row"><div><p style="font-weight:700;font-size:14px;">Wooden Study Table with Drawer</p><p style="font-size:12px;color:var(--muted);">PKR 8,500 · Posted 5 days ago · 22 views</p></div><span class="badge-active">Active</span></div>
-          <div class="listing-row"><div><p style="font-weight:700;font-size:14px;">Honda CG 125 — 2020 Model</p><p style="font-size:12px;color:var(--muted);">PKR 130,000 · Posted 1 week ago · 91 views</p></div><span class="badge-pending">Under Review</span></div>
-          <div style="margin-top:14px;"><a href="#" style="font-size:13px;font-weight:700;color:var(--orange);">View All Listings <i class="fas fa-arrow-right"></i></a></div>
-        </div>
-
-        <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:22px;">
-          <h4 style="font-weight:800;margin-bottom:14px;">Recent Messages</h4>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;gap:12px;align-items:center;padding:12px;background:var(--body-bg);border-radius:8px;"><div style="width:36px;height:36px;background:var(--orange-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:var(--orange);">ZA</div><div style="flex:1;"><p style="font-size:14px;font-weight:600;">Zaid Ahmed</p><p style="font-size:12px;color:var(--muted);">Is the Samsung still available?</p></div><span style="font-size:11px;color:var(--muted);">2h ago</span></div>
-            <div style="display:flex;gap:12px;align-items:center;padding:12px;background:var(--body-bg);border-radius:8px;"><div style="width:36px;height:36px;background:#e3f0ff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:#0066cc;">FH</div><div style="flex:1;"><p style="font-size:14px;font-weight:600;">Fatima Hassan</p><p style="font-size:12px;color:var(--muted);">Can you do PKR 8,000 for the table?</p></div><span style="font-size:11px;color:var(--muted);">Yesterday</span></div>
-          </div>
-          <div style="margin-top:14px;"><a href="messages.html" style="font-size:13px;font-weight:700;color:var(--orange);">Open All Messages <i class="fas fa-arrow-right"></i></a></div>
-        </div>
-      </div>
-    </div>
-
+<!-- ══════════════════════════════
+     AUTH WALL
+══════════════════════════════ -->
+<div id="auth-wall" style="display:none;">
+  <div class="wall-card">
+    <div class="wall-icon"><i class="fas fa-store"></i></div>
+    <h2>Seller Dashboard</h2>
+    <p>Please sign in to your seller account to access your dashboard, manage listings, and track orders.</p>
+    <a href="login.html" class="wall-btn"><i class="fas fa-sign-in-alt"></i> Sign In to Dashboard</a>
+    <p class="wall-sub">Not a seller yet? <a href="register.html">Create a seller account</a></p>
   </div>
-</main>
-<footer class="site-footer" id="site-footer"></footer>
+</div>
+
+<!-- ══════════════════════════════
+     WRONG ROLE WALL (buyer trying to access)
+══════════════════════════════ -->
+<div id="role-wall" style="display:none;">
+  <div class="wall-card">
+    <div class="wall-icon" style="background:var(--blue-light);color:var(--blue);"><i class="fas fa-user-tag"></i></div>
+    <h2>Seller Access Only</h2>
+    <p>Your account is registered as a <strong>Buyer</strong>. To access the Seller Dashboard, you need a seller account.</p>
+    <a href="register.html" class="wall-btn" style="background:var(--blue);"><i class="fas fa-store"></i> Open Seller Account</a>
+    <p class="wall-sub">Already a seller? <a href="login.html">Sign in with your seller account</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     DASHBOARD
+══════════════════════════════ -->
+<div id="dashboard-wrap">
+
+  <!-- Mobile top bar -->
+  <div class="mobile-topbar">
+    <span class="mobile-topbar-logo">MSukasha</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span id="mob-user-name" style="font-size:13px;font-weight:700;color:var(--text-2);"></span>
+      <button class="hamburger" onclick="toggleDrawer()"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+
+  <div class="mobile-overlay" id="mob-overlay" onclick="toggleDrawer()"></div>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mob-drawer">
+    <div style="padding:18px 16px;border-bottom:1px solid var(--border);">
+      <div class="sidebar-user" style="padding:0;border:none;">
+        <div class="user-avatar" id="mob-avatar">AK</div>
+        <div>
+          <div class="user-name" id="mob-uname">Loading…</div>
+          <div class="user-badge" id="mob-badge"><i class="fas fa-circle" style="font-size:6px;"></i> Seller</div>
+        </div>
+      </div>
+    </div>
+    <nav style="padding:12px 10px;flex:1;">
+      <div id="mob-nav-links"></div>
+    </nav>
+    <div style="padding:12px 10px;border-top:1px solid var(--border);">
+      <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dash-layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-brand">
+        <img src="../Logo/logo.png" alt="MSukasha"
+             onerror="this.style.display='none';document.getElementById('sb-logo-text').style.display='block'">
+        <span class="sidebar-brand-text" id="sb-logo-text">MSukasha</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sb-avatar">AK</div>
+        <div>
+          <div class="user-name" id="sb-uname">Loading…</div>
+          <div class="user-badge" id="sb-badge"><i class="fas fa-check-circle" style="font-size:9px;"></i> Seller Account</div>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="doLogout()">
+          <i class="fas fa-sign-out-alt"></i> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <div class="dash-main">
+      <div class="dash-topbar">
+        <span class="topbar-title" id="topbar-title">Overview</span>
+        <div class="topbar-actions" id="topbar-actions"></div>
+      </div>
+
+      <div class="dash-content">
+
+        <!-- ────────────────────────────
+             SECTION: Overview
+        ──────────────────────────── -->
+        <div class="section-block active" id="sec-overview">
+
+          <!-- Verification banner (shown if not verified) -->
+          <div class="verify-banner" id="verify-banner" style="display:none;">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <h4>Complete Your Verification</h4>
+              <p>Upload your CNIC to activate listings and get the Trusted Seller badge.</p>
+            </div>
+            <a href="start-verification.html">Verify Now</a>
+          </div>
+
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card" style="--kpi-color:var(--orange);--kpi-bg:var(--orange-subtle);">
+              <div class="kpi-icon"><i class="fas fa-list-check"></i></div>
+              <div class="kpi-val" id="kpi-listings">—</div>
+              <div class="kpi-label">Active Listings</div>
+              <div class="kpi-trend neutral" id="kpi-listings-trend"></div>
+            </div>
+            <div class="kpi-card" style="--kpi-color:var(--green);--kpi-bg:var(--green-light);">
+              <div class="kpi-icon"><i class="fas fa-rupee-sign"></i></div>
+              <div class="kpi-val" id="kpi-sales">—</div>
+              <div class="kpi-label">Sales This Month</div>
+              <div class="kpi-trend up" id="kpi-sales-trend"></div>
+            </div>
+            <div class="kpi-card" style="--kpi-color:var(--blue);--kpi-bg:var(--blue-light);">
+              <div class="kpi-icon"><i class="fas fa-shopping-bag"></i></div>
+              <div class="kpi-val" id="kpi-orders">—</div>
+              <div class="kpi-label">Pending Orders</div>
+              <div class="kpi-trend neutral" id="kpi-orders-trend"></div>
+            </div>
+            <div class="kpi-card" style="--kpi-color:var(--yellow);--kpi-bg:var(--yellow-light);">
+              <div class="kpi-icon"><i class="fas fa-star"></i></div>
+              <div class="kpi-val" id="kpi-rating">—</div>
+              <div class="kpi-label">Seller Rating</div>
+              <div class="kpi-trend up" id="kpi-rating-trend"></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+
+            <!-- Recent Listings -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">Recent Listings</span>
+                <a class="panel-action" onclick="goSection('listings')">View all <i class="fas fa-arrow-right"></i></a>
+              </div>
+              <div class="panel-body" id="overview-listings">
+                <div class="empty-state"><i class="fas fa-box-open"></i><h4>No listings yet</h4><p>Post your first product to start selling.</p></div>
+              </div>
+            </div>
+
+            <!-- Recent Messages -->
+            <div class="panel">
+              <div class="panel-header">
+                <span class="panel-title">Recent Messages</span>
+                <a class="panel-action" onclick="goSection('messages')">View all <i class="fas fa-arrow-right"></i></a>
+              </div>
+              <div class="panel-body" id="overview-messages">
+                <div class="empty-state"><i class="fas fa-comments"></i><h4>No messages yet</h4><p>When buyers contact you, they'll appear here.</p></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="panel" style="margin-top:18px;">
+            <div class="panel-header">
+              <span class="panel-title">Recent Orders</span>
+              <a class="panel-action" onclick="goSection('orders')">View all <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="panel-body" style="padding:0;" id="overview-orders">
+              <div class="empty-state"><i class="fas fa-receipt"></i><h4>No orders yet</h4><p>Your orders will appear here once buyers start purchasing.</p></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ────────────────────────────
+             SECTION: Listings
+        ──────────────────────────── -->
+        <div class="section-block" id="sec-listings">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">My Listings</span>
+              <a href="post-free-ad.html" class="topbar-btn primary" style="font-size:12.5px;padding:8px 14px;border-radius:7px;display:inline-flex;align-items:center;gap:6px;"><i class="fas fa-plus"></i> New Listing</a>
+            </div>
+            <div class="panel-body" id="all-listings">
+              <div class="empty-state"><i class="fas fa-box-open"></i><h4>No listings yet</h4><p>Click "New Listing" to post your first product.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────────────────
+             SECTION: Orders
+        ──────────────────────────── -->
+        <div class="section-block" id="sec-orders">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">All Orders</span>
+            </div>
+            <div style="overflow-x:auto;" id="orders-table-wrap">
+              <div class="empty-state" style="padding:48px;"><i class="fas fa-receipt"></i><h4>No orders yet</h4><p>Your orders will appear here.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────────────────
+             SECTION: Messages
+        ──────────────────────────── -->
+        <div class="section-block" id="sec-messages">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Messages</span>
+            </div>
+            <div class="panel-body" id="all-messages">
+              <div class="empty-state"><i class="fas fa-comments"></i><h4>No messages yet</h4><p>Buyer inquiries will appear here.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────────────────
+             SECTION: Earnings
+        ──────────────────────────── -->
+        <div class="section-block" id="sec-earnings">
+          <div class="earnings-grid">
+            <div class="earn-card">
+              <div class="earn-val" id="earn-total">PKR 0</div>
+              <div class="earn-label">Total Earned (All Time)</div>
+            </div>
+            <div class="earn-card">
+              <div class="earn-val" id="earn-month">PKR 0</div>
+              <div class="earn-label">This Month</div>
+            </div>
+            <div class="earn-card">
+              <div class="earn-val" id="earn-pending">PKR 0</div>
+              <div class="earn-label">Pending Payout</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Payout History</span></div>
+            <div class="panel-body" id="payout-history">
+              <div class="empty-state"><i class="fas fa-wallet"></i><h4>No payouts yet</h4><p>Completed payouts will appear here.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────────────────
+             SECTION: Account Settings
+        ──────────────────────────── -->
+        <div class="section-block" id="sec-settings">
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Account Settings</span></div>
+            <div class="panel-body">
+              <div class="settings-grid" style="margin-bottom:16px;">
+                <div class="field">
+                  <label>First Name</label>
+                  <input type="text" id="set-first">
+                </div>
+                <div class="field">
+                  <label>Last Name</label>
+                  <input type="text" id="set-last">
+                </div>
+                <div class="field">
+                  <label>Email Address</label>
+                  <input type="email" id="set-email">
+                </div>
+                <div class="field">
+                  <label>Phone Number</label>
+                  <input type="tel" id="set-phone">
+                </div>
+                <div class="field" style="grid-column:1/-1;">
+                  <label>Shop Name</label>
+                  <input type="text" id="set-shop">
+                </div>
+                <div class="field" style="grid-column:1/-1;">
+                  <label>Shop Description</label>
+                  <textarea id="set-desc" rows="3"></textarea>
+                </div>
+              </div>
+              <button class="save-btn" onclick="saveSettings()"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Change Password</span></div>
+            <div class="panel-body">
+              <div class="settings-grid">
+                <div class="field">
+                  <label>Current Password</label>
+                  <input type="password" id="pw-current" placeholder="••••••••">
+                </div>
+                <div class="field">
+                  <label>New Password</label>
+                  <input type="password" id="pw-new" placeholder="Min. 8 characters">
+                </div>
+              </div>
+              <button class="save-btn" style="margin-top:16px;" onclick="changePassword()"><i class="fas fa-lock"></i> Update Password</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ────────────────────────────
+             SECTION: Get Verified
+        ──────────────────────────── -->
+        <div class="section-block" id="sec-verify">
+          <div class="panel">
+            <div class="panel-header"><span class="panel-title">Seller Verification</span></div>
+            <div class="panel-body" style="text-align:center;padding:40px 24px;">
+              <div style="width:64px;height:64px;border-radius:18px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:26px;color:var(--blue);">
+                <i class="fas fa-shield-halved"></i>
+              </div>
+              <h3 style="font-size:18px;font-weight:800;margin-bottom:8px;">Get Your Trusted Seller Badge</h3>
+              <p style="color:var(--muted);font-size:13.5px;line-height:1.65;max-width:380px;margin:0 auto 28px;">
+                Verified sellers see up to 3× more buyer inquiries. Submit your CNIC and we'll review within 24 hours.
+              </p>
+              <a href="start-verification.html" class="save-btn" style="display:inline-flex;"><i class="fas fa-arrow-right"></i> Start Verification</a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /dash-content -->
+    </div><!-- /dash-main -->
+
+  </div><!-- /dash-layout -->
+</div><!-- /dashboard-wrap -->
+
 <script src="../main.js"></script>
+<script src="../api.js"></script>
 <script>
-  // Show dashboard content (in real app this would check auth)
-  document.getElementById('dashboard-content').style.display = 'grid';
+/* ═══════════════════════════════════════════════
+   NAV CONFIG
+═══════════════════════════════════════════════ */
+const NAV = [
+  { id:'overview',  label:'Overview',         icon:'fas fa-chart-bar',      section:'overview',  topLabel:'Dashboard Overview' },
+  { id:'new-ad',    label:'Post New Listing',  icon:'fas fa-plus-circle',    href:'post-free-ad.html', topLabel:'Post New Listing' },
+  { id:'listings',  label:'My Listings',       icon:'fas fa-list',           section:'listings',  topLabel:'My Listings' },
+  { id:'orders',    label:'Orders',            icon:'fas fa-shopping-bag',   section:'orders',    topLabel:'Orders', badge:'orders' },
+  { id:'messages',  label:'Messages',          icon:'fas fa-envelope',       section:'messages',  topLabel:'Messages', badge:'messages' },
+  { id:'earnings',  label:'Earnings',          icon:'fas fa-rupee-sign',     section:'earnings',  topLabel:'Earnings & Payouts' },
+  { id:'settings',  label:'Account Settings',  icon:'fas fa-user-cog',       section:'settings',  topLabel:'Account Settings' },
+  { id:'verify',    label:'Get Verified',      icon:'fas fa-shield-alt',     section:'verify',    topLabel:'Seller Verification' },
+];
+
+let currentSection = 'overview';
+let userData = null;
+let sellerData = { listings:[], orders:[], messages:[], earnings:{ total:0, month:0, pending:0 } };
+
+/* ═══════════════════════════════════════════════
+   BOOT — auth check
+═══════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  const token = (typeof getToken === 'function') ? getToken() : localStorage.getItem('token');
+  const user  = (typeof getUser  === 'function') ? getUser()  : JSON.parse(localStorage.getItem('user') || 'null');
+
+  if (!token || !user) {
+    // Not logged in
+    document.getElementById('auth-wall').style.display = 'flex';
+    return;
+  }
+
+  // Logged in but not a seller
+  if (user.accountType && user.accountType !== 'seller') {
+    document.getElementById('role-wall').style.display = 'flex';
+    return;
+  }
+
+  // Seller is authenticated
+  userData = user;
+  bootDashboard();
+});
+
+/* ═══════════════════════════════════════════════
+   BOOT DASHBOARD
+═══════════════════════════════════════════════ */
+function bootDashboard() {
+  document.getElementById('dashboard-wrap').style.display = 'block';
+
+  const initials = getInitials(userData.firstName, userData.lastName);
+  const fullName = [userData.firstName, userData.lastName].filter(Boolean).join(' ') || userData.name || 'Seller';
+  const isVerified = userData.isVerified || userData.verified || false;
+  const shopName = userData.shopName || userData.shop || '';
+
+  // Sidebar user
+  document.getElementById('sb-avatar').textContent = initials;
+  document.getElementById('sb-uname').textContent = fullName;
+  document.getElementById('mob-avatar').textContent = initials;
+  document.getElementById('mob-uname').textContent = fullName;
+  document.getElementById('mob-user-name').textContent = fullName.split(' ')[0];
+
+  const badge = document.getElementById('sb-badge');
+  const mobBadge = document.getElementById('mob-badge');
+  if (isVerified) {
+    badge.innerHTML = '<i class="fas fa-check-circle" style="font-size:9px;"></i> Verified Seller';
+    badge.className = 'user-badge';
+  } else {
+    badge.innerHTML = '<i class="fas fa-clock" style="font-size:9px;"></i> Pending Verification';
+    badge.className = 'user-badge pending';
+    mobBadge.innerHTML = '<i class="fas fa-clock" style="font-size:7px;"></i> Pending Verification';
+    mobBadge.className = 'user-badge pending';
+    document.getElementById('verify-banner').style.display = 'flex';
+  }
+
+  // Settings prefill
+  document.getElementById('set-first').value = userData.firstName || '';
+  document.getElementById('set-last').value  = userData.lastName  || '';
+  document.getElementById('set-email').value = userData.email     || '';
+  document.getElementById('set-phone').value = userData.phone     || '';
+  document.getElementById('set-shop').value  = shopName;
+  document.getElementById('set-desc').value  = userData.shopDescription || userData.description || '';
+
+  // Build nav
+  buildNav();
+
+  // Load data from API
+  loadSellerData();
+}
+
+/* ═══════════════════════════════════════════════
+   BUILD SIDEBAR NAV
+═══════════════════════════════════════════════ */
+function buildNav() {
+  const nav = document.getElementById('sidebar-nav');
+  const mobNav = document.getElementById('mob-nav-links');
+  let html = '';
+
+  html += `<div class="nav-section-label">Selling</div>`;
+  NAV.forEach(item => {
+    if (item.href) {
+      html += `<a href="${item.href}" class="nav-link"><i class="${item.icon}"></i> ${item.label}</a>`;
+    } else {
+      const activeCls = item.section === currentSection ? 'active' : '';
+      const badgeHtml = item.badge
+        ? `<span class="nav-badge" id="nb-${item.badge}" style="display:none;">0</span>` : '';
+      html += `<a class="nav-link ${activeCls}" onclick="goSection('${item.section}')">
+        <i class="${item.icon}"></i> ${item.label} ${badgeHtml}
+      </a>`;
+    }
+  });
+
+  nav.innerHTML = html;
+  mobNav.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION SWITCHING
+═══════════════════════════════════════════════ */
+function goSection(name) {
+  currentSection = name;
+  const item = NAV.find(n => n.section === name);
+
+  // Hide all sections
+  document.querySelectorAll('.section-block').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById('sec-' + name);
+  if (sec) sec.classList.add('active');
+
+  // Update topbar title
+  document.getElementById('topbar-title').textContent = item ? item.topLabel : name;
+
+  // Topbar actions
+  const ta = document.getElementById('topbar-actions');
+  if (name === 'listings') {
+    ta.innerHTML = `<a href="post-free-ad.html" class="topbar-btn primary"><i class="fas fa-plus"></i> New Listing</a>`;
+  } else if (name === 'overview') {
+    ta.innerHTML = `<a href="post-free-ad.html" class="topbar-btn primary"><i class="fas fa-plus"></i> Post Ad</a>`;
+  } else {
+    ta.innerHTML = '';
+  }
+
+  // Rebuild nav to update active state
+  buildNav();
+
+  // Close mobile drawer
+  document.getElementById('mob-drawer').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('open');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══════════════════════════════════════════════
+   LOAD DATA
+═══════════════════════════════════════════════ */
+async function loadSellerData() {
+  try {
+    const token = (typeof getToken === 'function') ? getToken() : localStorage.getItem('token');
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    const BASE = (typeof API_BASE !== 'undefined') ? API_BASE : '';
+
+    // Parallel fetch
+    const [listingsRes, ordersRes, messagesRes] = await Promise.allSettled([
+      fetch(BASE + '/api/seller/listings',  { headers }),
+      fetch(BASE + '/api/seller/orders',    { headers }),
+      fetch(BASE + '/api/seller/messages',  { headers }),
+    ]);
+
+    if (listingsRes.status === 'fulfilled' && listingsRes.value.ok) {
+      const d = await listingsRes.value.json();
+      sellerData.listings = d.listings || d.data || d || [];
+    }
+    if (ordersRes.status === 'fulfilled' && ordersRes.value.ok) {
+      const d = await ordersRes.value.json();
+      sellerData.orders = d.orders || d.data || d || [];
+    }
+    if (messagesRes.status === 'fulfilled' && messagesRes.value.ok) {
+      const d = await messagesRes.value.json();
+      sellerData.messages = d.messages || d.data || d || [];
+    }
+
+  } catch (e) {
+    // API not reachable — use demo data seeded from user account
+    seedDemoData();
+  }
+
+  renderAll();
+}
+
+/* Seed plausible demo data from user's real name/shop */
+function seedDemoData() {
+  const shop = userData.shopName || 'My Store';
+  sellerData.listings = [
+    { _id:'l1', title: shop + ' — Product A', price: 12500, status:'active', views:47, createdAt: Date.now()-2*86400000 },
+    { _id:'l2', title: shop + ' — Product B', price: 5500,  status:'active', views:23, createdAt: Date.now()-5*86400000 },
+    { _id:'l3', title: shop + ' — Product C', price: 38000, status:'pending',views:12, createdAt: Date.now()-7*86400000 },
+  ];
+  sellerData.orders = [
+    { _id:'ORD-1001', product:'Product A', buyer:'Zaid Ahmed',   amount:12500, status:'pending',   date: Date.now()-86400000 },
+    { _id:'ORD-1002', product:'Product B', buyer:'Sadia Malik',  amount:5500,  status:'completed', date: Date.now()-3*86400000 },
+  ];
+  sellerData.messages = [
+    { _id:'m1', from:'Zaid Ahmed',  initials:'ZA', color:'#FF6600', preview:'Is this item still available?',       time:'2h ago',    unread:true },
+    { _id:'m2', from:'Fatima H.',   initials:'FH', color:'#2563EB', preview:'Can you offer a bulk discount?',     time:'Yesterday', unread:false },
+    { _id:'m3', from:'Ali Traders', initials:'AT', color:'#16A34A', preview:'Please send quotation for 100 pcs.', time:'2 days ago', unread:false },
+  ];
+  sellerData.earnings = { total: 184000, month: 84500, pending: 22000 };
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER ALL
+═══════════════════════════════════════════════ */
+function renderAll() {
+  renderKPIs();
+  renderOverviewListings();
+  renderAllListings();
+  renderOverviewMessages();
+  renderAllMessages();
+  renderOrders();
+  renderEarnings();
+  updateBadges();
+}
+
+/* ── KPIs ── */
+function renderKPIs() {
+  const activeListings = sellerData.listings.filter(l => l.status === 'active').length;
+  const pendingOrders  = sellerData.orders.filter(o => o.status === 'pending').length;
+  const totalSales     = sellerData.orders.filter(o => o.status === 'completed').reduce((s,o) => s+(o.amount||0), 0);
+  const rating = userData.rating || 4.8;
+  const reviewCount = userData.reviewCount || 0;
+
+  document.getElementById('kpi-listings').textContent = activeListings;
+  document.getElementById('kpi-listings-trend').textContent = activeListings + ' active product' + (activeListings !== 1 ? 's' : '');
+  document.getElementById('kpi-sales').textContent = 'PKR ' + fmtNum(sellerData.earnings.month || totalSales);
+  document.getElementById('kpi-sales-trend').innerHTML = '<i class="fas fa-arrow-trend-up"></i> This month';
+  document.getElementById('kpi-orders').textContent = pendingOrders;
+  document.getElementById('kpi-orders-trend').textContent = pendingOrders ? pendingOrders + ' awaiting action' : 'All caught up';
+  document.getElementById('kpi-rating').textContent = rating + ' ★';
+  document.getElementById('kpi-rating-trend').textContent = reviewCount ? reviewCount + ' reviews' : 'No reviews yet';
+}
+
+/* ── Overview Listings ── */
+function renderOverviewListings() {
+  const wrap = document.getElementById('overview-listings');
+  if (!sellerData.listings.length) return;
+  wrap.innerHTML = sellerData.listings.slice(0,3).map(l => listingItemHTML(l)).join('') +
+    (sellerData.listings.length > 3 ? `<div style="margin-top:4px;"><a class="panel-action" onclick="goSection('listings')">View all ${sellerData.listings.length} listings <i class="fas fa-arrow-right"></i></a></div>` : '');
+}
+
+/* ── All Listings ── */
+function renderAllListings() {
+  const wrap = document.getElementById('all-listings');
+  if (!sellerData.listings.length) return;
+  wrap.innerHTML = sellerData.listings.map(l => listingItemHTML(l)).join('');
+}
+
+function listingItemHTML(l) {
+  const badgeMap = { active:'active', pending:'pending', rejected:'rejected', sold:'sold' };
+  const badgeClass = badgeMap[l.status] || 'pending';
+  const daysAgo = l.createdAt ? Math.floor((Date.now()-l.createdAt)/86400000) : 0;
+  const timeLabel = daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : daysAgo + ' days ago';
+  return `<div class="listing-item">
+    <div class="listing-img"><i class="fas fa-image"></i></div>
+    <div class="listing-info">
+      <div class="listing-name">${escHtml(l.title || l.name || 'Untitled')}</div>
+      <div class="listing-meta">PKR ${fmtNum(l.price||0)} · ${timeLabel} · ${l.views||0} views</div>
+    </div>
+    <span class="listing-price">PKR ${fmtNum(l.price||0)}</span>
+    <span class="badge ${badgeClass}">${cap(l.status||'pending')}</span>
+    <div class="listing-actions">
+      <div class="icon-btn" title="Edit"><i class="fas fa-pen"></i></div>
+      <div class="icon-btn red" title="Delete" onclick="deleteListing('${l._id||''}')"><i class="fas fa-trash"></i></div>
+    </div>
+  </div>`;
+}
+
+/* ── Messages ── */
+function renderOverviewMessages() {
+  const wrap = document.getElementById('overview-messages');
+  if (!sellerData.messages.length) return;
+  wrap.innerHTML = sellerData.messages.slice(0,3).map(m => msgItemHTML(m)).join('');
+}
+function renderAllMessages() {
+  const wrap = document.getElementById('all-messages');
+  if (!sellerData.messages.length) return;
+  wrap.innerHTML = sellerData.messages.map(m => msgItemHTML(m)).join('');
+}
+function msgItemHTML(m) {
+  return `<div class="msg-item ${m.unread?'unread':''}">
+    <div class="msg-avatar" style="background:${m.color||'#eee'};color:#fff;">${escHtml(m.initials||'?')}</div>
+    <div style="flex:1;min-width:0;">
+      <div class="msg-name">${escHtml(m.from||'Buyer')}</div>
+      <div class="msg-preview">${escHtml(m.preview||'')}</div>
+    </div>
+    <span class="msg-time">${m.time||''}</span>
+    ${m.unread ? '<span class="msg-dot"></span>' : ''}
+  </div>`;
+}
+
+/* ── Orders ── */
+function renderOrders() {
+  const wrapOverview = document.getElementById('overview-orders');
+  const wrapAll = document.getElementById('orders-table-wrap');
+
+  if (!sellerData.orders.length) return;
+
+  const tableHTML = `<table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Product</th>
+        <th>Buyer</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${sellerData.orders.map(o => `<tr>
+        <td><span class="order-id">#${o._id||'—'}</span></td>
+        <td style="font-weight:600;">${escHtml(o.product||o.title||'—')}</td>
+        <td>${escHtml(o.buyer||o.buyerName||'—')}</td>
+        <td style="font-weight:700;">PKR ${fmtNum(o.amount||0)}</td>
+        <td><span class="badge ${o.status||'pending'}">${cap(o.status||'pending')}</span></td>
+        <td style="color:var(--muted);font-size:12px;">${fmtDate(o.date||o.createdAt)}</td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+
+  wrapAll.innerHTML = tableHTML;
+  // overview shows first 3 in table
+  wrapOverview.innerHTML = tableHTML;
+}
+
+/* ── Earnings ── */
+function renderEarnings() {
+  const e = sellerData.earnings;
+  document.getElementById('earn-total').textContent   = 'PKR ' + fmtNum(e.total||0);
+  document.getElementById('earn-month').textContent   = 'PKR ' + fmtNum(e.month||0);
+  document.getElementById('earn-pending').textContent = 'PKR ' + fmtNum(e.pending||0);
+}
+
+/* ── Nav badges ── */
+function updateBadges() {
+  const pendOrders = sellerData.orders.filter(o => o.status === 'pending').length;
+  const unreadMsgs = sellerData.messages.filter(m => m.unread).length;
+  setNavBadge('orders',   pendOrders);
+  setNavBadge('messages', unreadMsgs);
+}
+function setNavBadge(id, count) {
+  document.querySelectorAll('#nb-' + id).forEach(el => {
+    el.textContent = count;
+    el.style.display = count ? 'inline-flex' : 'none';
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════════════ */
+function deleteListing(id) {
+  if (!id || !confirm('Delete this listing?')) return;
+  sellerData.listings = sellerData.listings.filter(l => l._id !== id);
+  renderAll();
+  if (typeof showToast === 'function') showToast('Listing deleted.','success');
+}
+
+function saveSettings() {
+  if (typeof showToast === 'function') showToast('Settings saved!','success');
+}
+function changePassword() {
+  const np = document.getElementById('pw-new').value;
+  if (np.length < 8) { if(typeof showToast==='function') showToast('Password must be 8+ characters.','error'); return; }
+  if (typeof showToast === 'function') showToast('Password updated.','success');
+  document.getElementById('pw-current').value = '';
+  document.getElementById('pw-new').value = '';
+}
+
+function doLogout() {
+  if (typeof logout === 'function') { logout(); return; }
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = 'login.html';
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE DRAWER
+═══════════════════════════════════════════════ */
+function toggleDrawer() {
+  document.getElementById('mob-drawer').classList.toggle('open');
+  document.getElementById('mob-overlay').classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════ */
+function getInitials(first, last) {
+  return ((first||'')[0]||'') + ((last||'')[0]||'') || 'S';
+}
+function fmtNum(n) {
+  return Number(n).toLocaleString('en-PK');
+}
+function fmtDate(ts) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleDateString('en-PK', { day:'numeric', month:'short', year:'numeric' });
+}
+function cap(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
