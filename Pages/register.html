@@ -6,133 +6,1070 @@
   <title>Create Account | MSukasha</title>
   <link rel="icon" type="image/png" href="../Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
-    .auth-page { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px 0; }
-    .auth-box { background: #fff; border-radius: 14px; border: 1px solid var(--border); padding: 40px; width: 100%; max-width: 480px; box-shadow: var(--shadow-md); }
-    .auth-logo { text-align: center; margin-bottom: 24px; }
-    .auth-logo img { height: 44px; margin: 0 auto 10px; }
-    .account-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-    .account-type-btn { padding: 14px; border: 2px solid var(--border); border-radius: 10px; text-align: center; cursor: pointer; transition: all var(--transition); background: #fff; }
-    .account-type-btn.selected { border-color: var(--orange); background: var(--orange-light); }
-    .account-type-btn i { font-size: 24px; color: var(--muted); display: block; margin-bottom: 6px; }
-    .account-type-btn.selected i { color: var(--orange); }
-    .account-type-btn span { font-size: 13px; font-weight: 700; color: var(--text); }
-    .account-type-btn small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F5620F;
+      --orange-dark: #D44D08;
+      --orange-light: #FFF3EE;
+      --orange-subtle: #FEF0E9;
+      --text: #0F0F0F;
+      --text-2: #3D3D3D;
+      --muted: #767676;
+      --border: #E5E5E5;
+      --bg: #F7F7F7;
+      --white: #ffffff;
+      --green: #16A34A;
+      --green-light: #F0FDF4;
+      --radius: 12px;
+      --transition: 0.18s ease;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body { font-family: var(--font); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+    /* ════════════════════════════
+       PAGE LAYOUT
+    ════════════════════════════ */
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+    }
+
+    /* ════════════════════════════
+       LEFT PANEL
+    ════════════════════════════ */
+    .auth-left {
+      background: linear-gradient(155deg, #0F0F0F 0%, #1C1C1C 55%, #22190F 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 44px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-left::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(245,98,15,0.20) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .auth-left::after {
+      content: '';
+      position: absolute; bottom: -80px; left: -60px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(245,98,15,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .left-logo {
+      display: flex; align-items: center; gap: 10px;
+      position: relative; z-index: 1;
+    }
+    .left-logo img { height: 34px; filter: brightness(0) invert(1); }
+    .left-logo-text { font-size: 22px; font-weight: 900; color: var(--orange); letter-spacing: -0.5px; display: none; }
+
+    .left-content { position: relative; z-index: 1; }
+
+    .left-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(245,98,15,0.15);
+      border: 1px solid rgba(245,98,15,0.30);
+      color: var(--orange);
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 100px;
+      margin-bottom: 22px;
+    }
+
+    .left-heading {
+      font-size: 34px; font-weight: 900;
+      line-height: 1.15; color: #fff;
+      letter-spacing: -1px; margin-bottom: 14px;
+    }
+    .left-heading span { color: var(--orange); }
+
+    .left-sub {
+      font-size: 13.5px; color: rgba(255,255,255,0.48);
+      line-height: 1.65; max-width: 320px; margin-bottom: 36px;
+    }
+
+    /* Dynamic left panel */
+    .left-panel-buyer, .left-panel-seller { transition: opacity 0.3s; }
+    .left-panel-seller { display: none; }
+
+    .trust-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+    .trust-list li { display: flex; align-items: center; gap: 12px; font-size: 13px; color: rgba(255,255,255,0.72); font-weight: 500; }
+    .trust-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(245,98,15,0.12); border: 1px solid rgba(245,98,15,0.22);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--orange); font-size: 13px; flex-shrink: 0;
+    }
+
+    /* Seller benefits */
+    .seller-benefit {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .sb-icon {
+      width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+      background: rgba(245,98,15,0.13); border: 1px solid rgba(245,98,15,0.22);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--orange); font-size: 15px;
+    }
+    .sb-text strong { display: block; font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .sb-text span { font-size: 11.5px; color: rgba(255,255,255,0.42); line-height: 1.4; }
+
+    .left-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      position: relative; z-index: 1;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .stat-num { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
+    .stat-num span { color: var(--orange); }
+    .stat-label { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+
+    /* ════════════════════════════
+       RIGHT PANEL
+    ════════════════════════════ */
+    .auth-right {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 40px 60px;
+      background: var(--white);
+      overflow-y: auto;
+    }
+    .auth-form-wrap { width: 100%; max-width: 460px; }
+
+    .auth-top { margin-bottom: 28px; }
+    .auth-top h1 { font-size: 25px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; margin-bottom: 5px; }
+    .auth-top p { font-size: 13.5px; color: var(--muted); }
+
+    /* ════════════════════════════
+       ACCOUNT TYPE
+    ════════════════════════════ */
+    .type-label {
+      font-size: 11.5px; font-weight: 700; color: var(--text-2);
+      text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px;
+    }
+    .account-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+
+    .account-type-btn {
+      padding: 15px 12px; border: 1.5px solid var(--border);
+      border-radius: var(--radius); text-align: center;
+      cursor: pointer; transition: all var(--transition);
+      background: var(--white); position: relative; user-select: none;
+    }
+    .account-type-btn:hover { border-color: #ccc; background: #fafafa; }
+    .account-type-btn.selected { border-color: var(--orange); background: var(--orange-subtle); }
+
+    .type-check {
+      position: absolute; top: 8px; right: 8px;
+      width: 18px; height: 18px; background: var(--orange);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 8px; opacity: 0;
+      transform: scale(0.5); transition: all var(--transition);
+    }
+    .account-type-btn.selected .type-check { opacity: 1; transform: scale(1); }
+
+    .type-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: #F3F3F3; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 9px;
+      font-size: 16px; color: var(--muted); transition: all var(--transition);
+    }
+    .account-type-btn.selected .type-icon { background: var(--orange-light); color: var(--orange); }
+    .account-type-btn .type-name { font-size: 13px; font-weight: 700; color: var(--text); display: block; margin-bottom: 2px; }
+    .account-type-btn small { font-size: 11px; color: var(--muted); }
+
+    /* ════════════════════════════
+       MULTI-STEP PROGRESS (Seller)
+    ════════════════════════════ */
+    .step-progress {
+      display: none; /* shown only for seller */
+      align-items: center; gap: 0;
+      margin-bottom: 28px;
+    }
+    .step-progress.visible { display: flex; }
+
+    .step-item {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1; position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 16px; left: 50%; width: 100%; height: 2px;
+      background: var(--border); z-index: 0;
+      transition: background 0.35s;
+    }
+    .step-item.done:not(:last-child)::after { background: var(--orange); }
+
+    .step-circle {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      position: relative; z-index: 1;
+      transition: all 0.25s;
+    }
+    .step-item.active .step-circle {
+      border-color: var(--orange); background: var(--orange); color: #fff;
+    }
+    .step-item.done .step-circle {
+      border-color: var(--orange); background: var(--orange); color: #fff;
+    }
+    .step-item.done .step-circle::after {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free'; font-weight: 900;
+      font-size: 11px;
+    }
+    .step-item.done .step-num { display: none; }
+
+    .step-label {
+      font-size: 10.5px; font-weight: 600; color: var(--muted);
+      margin-top: 5px; white-space: nowrap;
+    }
+    .step-item.active .step-label { color: var(--orange); }
+    .step-item.done .step-label { color: var(--green); }
+
+    /* ════════════════════════════
+       SECTION HEADER
+    ════════════════════════════ */
+    .section-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; padding-bottom: 14px;
+      border-bottom: 1.5px solid #F0F0F0;
+    }
+    .section-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--orange-subtle); border: 1px solid rgba(245,98,15,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--orange); font-size: 14px; flex-shrink: 0;
+    }
+    .section-title { font-size: 15px; font-weight: 800; color: var(--text); }
+    .section-sub { font-size: 12px; color: var(--muted); }
+
+    /* ════════════════════════════
+       FORM FIELDS
+    ════════════════════════════ */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field { margin-bottom: 15px; }
+    .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
+
+    .field-wrap { position: relative; }
+    .field-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); font-size: 13px; pointer-events: none;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 0 13px 0 38px;
+      height: 44px;
+      font-family: var(--font); font-size: 13.5px; color: var(--text);
+      background: #FAFAFA; border: 1.5px solid var(--border);
+      border-radius: 9px; outline: none; transition: all var(--transition);
+    }
+    .field select { cursor: pointer; }
+    .field textarea {
+      height: auto; padding-top: 12px; padding-bottom: 12px;
+      resize: vertical; min-height: 80px; line-height: 1.5;
+    }
+    .field input.no-icon, .field select.no-icon, .field textarea.no-icon {
+      padding-left: 13px;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--orange); background: var(--white);
+      box-shadow: 0 0 0 3px rgba(245,98,15,0.09);
+    }
+    .field input::placeholder, .field textarea::placeholder { color: #BDBDBD; font-size: 13px; }
+
+    .pw-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 14px; padding: 4px; transition: color var(--transition);
+    }
+    .pw-toggle:hover { color: var(--text-2); }
+
+    /* strength */
+    .strength-wrap { margin-top: 6px; }
+    .strength-bars { display: flex; gap: 4px; margin-bottom: 3px; }
+    .strength-bar { height: 3px; flex: 1; border-radius: 100px; background: var(--border); transition: background 0.3s; }
+    .strength-text { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .str-1 .strength-bar:nth-child(1) { background: #EF4444; }
+    .str-2 .strength-bar:nth-child(-n+2) { background: #F59E0B; }
+    .str-3 .strength-bar { background: var(--green); }
+
+    /* field hint */
+    .field-hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+
+    /* file upload */
+    .upload-box {
+      border: 2px dashed var(--border); border-radius: 10px;
+      padding: 18px 16px; text-align: center; cursor: pointer;
+      transition: all var(--transition); background: #FAFAFA;
+      position: relative;
+    }
+    .upload-box:hover { border-color: var(--orange); background: var(--orange-subtle); }
+    .upload-box input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+      padding: 0; border: none; background: transparent;
+    }
+    .upload-icon { font-size: 22px; color: var(--muted); margin-bottom: 6px; }
+    .upload-box:hover .upload-icon { color: var(--orange); }
+    .upload-label { font-size: 13px; font-weight: 600; color: var(--text-2); display: block; }
+    .upload-sub { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+    .upload-preview {
+      font-size: 12px; color: var(--green); font-weight: 600;
+      margin-top: 6px; display: none;
+    }
+
+    /* radio group */
+    .radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .radio-pill {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 600; color: var(--text-2);
+      transition: all var(--transition); background: var(--white);
+    }
+    .radio-pill input { display: none; }
+    .radio-pill:has(input:checked) { border-color: var(--orange); background: var(--orange-subtle); color: var(--orange); }
+
+    /* checkbox */
+    .check-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; }
+    .check-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--orange); flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+    .check-row span { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+    .check-row a { color: var(--orange); font-weight: 600; text-decoration: none; }
+    .check-row a:hover { text-decoration: underline; }
+
+    /* alert box */
+    .alert-info {
+      background: #EFF6FF; border: 1px solid #BFDBFE;
+      border-radius: 9px; padding: 12px 14px;
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 12.5px; color: #1E40AF; line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .alert-info i { color: #3B82F6; font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+    /* ════════════════════════════
+       BUTTONS
+    ════════════════════════════ */
+    .btn-row { display: flex; gap: 10px; margin-top: 6px; }
+
+    .btn-back {
+      height: 46px; padding: 0 20px;
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 10px; font-family: var(--font);
+      font-size: 14px; font-weight: 600; color: var(--text-2);
+      cursor: pointer; display: flex; align-items: center; gap: 7px;
+      transition: all var(--transition); flex-shrink: 0;
+    }
+    .btn-back:hover { border-color: #aaa; color: var(--text); }
+
+    .submit-btn {
+      flex: 1; height: 46px;
+      background: var(--orange); color: #fff;
+      border: none; border-radius: 10px;
+      font-family: var(--font); font-size: 14.5px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all var(--transition); letter-spacing: -0.2px;
+    }
+    .submit-btn:hover:not(:disabled) { background: var(--orange-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,98,15,0.35); }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+    .submit-btn .spinner {
+      width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .signin-row { text-align: center; font-size: 13px; color: var(--muted); margin-top: 20px; }
+    .signin-row a { color: var(--orange); font-weight: 700; text-decoration: none; }
+    .signin-row a:hover { text-decoration: underline; }
+
+    /* ════════════════════════════
+       RESPONSIVE
+    ════════════════════════════ */
+    @media (max-width: 960px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { min-height: 100vh; padding: 32px 20px 60px; }
+    }
+    @media (max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 <header class="site-header" id="site-header"></header>
 
 <main class="auth-page">
-  <div class="auth-box">
-    <div class="auth-logo">
-      <img src="../Logo/logo.png" alt="MSukasha" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <span style="display:none;font-size:24px;font-weight:900;color:var(--orange);">MSukasha</span>
-    </div>
-    <h1 style="font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;">Create Your Account</h1>
-    <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:24px;">Join Pakistan's largest trading platform</p>
 
-    <!-- Account Type -->
-    <p style="font-size:13px;font-weight:700;margin-bottom:12px;">I want to:</p>
-    <div class="account-type-grid">
-      <div class="account-type-btn selected" id="type-buyer" onclick="selectType('buyer')">
-        <i class="fas fa-shopping-bag"></i>
-        <span>Buy Products</span>
-        <small>Browse & purchase</small>
-      </div>
-      <div class="account-type-btn" id="type-seller" onclick="selectType('seller')">
-        <i class="fas fa-store"></i>
-        <span>Sell / Wholesale</span>
-        <small>List your products</small>
-      </div>
+  <!-- ════ LEFT PANEL ════ -->
+  <aside class="auth-left">
+    <div class="left-logo">
+      <img src="../Logo/logo.png" alt="MSukasha"
+           onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'">
+      <span class="left-logo-text" id="logo-text">MSukasha</span>
     </div>
 
-    <form id="register-form" onsubmit="handleRegister(event)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-        <div class="form-group">
-          <label class="form-label" for="reg-first-name">First Name *</label>
-          <input id="reg-first-name" name="firstName" type="text" class="form-control" placeholder="First name" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="reg-last-name">Last Name *</label>
-          <input id="reg-last-name" name="lastName" type="text" class="form-control" placeholder="Last name" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="reg-email">Email Address *</label>
-        <input id="reg-email" name="email" type="email" class="form-control" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="reg-phone">Phone Number *</label>
-        <input id="reg-phone" name="phone" type="tel" class="form-control" placeholder="+92 300 0000000" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="reg-password">Password *</label>
-        <input id="reg-password" name="password" type="password" class="form-control" placeholder="Min. 8 characters" required minlength="8">
-      </div>
-      <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;margin-bottom:20px;cursor:pointer;line-height:1.5;">
-        <input type="checkbox" style="accent-color:var(--orange);margin-top:2px;" required>
-        I agree to MSukasha's <a href="terms and conditions.html" style="color:var(--orange);">Terms & Conditions</a> and <a href="safety-tips.html" style="color:var(--orange);">Privacy Policy</a>
-      </label>
-      <button type="submit" class="btn-primary" id="register-btn" style="width:100%;justify-content:center;padding:13px;">
-        <i class="fas fa-user-plus"></i> <span id="register-btn-text">Create Account</span>
-      </button>
-    </form>
+    <div class="left-content" id="left-dynamic">
 
-    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:20px;">
-      Already have an account? <a href="login.html" style="color:var(--orange);font-weight:700;">Sign In</a>
-    </p>
-  </div>
+      <!-- Buyer content (default) -->
+      <div class="left-panel-buyer" id="left-buyer">
+        <div class="left-tag"><i class="fas fa-circle" style="font-size:6px;"></i> Pakistan's B2B &amp; C2C Marketplace</div>
+        <h2 class="left-heading">Trade smarter.<br>Grow <span>faster.</span></h2>
+        <p class="left-sub">Connect with verified buyers and sellers across Pakistan — from wholesale bulk orders to individual listings, all in one place.</p>
+        <ul class="trust-list">
+          <li><div class="trust-icon"><i class="fas fa-shield-halved"></i></div> CNIC-verified sellers &amp; SECP-registered platform</li>
+          <li><div class="trust-icon"><i class="fas fa-lock"></i></div> Escrow-protected payments — JazzCash, EasyPaisa</li>
+          <li><div class="trust-icon"><i class="fas fa-truck-fast"></i></div> Integrated logistics &amp; real-time order tracking</li>
+          <li><div class="trust-icon"><i class="fas fa-boxes-stacked"></i></div> Wholesale pricing for registered businesses</li>
+        </ul>
+      </div>
+
+      <!-- Seller content -->
+      <div class="left-panel-seller" id="left-seller">
+        <div class="left-tag"><i class="fas fa-store" style="font-size:9px;"></i> Start Selling on MSukasha</div>
+        <h2 class="left-heading">Reach millions<br>of <span>buyers.</span></h2>
+        <p class="left-sub">Set up your store in minutes and start selling wholesale or retail to verified buyers across all of Pakistan.</p>
+        <div class="seller-benefit">
+          <div class="sb-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="sb-text">
+            <strong>Zero listing fees to start</strong>
+            <span>List up to 50 products free — upgrade when you grow</span>
+          </div>
+        </div>
+        <div class="seller-benefit">
+          <div class="sb-icon"><i class="fas fa-shield-halved"></i></div>
+          <div class="sb-text">
+            <strong>Escrow-protected payments</strong>
+            <span>Get paid on delivery — funds released when buyer confirms</span>
+          </div>
+        </div>
+        <div class="seller-benefit">
+          <div class="sb-icon"><i class="fas fa-bullhorn"></i></div>
+          <div class="sb-text">
+            <strong>Free seller dashboard &amp; analytics</strong>
+            <span>Track orders, revenue, and reviews in real time</span>
+          </div>
+        </div>
+        <div class="seller-benefit">
+          <div class="sb-icon"><i class="fas fa-truck"></i></div>
+          <div class="sb-text">
+            <strong>Integrated logistics</strong>
+            <span>TCS, Leopards, and COD — all managed from one place</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="left-stats">
+      <div class="stat-card"><div class="stat-num">50K<span>+</span></div><div class="stat-label">Active Traders</div></div>
+      <div class="stat-card"><div class="stat-num">120<span>+</span></div><div class="stat-label">Cities Covered</div></div>
+      <div class="stat-card"><div class="stat-num">₨2B<span>+</span></div><div class="stat-label">Monthly GMV</div></div>
+      <div class="stat-card"><div class="stat-num">4.8<span>★</span></div><div class="stat-label">Seller Rating</div></div>
+    </div>
+  </aside>
+
+  <!-- ════ RIGHT PANEL ════ -->
+  <section class="auth-right">
+    <div class="auth-form-wrap">
+
+      <div class="auth-top">
+        <h1 id="page-title">Create your account</h1>
+        <p id="page-sub">Join Pakistan's trusted wholesale &amp; retail marketplace</p>
+      </div>
+
+      <!-- Account Type -->
+      <p class="type-label">I want to</p>
+      <div class="account-type-grid">
+        <div class="account-type-btn selected" id="type-buyer" onclick="selectType('buyer')">
+          <span class="type-check"><i class="fas fa-check"></i></span>
+          <div class="type-icon"><i class="fas fa-shopping-bag"></i></div>
+          <span class="type-name">Buy Products</span>
+          <small>Browse &amp; purchase</small>
+        </div>
+        <div class="account-type-btn" id="type-seller" onclick="selectType('seller')">
+          <span class="type-check"><i class="fas fa-check"></i></span>
+          <div class="type-icon"><i class="fas fa-store"></i></div>
+          <span class="type-name">Sell / Wholesale</span>
+          <small>List &amp; manage products</small>
+        </div>
+      </div>
+
+      <!-- Step progress (seller only) -->
+      <div class="step-progress" id="step-progress">
+        <div class="step-item active" id="sp-1">
+          <div class="step-circle"><span class="step-num">1</span></div>
+          <div class="step-label">Personal</div>
+        </div>
+        <div class="step-item" id="sp-2">
+          <div class="step-circle"><span class="step-num">2</span></div>
+          <div class="step-label">Business</div>
+        </div>
+        <div class="step-item" id="sp-3">
+          <div class="step-circle"><span class="step-num">3</span></div>
+          <div class="step-label">Verify</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════
+           BUYER FORM (single step)
+      ═══════════════════════════ -->
+      <form id="buyer-form" onsubmit="handleBuyerRegister(event)" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="b-first">First Name *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-user"></i>
+              <input id="b-first" type="text" placeholder="Asim" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="b-last">Last Name *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-user"></i>
+              <input id="b-last" type="text" placeholder="Khan" required>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-email">Email Address *</label>
+          <div class="field-wrap">
+            <i class="field-icon fas fa-envelope"></i>
+            <input id="b-email" type="email" placeholder="your@email.com" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-phone">Phone Number *</label>
+          <div class="field-wrap">
+            <i class="field-icon fas fa-phone"></i>
+            <input id="b-phone" type="tel" placeholder="+92 300 0000000" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="b-password">Password *</label>
+          <div class="field-wrap">
+            <i class="field-icon fas fa-lock"></i>
+            <input id="b-password" type="password" placeholder="Min. 8 characters" required minlength="8" oninput="checkStrength(this.value,'b-strength')">
+            <button type="button" class="pw-toggle" onclick="togglePw('b-password','b-pw-icon')" tabindex="-1"><i class="fas fa-eye" id="b-pw-icon"></i></button>
+          </div>
+          <div class="strength-wrap str-0" id="b-strength">
+            <div class="strength-bars">
+              <div class="strength-bar"></div><div class="strength-bar"></div><div class="strength-bar"></div>
+            </div>
+            <span class="strength-text" id="b-str-text"></span>
+          </div>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="b-terms" required>
+          <span>I agree to MSukasha's <a href="terms and conditions.html">Terms &amp; Conditions</a> and <a href="safety-tips.html">Privacy Policy</a></span>
+        </div>
+        <button type="submit" class="submit-btn" id="buyer-btn">
+          <i class="fas fa-user-plus" id="b-btn-icon"></i>
+          <span id="b-btn-text">Create Account</span>
+        </button>
+      </form>
+
+      <!-- ═══════════════════════════
+           SELLER FORM — Step 1: Personal
+      ═══════════════════════════ -->
+      <form id="seller-form" onsubmit="handleSellerSubmit(event)" novalidate style="display:none;">
+
+        <!-- STEP 1 -->
+        <div class="form-step active" id="s-step-1">
+          <div class="section-header">
+            <div class="section-icon"><i class="fas fa-user"></i></div>
+            <div>
+              <div class="section-title">Personal Information</div>
+              <div class="section-sub">Your account owner details</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="s-first">First Name *</label>
+              <div class="field-wrap">
+                <i class="field-icon fas fa-user"></i>
+                <input id="s-first" type="text" placeholder="Muhammad" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="s-last">Last Name *</label>
+              <div class="field-wrap">
+                <i class="field-icon fas fa-user"></i>
+                <input id="s-last" type="text" placeholder="Ali" required>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="s-email">Email Address *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-envelope"></i>
+              <input id="s-email" type="email" placeholder="business@email.com" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="s-phone">Phone Number *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-phone"></i>
+              <input id="s-phone" type="tel" placeholder="+92 300 0000000" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="s-password">Password *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-lock"></i>
+              <input id="s-password" type="password" placeholder="Min. 8 characters" required minlength="8" oninput="checkStrength(this.value,'s-strength')">
+              <button type="button" class="pw-toggle" onclick="togglePw('s-password','s-pw-icon')" tabindex="-1"><i class="fas fa-eye" id="s-pw-icon"></i></button>
+            </div>
+            <div class="strength-wrap str-0" id="s-strength">
+              <div class="strength-bars">
+                <div class="strength-bar"></div><div class="strength-bar"></div><div class="strength-bar"></div>
+              </div>
+              <span class="strength-text" id="s-str-text"></span>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="submit-btn" onclick="goStep(2)">
+              Continue <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Business Info -->
+        <div class="form-step" id="s-step-2">
+          <div class="section-header">
+            <div class="section-icon"><i class="fas fa-store"></i></div>
+            <div>
+              <div class="section-title">Business / Shop Details</div>
+              <div class="section-sub">Tell buyers about your store</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="s-shop">Shop / Store Name *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-shop"></i>
+              <input id="s-shop" type="text" placeholder="e.g. Ali Traders, Karachi Electronics" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="s-category">Business Category *</label>
+              <div class="field-wrap">
+                <i class="field-icon fas fa-tag"></i>
+                <select id="s-category" required>
+                  <option value="" disabled selected>Select category</option>
+                  <option>Electronics</option>
+                  <option>Clothing &amp; Apparel</option>
+                  <option>Food &amp; Groceries</option>
+                  <option>Home &amp; Furniture</option>
+                  <option>Mobile Phones</option>
+                  <option>Auto Parts</option>
+                  <option>Agriculture</option>
+                  <option>Machinery &amp; Tools</option>
+                  <option>Cosmetics &amp; Beauty</option>
+                  <option>Books &amp; Stationery</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="s-type">Seller Type *</label>
+              <div class="field-wrap">
+                <i class="field-icon fas fa-layer-group"></i>
+                <select id="s-type" required>
+                  <option value="" disabled selected>Select type</option>
+                  <option value="retail">Retail (C2C)</option>
+                  <option value="wholesale">Wholesale (B2B)</option>
+                  <option value="both">Both Retail &amp; Wholesale</option>
+                  <option value="manufacturer">Manufacturer / Producer</option>
+                  <option value="importer">Importer / Distributor</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="s-city">City *</label>
+              <div class="field-wrap">
+                <i class="field-icon fas fa-city"></i>
+                <select id="s-city" required>
+                  <option value="" disabled selected>Select city</option>
+                  <option>Karachi</option><option>Lahore</option><option>Islamabad</option>
+                  <option>Rawalpindi</option><option>Faisalabad</option><option>Multan</option>
+                  <option>Peshawar</option><option>Quetta</option><option>Sialkot</option>
+                  <option>Hyderabad</option><option>Gujranwala</option><option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="s-address">Business Address *</label>
+              <div class="field-wrap">
+                <i class="field-icon fas fa-location-dot"></i>
+                <input id="s-address" type="text" placeholder="Street, Area" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="s-desc">Shop Description</label>
+            <div class="field-wrap">
+              <textarea id="s-desc" class="no-icon" placeholder="Briefly describe your business — what you sell, minimum order quantity, etc." style="padding-left:13px;"></textarea>
+            </div>
+            <div class="field-hint">Buyers will see this on your store page. Be specific to attract the right orders.</div>
+          </div>
+
+          <div class="field">
+            <label>Selling Mode *</label>
+            <div class="radio-group">
+              <label class="radio-pill"><input type="radio" name="sell-mode" value="online" checked> <i class="fas fa-globe" style="font-size:12px;"></i> Online Only</label>
+              <label class="radio-pill"><input type="radio" name="sell-mode" value="physical"> <i class="fas fa-store" style="font-size:12px;"></i> Physical Store</label>
+              <label class="radio-pill"><input type="radio" name="sell-mode" value="both"> <i class="fas fa-arrows-left-right" style="font-size:12px;"></i> Both</label>
+            </div>
+          </div>
+
+          <div class="btn-row" style="margin-top:20px;">
+            <button type="button" class="btn-back" onclick="goStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="button" class="submit-btn" onclick="goStep(3)">Continue <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Verify -->
+        <div class="form-step" id="s-step-3">
+          <div class="section-header">
+            <div class="section-icon"><i class="fas fa-id-card"></i></div>
+            <div>
+              <div class="section-title">Identity &amp; Verification</div>
+              <div class="section-sub">Required to activate your seller account</div>
+            </div>
+          </div>
+
+          <div class="alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span>CNIC verification is required by Pakistani law for all commercial sellers. Your data is encrypted and never shared with third parties.</span>
+          </div>
+
+          <div class="field">
+            <label for="s-cnic">CNIC Number *</label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-id-card"></i>
+              <input id="s-cnic" type="text" placeholder="XXXXX-XXXXXXX-X" maxlength="15" required oninput="formatCNIC(this)">
+            </div>
+            <div class="field-hint">Format: 42101-1234567-8</div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label>CNIC Front Photo *</label>
+              <div class="upload-box" id="cnic-front-box" onclick="triggerUpload('cnic-front-file')">
+                <input type="file" id="cnic-front-file" accept="image/*,.pdf" onchange="handleFileSelect(this,'cnic-front-preview','cnic-front-box')">
+                <div class="upload-icon"><i class="fas fa-camera"></i></div>
+                <span class="upload-label">Upload Front</span>
+                <span class="upload-sub">JPG, PNG or PDF — max 5MB</span>
+                <span class="upload-preview" id="cnic-front-preview"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label>CNIC Back Photo *</label>
+              <div class="upload-box" id="cnic-back-box" onclick="triggerUpload('cnic-back-file')">
+                <input type="file" id="cnic-back-file" accept="image/*,.pdf" onchange="handleFileSelect(this,'cnic-back-preview','cnic-back-box')">
+                <div class="upload-icon"><i class="fas fa-camera"></i></div>
+                <span class="upload-label">Upload Back</span>
+                <span class="upload-sub">JPG, PNG or PDF — max 5MB</span>
+                <span class="upload-preview" id="cnic-back-preview"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field" id="ntn-field">
+            <label for="s-ntn">NTN / Business Registration No. <span style="font-weight:400;color:var(--muted);">(Optional)</span></label>
+            <div class="field-wrap">
+              <i class="field-icon fas fa-file-certificate"></i>
+              <input id="s-ntn" type="text" placeholder="e.g. 1234567-8 or SECP Corp ID">
+            </div>
+            <div class="field-hint">Verified businesses get a "Trusted Seller" badge and priority placement in search.</div>
+          </div>
+
+          <div class="field">
+            <label>Preferred Payout Method *</label>
+            <div class="radio-group">
+              <label class="radio-pill"><input type="radio" name="payout" value="jazzcash" checked> <i class="fas fa-mobile-screen" style="font-size:12px;"></i> JazzCash</label>
+              <label class="radio-pill"><input type="radio" name="payout" value="easypaisa"> <i class="fas fa-mobile-screen" style="font-size:12px;"></i> EasyPaisa</label>
+              <label class="radio-pill"><input type="radio" name="payout" value="bank"> <i class="fas fa-building-columns" style="font-size:12px;"></i> Bank Transfer</label>
+            </div>
+          </div>
+
+          <div class="check-row" style="margin-top:18px;">
+            <input type="checkbox" id="s-terms" required>
+            <span>I agree to MSukasha's <a href="terms and conditions.html">Terms &amp; Conditions</a>, <a href="safety-tips.html">Privacy Policy</a>, and <a href="seller-policy.html">Seller Policy</a></span>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn-back" onclick="goStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+            <button type="submit" class="submit-btn" id="seller-btn">
+              <i class="fas fa-store" id="s-btn-icon"></i>
+              <span id="s-btn-text">Create Seller Account</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+      <div class="signin-row">
+        Already have an account? <a href="login.html">Sign In</a>
+      </div>
+
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer" id="site-footer"></footer>
 <script src="../main.js"></script>
 <script src="../api.js"></script>
 <script>
-let selectedAccountType = 'buyer';
-function selectType(type) {
-  selectedAccountType = type;
-  document.getElementById('type-buyer').classList.toggle('selected', type === 'buyer');
-  document.getElementById('type-seller').classList.toggle('selected', type === 'seller');
-}
+  /* ════ State ════ */
+  let selectedAccountType = 'buyer';
+  let currentStep = 1;
 
-function handleRegister(e) {
-  e.preventDefault();
-  const form = document.getElementById('register-form');
-  if (!validateForm(form)) return;
+  /* ════ Account Type Switch ════ */
+  function selectType(type) {
+    selectedAccountType = type;
+    document.getElementById('type-buyer').classList.toggle('selected', type === 'buyer');
+    document.getElementById('type-seller').classList.toggle('selected', type === 'seller');
 
-  const btn = document.getElementById('register-btn');
-  const btnText = document.getElementById('register-btn-text');
-  btn.disabled = true;
-  btnText.textContent = 'Creating account...';
+    const isSeller = type === 'seller';
 
-  const registerData = {
-    firstName: document.getElementById('reg-first-name').value.trim(),
-    lastName: document.getElementById('reg-last-name').value.trim(),
-    email: document.getElementById('reg-email').value.trim().toLowerCase(),
-    phone: document.getElementById('reg-phone').value.trim(),
-    password: document.getElementById('reg-password').value,
-    accountType: selectedAccountType,
-  };
+    // Forms
+    document.getElementById('buyer-form').style.display  = isSeller ? 'none' : 'block';
+    document.getElementById('seller-form').style.display = isSeller ? 'block' : 'none';
 
-  apiRegister(registerData)
-    .then(() => {
-      showToast('Account created! Redirecting...', 'success');
-      setTimeout(() => window.location.href = 'my-account.html', 1200);
-    })
-    .catch(error => {
-      showToast(error.message || 'Registration failed. Please try again.', 'error');
-      btn.disabled = false;
-      btnText.textContent = 'Create Account';
-    });
-}
+    // Step progress
+    document.getElementById('step-progress').classList.toggle('visible', isSeller);
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (getToken() && getUser()) {
-    window.location.href = 'my-account.html';
+    // Left panel
+    document.getElementById('left-buyer').style.display  = isSeller ? 'none' : 'block';
+    document.getElementById('left-seller').style.display = isSeller ? 'block' : 'none';
+
+    // Page title
+    document.getElementById('page-title').textContent = isSeller ? 'Open your seller account' : 'Create your account';
+    document.getElementById('page-sub').textContent   = isSeller
+      ? 'Step-by-step setup — takes about 3 minutes'
+      : 'Join Pakistan\'s trusted wholesale & retail marketplace';
+
+    if (isSeller) goStep(1);
   }
-});
+
+  /* ════ Step Navigation ════ */
+  function goStep(n) {
+    // Validate before advancing
+    if (n > currentStep) {
+      if (!validateStep(currentStep)) return;
+    }
+
+    // Hide all steps
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('s-step-' + n).classList.add('active');
+
+    // Update progress indicators
+    [1,2,3].forEach(i => {
+      const el = document.getElementById('sp-' + i);
+      el.classList.remove('active','done');
+      if (i < n)  el.classList.add('done');
+      if (i === n) el.classList.add('active');
+    });
+
+    currentStep = n;
+    // Scroll right panel to top smoothly
+    document.querySelector('.auth-right').scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ════ Step Validation ════ */
+  function validateStep(step) {
+    if (step === 1) {
+      const fields = ['s-first','s-last','s-email','s-phone','s-password'];
+      for (const id of fields) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.focus(); showToastSafe('Please fill in all required fields.','error'); return false; }
+      }
+      if (document.getElementById('s-password').value.length < 8) {
+        document.getElementById('s-password').focus();
+        showToastSafe('Password must be at least 8 characters.','error'); return false;
+      }
+    }
+    if (step === 2) {
+      const fields = ['s-shop','s-category','s-type','s-city','s-address'];
+      for (const id of fields) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.focus(); showToastSafe('Please fill in all required fields.','error'); return false; }
+      }
+    }
+    return true;
+  }
+
+  /* ════ Buyer Registration ════ */
+  function handleBuyerRegister(e) {
+    e.preventDefault();
+    const btn = document.getElementById('buyer-btn');
+    const btnText = document.getElementById('b-btn-text');
+
+    if (!document.getElementById('b-terms').checked) {
+      showToastSafe('Please accept the Terms & Conditions.','error'); return;
+    }
+
+    btn.disabled = true;
+    document.getElementById('b-btn-icon').outerHTML = '<span class="spinner" id="b-btn-icon"></span>';
+    btnText.textContent = 'Creating account…';
+
+    const data = {
+      firstName:   document.getElementById('b-first').value.trim(),
+      lastName:    document.getElementById('b-last').value.trim(),
+      email:       document.getElementById('b-email').value.trim().toLowerCase(),
+      phone:       document.getElementById('b-phone').value.trim(),
+      password:    document.getElementById('b-password').value,
+      accountType: 'buyer',
+    };
+
+    apiRegister(data)
+      .then(() => {
+        showToastSafe('Account created! Redirecting…','success');
+        setTimeout(() => window.location.href = 'my-account.html', 1200);
+      })
+      .catch(err => {
+        showToastSafe(err.message || 'Registration failed. Please try again.','error');
+        btn.disabled = false;
+        document.getElementById('b-btn-icon').outerHTML = '<i class="fas fa-user-plus" id="b-btn-icon"></i>';
+        btnText.textContent = 'Create Account';
+      });
+  }
+
+  /* ════ Seller Registration ════ */
+  function handleSellerSubmit(e) {
+    e.preventDefault();
+
+    if (!document.getElementById('s-cnic').value.trim()) {
+      showToastSafe('Please enter your CNIC number.','error'); return;
+    }
+    if (!document.getElementById('s-terms').checked) {
+      showToastSafe('Please accept the Terms & Conditions.','error'); return;
+    }
+
+    const btn = document.getElementById('seller-btn');
+    const btnText = document.getElementById('s-btn-text');
+    btn.disabled = true;
+    document.getElementById('s-btn-icon').outerHTML = '<span class="spinner" id="s-btn-icon"></span>';
+    btnText.textContent = 'Creating seller account…';
+
+    const data = {
+      firstName:    document.getElementById('s-first').value.trim(),
+      lastName:     document.getElementById('s-last').value.trim(),
+      email:        document.getElementById('s-email').value.trim().toLowerCase(),
+      phone:        document.getElementById('s-phone').value.trim(),
+      password:     document.getElementById('s-password').value,
+      accountType:  'seller',
+      shopName:     document.getElementById('s-shop').value.trim(),
+      category:     document.getElementById('s-category').value,
+      sellerType:   document.getElementById('s-type').value,
+      city:         document.getElementById('s-city').value,
+      address:      document.getElementById('s-address').value.trim(),
+      description:  document.getElementById('s-desc').value.trim(),
+      sellMode:     document.querySelector('input[name="sell-mode"]:checked')?.value || 'online',
+      cnic:         document.getElementById('s-cnic').value.trim(),
+      ntn:          document.getElementById('s-ntn').value.trim(),
+      payoutMethod: document.querySelector('input[name="payout"]:checked')?.value || 'jazzcash',
+    };
+
+    apiRegister(data)
+      .then(() => {
+        showToastSafe('Seller account created! Setting up your dashboard…','success');
+        setTimeout(() => window.location.href = 'seller-dashboard.html', 1400);
+      })
+      .catch(err => {
+        showToastSafe(err.message || 'Registration failed. Please try again.','error');
+        btn.disabled = false;
+        document.getElementById('s-btn-icon').outerHTML = '<i class="fas fa-store" id="s-btn-icon"></i>';
+        btnText.textContent = 'Create Seller Account';
+      });
+  }
+
+  /* ════ Helpers ════ */
+  function showToastSafe(msg, type) {
+    if (typeof showToast === 'function') showToast(msg, type);
+    else alert(msg);
+  }
+
+  function togglePw(inputId, iconId) {
+    const inp = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    icon.className = show ? 'fas fa-eye-slash' : 'fas fa-eye';
+  }
+
+  function checkStrength(val, wrapId) {
+    const wrap = document.getElementById(wrapId);
+    const textId = wrapId.replace('strength','str-text');
+    const txt = document.getElementById(textId);
+    if (!wrap) return;
+    if (!val) { wrap.className = 'strength-wrap str-0'; if(txt) txt.textContent=''; return; }
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+    if (/\d/.test(val) && /[^A-Za-z0-9]/.test(val)) score++;
+    wrap.className = 'strength-wrap str-' + score;
+    if (txt) txt.textContent = score ? ['','Weak','Fair','Strong'][score] + ' password' : '';
+  }
+
+  function formatCNIC(input) {
+    let v = input.value.replace(/\D/g,'');
+    if (v.length > 5 && v.length <= 12) v = v.slice(0,5) + '-' + v.slice(5);
+    if (v.length > 13) v = v.slice(0,13) + '-' + v.slice(13,14);
+    input.value = v;
+  }
+
+  function triggerUpload(id) { document.getElementById(id).click(); }
+
+  function handleFileSelect(input, previewId, boxId) {
+    const file = input.files[0];
+    if (!file) return;
+    const preview = document.getElementById(previewId);
+    preview.textContent = '✓ ' + file.name;
+    preview.style.display = 'block';
+    document.getElementById(boxId).style.borderColor = 'var(--green)';
+    document.getElementById(boxId).style.background = 'var(--green-light)';
+  }
+
+  /* ════ Redirect if logged in ════ */
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof getToken === 'function' && typeof getUser === 'function') {
+      if (getToken() && getUser()) window.location.href = 'my-account.html';
+    }
+  });
 </script>
 </body>
 </html>
