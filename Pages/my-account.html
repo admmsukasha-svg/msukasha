@@ -35,10 +35,31 @@
       <a href="wishlist.html"><i class="far fa-heart"></i> Wishlist</a>
       <a href="messages.html"><i class="fas fa-envelope"></i> Messages</a>
       <a href="seller-dashboard.html"><i class="fas fa-store"></i> My Listings</a>
-      <a href="#"><i class="fas fa-user-cog"></i> Profile Settings</a>
+      <a href="#" onclick="showSection('profile-settings');return false;"><i class="fas fa-user-cog"></i> Profile Settings</a>
       <a href="#" onclick="handleSignOut(event)"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
     </div>
     <div>
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-header"><h3>Quick Actions</h3></div>
+        <div class="card-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:18px;">
+          <a class="card" href="track-order.html" style="padding:16px;text-align:center;text-decoration:none;color:inherit;">
+            <i class="fas fa-truck" style="font-size:20px;color:var(--orange);margin-bottom:8px;"></i>
+            <div style="font-weight:700;">Track Orders</div>
+          </a>
+          <a class="card" href="wishlist.html" style="padding:16px;text-align:center;text-decoration:none;color:inherit;">
+            <i class="fas fa-heart" style="font-size:20px;color:var(--orange);margin-bottom:8px;"></i>
+            <div style="font-weight:700;">Wishlist</div>
+          </a>
+          <a class="card" href="messages.html" style="padding:16px;text-align:center;text-decoration:none;color:inherit;">
+            <i class="fas fa-envelope" style="font-size:20px;color:var(--orange);margin-bottom:8px;"></i>
+            <div style="font-weight:700;">Messages</div>
+          </a>
+          <a class="card" href="seller-dashboard.html" style="padding:16px;text-align:center;text-decoration:none;color:inherit;">
+            <i class="fas fa-store" style="font-size:20px;color:var(--orange);margin-bottom:8px;"></i>
+            <div style="font-weight:700;">Seller Dashboard</div>
+          </a>
+        </div>
+      </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
         <div class="card" style="padding:20px;text-align:center;"><span id="stat-orders" style="font-size:28px;font-weight:800;color:var(--orange);display:block;">0</span><span style="font-size:12px;color:var(--muted);">Active Orders</span></div>
         <div class="card" style="padding:20px;text-align:center;"><span id="stat-wishlist" style="font-size:28px;font-weight:800;color:var(--orange);display:block;">0</span><span style="font-size:12px;color:var(--muted);">Wishlist Items</span></div>
