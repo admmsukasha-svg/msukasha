@@ -1,7 +1,7 @@
 /**
- * MSukasha — api.js (compat wrapper / v2)
- * This file is a copy of api_js_v2.js but with auth endpoints adjusted to /api/auth/*
- * Place this at repository root so Pages/* HTML pages that include "../api.js" will load it.
+ * MSukasha — api.js v2
+ * Works as a local auth helper for the static site.
+ * Place AFTER main.js on every HTML page.
  */
 
 const API = (window.MSUKASHA_API_BASE || localStorage.getItem("msukasha_api_base") || "https://msukasha-backend-git-main-msukasha.vercel.app").replace(/\/$/, "");
@@ -46,6 +46,9 @@ function buildApiUrl(path) {
 function normalizeAuthResult(data, fallbackUser = null) {
   const token = data?.token || data?.accessToken || data?.jwt || data?.authToken || '';
   const user = data?.user || data?.profile || data?.data || fallbackUser || null;
+  if (user && !user.uid) {
+    user.uid = user.id || user._id || (user.email ? 'remote_' + user.email.trim().toLowerCase() : 'remote_user');
+  }
   return { token, user };
 }
 
@@ -137,11 +140,10 @@ function loginLocalUser(email, password) {
 
 /* ============================================================
    AUTH
-   Note: adjusted auth paths to match backend mounting at /api/auth/*
    ============================================================ */
 async function apiRegister(payload) {
   try {
-    const data = await apiFetch("/api/auth/register", {
+    const data = await apiFetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -158,7 +160,7 @@ async function apiRegister(payload) {
 
 async function apiLogin(email, password) {
   try {
-    const data = await apiFetch("/api/auth/login", {
+    const data = await apiFetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
@@ -185,7 +187,7 @@ function apiLogout() {
   localStorage.removeItem("msukasha_user");
   localStorage.removeItem("msukasha_cart");
   localStorage.removeItem("msukasha_wishlist");
-  if (typeof showToast === 'function') showToast("Logged out successfully.", "info");
+  showToast("Logged out successfully.", "info");
   const isSeller = window.location.hostname.includes("sellermsukasha");
   setTimeout(() => {
     window.location.href = isSeller ? "seller-login.html" : "index.html";
@@ -198,7 +200,7 @@ async function apiGetMe() {
   if (user) return user;
   if (!USE_REMOTE_API) return null;
   try {
-    const data = await apiFetch("/api/auth/me", { headers: authHeaders() });
+    const data = await apiFetch("/api/profile", { headers: authHeaders() });
     const auth = normalizeAuthResult(data);
     if (auth.user) setUser(auth.user);
     return auth.user;
@@ -207,6 +209,20 @@ async function apiGetMe() {
     localStorage.removeItem("msukasha_user");
     return null;
   }
+}
+
+async function apiUpdateProfile(profileData) {
+  const user = getUser();
+  if (!user) throw new Error('Not logged in');
+  const updated = { ...user, profile: { ...user.profile, ...profileData } };
+  setUser(updated);
+  const users = getUsers();
+  const index = users.findIndex(u => u.email === user.email);
+  if (index !== -1) {
+    users[index] = updated;
+    saveUsers(users);
+  }
+  return { user: updated };
 }
 
 /* ============================================================
