@@ -53,6 +53,10 @@ function getHeaderHtml(pageBase, rootBase) {
         <i class="fas fa-user"></i>
         <span>Seller Account</span>
       </a>
+      <a href="${pageBase}seller-dashboard.html" class="hdr-btn">
+        <i class="fas fa-chart-line"></i>
+        <span>Seller Dashboard</span>
+      </a>
       <a href="${pageBase}wishlist.html" class="hdr-btn">
         <i class="far fa-heart"></i>
         <span>Wishlist</span>
