@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listing | msukasha</title>
+<meta name="description" content="View wholesale and local listing details on msukasha">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <div class="container" style="padding:26px 24px 60px;">
+    <div class="breadcrumb" style="margin-bottom:18px;"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><a href="./shop.html" id="crumb-cat">Shop</a><i class="fas fa-chevron-right"></i><span id="crumb-name">Listing</span></div>
+    <div class="detail-layout" id="detail-root">
+      <p>Loading listing…</p>
+    </div>
+
+    <section style="margin-top:52px;">
+      <div class="section-header"><h2 class="section-title">You may also like</h2></div>
+      <div class="product-grid" id="related-grid"></div>
+    </section>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const id = getUrlParam('id');
+  const p = getProductById(id);
+  const root = document.getElementById('detail-root');
+  if (!p) {
+    root.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-box-open"></i><h3>Listing not found</h3><p>This listing may have been removed or the link is incorrect.</p><a href="./shop.html" class="btn-primary">Back to shop</a></div>';
+    return;
+  }
+  document.title = p.name + ' | msukasha';
+  document.getElementById('crumb-name').textContent = p.short;
+  const crumbCat = document.getElementById('crumb-cat');
+  crumbCat.textContent = p.type === 'b2b' ? 'Wholesale' : 'Local deals';
+  crumbCat.href = p.type === 'b2b' ? './wholesale.html' : './c2c.html';
+
+  const b2b = p.type === 'b2b';
+  const price = b2b ? ('$' + p.price.toFixed(2) + '<small>/' + p.unit + '</small>') : ('Rs. ' + p.price.toLocaleString('en-PK'));
+  const metaRows = b2b
+    ? '<div><span>Minimum order</span><strong>' + p.moq + ' pieces</strong></div><div><span>Category</span><strong>' + getCategoryName(p.cat) + '</strong></div><div><span>Supplier location</span><strong>Pakistan</strong></div>'
+    : '<div><span>Location</span><strong>' + p.location + '</strong></div><div><span>Category</span><strong>' + getCategoryName(p.cat) + '</strong></div><div><span>Condition</span><strong>Used</strong></div>';
+  const actions = b2b
+    ? '<a href="./contact.html" class="btn-outline"><i class="fas fa-comment-dots"></i> Inquire Now</a><button class="btn-primary" onclick="msCart(\''+p.id+'\')"><i class="fas fa-cart-plus"></i> Buy Now</button>'
+    : '<a href="./messages.html" class="btn-outline"><i class="fas fa-comment-dots"></i> Message Seller</a><a href="./contact.html" class="btn-primary"><i class="fas fa-phone"></i> Call Now</a>';
+
+  root.innerHTML = `
+    <div class="detail-visual zone-${p.type}">
+      <i class="fas ${p.icon}"></i>
+      ${msImgTag(p)}
+    </div>
+    <div class="detail-info">
+      <span class="detail-tag">${b2b ? 'B2B WHOLESALE' : 'USED — C2C'}</span>
+      <h1>${escHtml(p.name)}</h1>
+      <p class="price-big">${price}</p>
+      <div class="meta-list">${metaRows}</div>
+      <div class="detail-actions">
+        <button class="card-action-btn" style="width:48px;height:48px;font-size:18px;" onclick="msWish('${p.id}')" title="Wishlist"><i class="far fa-heart"></i></button>
+        ${actions}
+      </div>
+    </div>`;
+
+  const related = MS_PRODUCTS.filter(x => x.id !== p.id && x.type === p.type).slice(0,4);
+  document.getElementById('related-grid').innerHTML = related.map(msProductCard).join('');
+});
+</script>
+</body>
+</html>

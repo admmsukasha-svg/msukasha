@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post a Free Ad | msukasha</title>
+<meta name="description" content="Post a free local classified ad on msukasha">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <section class="page-hero teal">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Post a Free Ad</span></div>
+      <h1>Post a Free Local Ad</h1>
+      <p>List your used item and reach buyers in your own city — 100% free.</p>
+      
+    </div>
+  </section>
+
+  <div class="container" style="padding:32px 24px 60px;">
+    <div class="two-col">
+      <div class="card form-card">
+        <h2 style="margin:0 0 18px;font-size:19px;">Ad Details</h2>
+        <form id="c2c-form" onsubmit="msHandleLeadForm(event, 'New free ad submission', 'c2c-result')">
+          <div class="form-grid">
+            <div class="form-group full"><label data-label="Item title">Item title *</label><input name="title" placeholder="e.g. Honda CD 70 — 2023 Model" required></div>
+            <div class="form-group"><label data-label="Category">Category *</label>
+              <select name="category" required><option value="">Select category</option><option value="electronics">Electronics</option><option value="fashion">Fashion & Apparel</option><option value="home">Home & Living</option><option value="vehicles">Vehicles</option><option value="sports">Sports & Fitness</option><option value="books">Books & Stationery</option><option value="other">Other</option></select>
+            </div>
+            <div class="form-group"><label data-label="Asking price (PKR)">Asking price (PKR) *</label><input type="number" name="price" placeholder="e.g. 45000" required></div>
+            <div class="form-group"><label data-label="City / area">City / area *</label><input name="location" placeholder="e.g. DHA, Karachi" required></div>
+            <div class="form-group"><label data-label="Condition">Condition</label>
+              <select name="condition"><option>Used — Good</option><option>Used — Fair</option><option>New</option></select>
+            </div>
+            <div class="form-group full"><label data-label="Description">Description *</label><textarea name="description" rows="4" placeholder="Describe your item..." required></textarea></div>
+            <div class="form-group full"><label data-label="Contact name">Your name *</label><input name="name" required></div>
+            <div class="form-group"><label data-label="Phone / WhatsApp">Phone / WhatsApp *</label><input type="tel" name="phone" required></div>
+            <div class="form-group"><label data-label="Email">Email</label><input type="email" name="email"></div>
+          </div>
+          <button type="submit" class="btn-teal" style="margin-top:18px;"><i class="fas fa-plus-circle"></i> Post Ad — It's Free</button>
+        </form>
+        <div class="lead-result" id="c2c-result"></div>
+      </div>
+      <div class="info-card card">
+        <h3><i class="fas fa-lightbulb" style="color:var(--teal);margin-right:8px;"></i>Tips for a faster sale</h3>
+        <div class="info-row"><i class="fas fa-camera"></i><div><span>Photos</span><strong>Add clear, well-lit photos</strong></div></div>
+        <div class="info-row"><i class="fas fa-tag"></i><div><span>Pricing</span><strong>Price it fairly for a quick sale</strong></div></div>
+        <div class="info-row"><i class="fas fa-comment"></i><div><span>Response</span><strong>Reply to buyers quickly</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Dashboard | msukasha</title>
+<meta name="description" content="Manage your msukasha listings and ads">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Seller Dashboard</span></div>
+      <h1>Seller Dashboard</h1>
+      <p>Manage your wholesale listings, local ads and advertising campaigns in one place.</p>
+      
+    </div>
+  </section>
+
+  <div class="container" style="padding:32px 24px 60px;">
+    <div class="stat-strip" style="border-radius:var(--radius);margin-bottom:28px;">
+      <div class="container" style="padding:20px 24px;">
+        <div><span class="stat-num">0</span><span class="stat-label">Active listings</span></div>
+        <div><span class="stat-num">0</span><span class="stat-label">Pending ads</span></div>
+        <div><span class="stat-num">0</span><span class="stat-label">Messages</span></div>
+        <div><span class="stat-num">0</span><span class="stat-label">Orders</span></div>
+      </div>
+    </div>
+    <div class="feature-grid">
+      <a class="feature-card card" href="./post-free-ad.html"><div class="ficon"><i class="fas fa-plus-circle"></i></div><h3>Post a C2C Ad</h3><p>List a used item free of charge for local buyers.</p></a>
+      <a class="feature-card card" href="./advertise.html"><div class="ficon"><i class="fas fa-bullhorn"></i></div><h3>Advertise Your Business</h3><p>Run a paid promotion across msukasha.</p></a>
+      <a class="feature-card card" href="./start-verification.html"><div class="ficon"><i class="fas fa-certificate"></i></div><h3>Get Verified</h3><p>Apply for a verified supplier badge.</p></a>
+      <a class="feature-card card" href="./messages.html"><div class="ficon"><i class="fas fa-comment-dots"></i></div><h3>Buyer Messages</h3><p>Reply to enquiries from interested buyers.</p></a>
+    </div>
+    <div class="empty-state" style="margin-top:24px;">
+      <i class="fas fa-boxes-stacked"></i>
+      <h3>No listings yet</h3>
+      <p>Once the seller backend is connected, your live listings and their performance will appear here.</p>
+      <a href="./post-free-ad.html" class="btn-primary">Post your first listing</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+</body>
+</html>

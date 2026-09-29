@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask a B2B Expert | msukasha</title>
+<meta name="description" content="Get wholesale sourcing guidance from msukasha">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>B2B Guide</span></div>
+      <h1>Ask a B2B Expert</h1>
+      <p>Get sourcing guidance from the msukasha team before you place a bulk order.</p>
+      
+    </div>
+  </section>
+
+  <div class="container" style="padding:32px 24px 60px;">
+    <div class="two-col">
+      <div class="card form-card">
+        <h2 style="margin:0 0 18px;font-size:19px;">Your Question</h2>
+        <form id="expert-form" onsubmit="msHandleLeadForm(event, 'B2B expert question', 'expert-result')">
+          <div class="form-grid">
+            <div class="form-group"><label data-label="Name">Name *</label><input name="name" required></div>
+            <div class="form-group"><label data-label="Email">Email *</label><input type="email" name="email" required></div>
+            <div class="form-group full"><label data-label="Product category">Product category</label><input name="category" placeholder="e.g. Electronics, Textiles"></div>
+            <div class="form-group full"><label data-label="Your question">Your question *</label><textarea name="question" rows="5" placeholder="What would you like help with?" required></textarea></div>
+          </div>
+          <button type="submit" class="btn-primary" style="margin-top:18px;"><i class="fas fa-paper-plane"></i> Send Question</button>
+        </form>
+        <div class="lead-result" id="expert-result"></div>
+      </div>
+      <div class="info-card card">
+        <h3><i class="fas fa-comments" style="color:var(--orange);margin-right:8px;"></i>Popular topics</h3>
+        <div class="info-row"><i class="fas fa-boxes"></i><div><span>MOQ negotiation</span><strong>Getting a lower minimum</strong></div></div>
+        <div class="info-row"><i class="fas fa-magnifying-glass"></i><div><span>Supplier vetting</span><strong>Checking a supplier is genuine</strong></div></div>
+        <div class="info-row"><i class="fas fa-file-invoice-dollar"></i><div><span>Pricing</span><strong>Understanding wholesale tiers</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+</body>
+</html>

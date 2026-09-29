@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categories | msukasha</title>
+<meta name="description" content="Browse msukasha categories">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Categories</span></div>
+      <h1>Browse All Categories</h1>
+      <p>Explore wholesale and local listings by category.</p>
+      
+    </div>
+  </section>
+
+  <div class="container" style="padding:32px 24px 60px;">
+    <div class="cat-grid" id="cat-grid"></div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById('cat-grid').innerHTML = MS_CATEGORIES.map(function(c){
+    return '<a class="cat-tile" href="./shop.html?cat='+c.id+'"><i class="fas '+c.icon+'"></i><span><strong>'+c.name+'</strong><span>Browse listings</span></span></a>';
+  }).join('');
+});
+</script>
+</body>
+</html>

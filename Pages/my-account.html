@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account | msukasha</title>
+<meta name="description" content="Your msukasha account overview">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <div class="container" style="padding:32px 24px 60px;">
+    <div id="account-root"></div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const user = getUser();
+  const root = document.getElementById('account-root');
+  if (!user) {
+    root.innerHTML = '<div class="empty-state"><i class="fas fa-user-lock"></i><h3>You are not signed in</h3><p>Sign in to view your account, orders and saved listings.</p><a href="./login.html" class="btn-primary">Sign in</a></div>';
+    return;
+  }
+  root.innerHTML = `
+    <div class="page-hero" style="border-radius:var(--radius);margin-bottom:28px;">
+      <div class="container" style="padding:30px 30px;">
+        <h1 style="margin:0 0 4px;">Welcome, ${escHtml(user.name || 'there')}</h1>
+        <p>${escHtml(user.email || '')}</p>
+      </div>
+    </div>
+    <div class="feature-grid">
+      <a class="feature-card card" href="./cart.html"><div class="ficon"><i class="fas fa-shopping-cart"></i></div><h3>Your Cart</h3><p>Review items you are ready to buy.</p></a>
+      <a class="feature-card card" href="./wishlist.html"><div class="ficon"><i class="fas fa-heart"></i></div><h3>Wishlist</h3><p>Listings you have saved for later.</p></a>
+      <a class="feature-card card" href="./seller-dashboard.html"><div class="ficon"><i class="fas fa-store"></i></div><h3>Seller Dashboard</h3><p>Manage your listings and ads.</p></a>
+      <a class="feature-card card" href="./track-order.html"><div class="ficon"><i class="fas fa-truck"></i></div><h3>Track Order</h3><p>Check the status of a wholesale order.</p></a>
+      <a class="feature-card card" href="./messages.html"><div class="ficon"><i class="fas fa-comment-dots"></i></div><h3>Messages</h3><p>Conversations with buyers and sellers.</p></a>
+      <button class="feature-card card" style="text-align:left;border:1px solid var(--border);cursor:pointer;" onclick="logout()"><div class="ficon" style="background:#F7E4DA;color:#C0392B;"><i class="fas fa-right-from-bracket"></i></div><h3>Sign Out</h3><p>End your msukasha session on this device.</p></button>
+    </div>`;
+});
+</script>
+</body>
+</html>

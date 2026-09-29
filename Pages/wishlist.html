@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist | msukasha</title>
+<meta name="description" content="Listings you have saved on msukasha">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <div class="container" style="padding:26px 24px 60px;">
+    <div class="breadcrumb" style="margin-bottom:8px;"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Wishlist</span></div>
+    <h1 style="font-size:26px;margin:6px 0 22px;">Your Wishlist</h1>
+    <div class="product-grid" id="wish-grid"></div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const list = getWishlist();
+  const grid = document.getElementById('wish-grid');
+  if (!list.length){
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-heart"></i><h3>Your wishlist is empty</h3><p>Tap the heart icon on any listing to save it here.</p><a href="./shop.html" class="btn-primary">Browse listings</a></div>';
+    return;
+  }
+  grid.innerHTML = list.map(function(i){
+    const p = getProductById(i.id);
+    return p ? msProductCard(p) : '';
+  }).join('');
+});
+</script>
+</body>
+</html>

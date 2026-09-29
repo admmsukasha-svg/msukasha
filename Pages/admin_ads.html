@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ad Management | msukasha</title>
+  <meta name="description" content="MSUKASHA advertising management dashboard for reviewing, approving and managing business advertisements.">
+
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    .admin-page {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .admin-hero {
+      background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      color: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 24px;
+    }
+
+    .admin-hero h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .admin-hero p {
+      margin: 0;
+      color: #dbe3ec;
+      line-height: 1.6;
+    }
+
+    .admin-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .admin-toolbar h2 {
+      margin: 0;
+      color: var(--dark);
+      font-size: 21px;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .admin-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--dark);
+      border-radius: 7px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .admin-btn:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .admin-btn.primary {
+      background: var(--orange);
+      color: #fff;
+      border-color: var(--orange);
+    }
+
+    .admin-btn.danger {
+      color: #c0392b;
+    }
+
+    .admin-btn.success {
+      color: #18864b;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-card .icon {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: var(--orange-light);
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 25px;
+      color: var(--dark);
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .filters select,
+    .filters input {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 12px;
+      background: #fff;
+      color: var(--text);
+      min-width: 160px;
+      outline: none;
+    }
+
+    .filters input:focus,
+    .filters select:focus {
+      border-color: var(--orange);
+    }
+
+    .ads-table-wrap {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ads-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 950px;
+    }
+
+    .ads-table th,
+    .ads-table td {
+      padding: 14px 15px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 13px;
+    }
+
+    .ads-table th {
+      background: #f8fafc;
+      color: var(--dark);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .ads-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .ad-preview {
+      width: 72px;
+      height: 48px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: #f3f5f7;
+    }
+
+    .no-image {
+      width: 72px;
+      height: 48px;
+      border-radius: 6px;
+      background: var(--orange-light);
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .status.pending {
+      background: #fff4d6;
+      color: #936400;
+    }
+
+    .status.approved {
+      background: #e8f8ef;
+      color: #187943;
+    }
+
+    .status.rejected,
+    .status.expired {
+      background: #fdeaea;
+      color: #b33232;
+    }
+
+    .status.scheduled {
+      background: #eaf2ff;
+      color: #2d63a8;
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 6px;
+      padding: 7px 9px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .small-btn:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 55px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 38px;
+      color: #cbd3dc;
+      margin-bottom: 12px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 35px;
+      color: var(--muted);
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(650px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: var(--dark);
+    }
+
+    .modal-close {
+      border: 0;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .modal-body {
+      padding: 22px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .detail-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafbfc;
+    }
+
+    .detail-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-item small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .detail-item strong {
+      color: var(--dark);
+      word-break: break-word;
+    }
+
+    .modal-footer {
+      padding: 15px 22px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .admin-page {
+        padding: 20px 12px 40px;
+      }
+
+      .admin-hero {
+        padding: 22px;
+      }
+
+      .admin-hero h1 {
+        font-size: 23px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 15px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-item.full {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header" id="site-header"></header>
+
+  <main class="admin-page">
+
+    <section class="admin-hero">
+      <h1><i class="fas fa-bullhorn"></i> Advertisement Management</h1>
+      <p>
+        Review, approve, reject and manage paid business advertisements submitted
+        to MSUKASHA. Monitor advertisement status, schedule, impressions and clicks.
+      </p>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="icon"><i class="fas fa-layer-group"></i></div>
+        <strong id="totalAds">0</strong>
+        <span>Total Advertisements</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon"><i class="fas fa-clock"></i></div>
+        <strong id="pendingAds">0</strong>
+        <span>Pending Approval</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon"><i class="fas fa-check-circle"></i></div>
+        <strong id="approvedAds">0</strong>
+        <span>Approved</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="icon"><i class="fas fa-chart-line"></i></div>
+        <strong id="totalClicks">0</strong>
+        <span>Total Clicks</span>
+      </div>
+    </section>
+
+    <section>
+      <div class="admin-toolbar">
+        <h2>Business Advertisements</h2>
+
+        <div class="admin-actions">
+          <button class="admin-btn primary" onclick="loadAds()">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <select id="statusFilter" onchange="loadAds()">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+          <option value="expired">Expired</option>
+        </select>
+
+        <input
+          type="search"
+          id="searchAds"
+          placeholder="Search advertiser or ad title..."
+          oninput="renderAds()"
+        >
+      </div>
+
+      <div class="ads-table-wrap">
+        <div id="adsLoading" class="loading">
+          <i class="fas fa-spinner fa-spin"></i> Loading advertisements...
+        </div>
+
+        <table class="ads-table" id="adsTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>Advertisement</th>
+              <th>Advertiser</th>
+              <th>Package</th>
+              <th>Status</th>
+              <th>Schedule</th>
+              <th>Performance</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adsBody"></tbody>
+        </table>
+
+        <div id="emptyAds" class="empty-state" style="display:none;">
+          <i class="fas fa-bullhorn"></i>
+          <h3>No advertisements found</h3>
+          <p>There are no advertisements matching the selected filters.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="adModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Advertisement Details</h3>
+        <button class="modal-close" onclick="closeAdModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-grid" id="adDetails"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="admin-btn success" id="modalApproveBtn">
+          <i class="fas fa-check"></i> Approve
+        </button>
+
+        <button class="admin-btn danger" id="modalRejectBtn">
+          <i class="fas fa-times"></i> Reject
+        </button>
+
+        <button class="admin-btn" onclick="closeAdModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="../main.js"></script>
+  <script src="../api.js"></script>
+
+  <script>
+    let allAds = [];
+    let selectedAd = null;
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function getStatus(ad) {
+      if (ad.status) return String(ad.status).toLowerCase();
+
+      if (ad.startDate && new Date(ad.startDate) > new Date()) {
+        return 'scheduled';
+      }
+
+      if (ad.endDate && new Date(ad.endDate + 'T23:59:59') < new Date()) {
+        return 'expired';
+      }
+
+      return 'pending';
+    }
+
+    function formatDate(value) {
+      if (!value) return '-';
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return escapeHtml(value);
+
+      return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+
+    function packageName(ad) {
+      return ad.packageName || ad.package || ad.plan || 'Standard';
+    }
+
+    function advertiserName(ad) {
+      return ad.businessName ||
+             ad.companyName ||
+             ad.advertiserName ||
+             ad.name ||
+             ad.email ||
+             'Unknown Advertiser';
+    }
+
+    async function loadAds() {
+      const loading = document.getElementById('adsLoading');
+      const table = document.getElementById('adsTable');
+      const empty = document.getElementById('emptyAds');
+
+      loading.style.display = 'block';
+      table.style.display = 'none';
+      empty.style.display = 'none';
+
+      try {
+        const status = document.getElementById('statusFilter').value;
+        const filters = status ? { status } : {};
+
+        allAds = await apiAdminGetBusinessAds(filters);
+
+        if (!Array.isArray(allAds)) allAds = [];
+
+        updateStats();
+        renderAds();
+
+      } catch (error) {
+        console.error('Advertisement loading error:', error);
+
+        loading.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Unable to load advertisements.</p>
+          <small>${escapeHtml(error.message)}</small>
+        `;
+        return;
+      }
+
+      loading.style.display = 'none';
+    }
+
+    function updateStats() {
+      const total = allAds.length;
+
+      const pending = allAds.filter(ad => getStatus(ad) === 'pending').length;
+      const approved = allAds.filter(ad => getStatus(ad) === 'approved').length;
+
+      const clicks = allAds.reduce(
+        (sum, ad) => sum + Number(ad.clicks || 0),
+        0
+      );
+
+      document.getElementById('totalAds').textContent = total;
+      document.getElementById('pendingAds').textContent = pending;
+      document.getElementById('approvedAds').textContent = approved;
+      document.getElementById('totalClicks').textContent = clicks;
+    }
+
+    function renderAds() {
+      const body = document.getElementById('adsBody');
+      const table = document.getElementById('adsTable');
+      const empty = document.getElementById('emptyAds');
+
+      const query = document.getElementById('searchAds').value
+        .trim()
+        .toLowerCase();
+
+      const filtered = allAds.filter(ad => {
+        const text = [
+          ad.title,
+          ad.businessName,
+          ad.companyName,
+          ad.advertiserName,
+          ad.email
+        ].join(' ').toLowerCase();
+
+        return !query || text.includes(query);
+      });
+
+      body.innerHTML = '';
+
+      if (!filtered.length) {
+        table.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      table.style.display = 'table';
+      empty.style.display = 'none';
+
+      filtered.forEach(ad => {
+        const id = ad._id || ad.id;
+        const status = getStatus(ad);
+
+        const image = ad.imageUrl || ad.bannerUrl || ad.image;
+
+        const preview = image
+          ? `<img class="ad-preview" src="${escapeHtml(image)}" alt="Advertisement">`
+          : `<div class="no-image"><i class="fas fa-bullhorn"></i></div>`;
+
+        body.innerHTML += `
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px;">
+                ${preview}
+                <div>
+                  <strong>${escapeHtml(ad.title || 'Untitled Advertisement')}</strong>
+                  <div style="font-size:11px;color:var(--muted);margin-top:3px;">
+                    ID: ${escapeHtml(id || '-')}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <strong>${escapeHtml(advertiserName(ad))}</strong>
+              <div style="font-size:11px;color:var(--muted);">
+                ${escapeHtml(ad.email || ad.contactEmail || '')}
+              </div>
+            </td>
+
+            <td>${escapeHtml(packageName(ad))}</td>
+
+            <td>
+              <span class="status ${escapeHtml(status)}">
+                ${escapeHtml(status)}
+              </span>
+            </td>
+
+            <td>
+              ${formatDate(ad.startDate)}
+              <br>
+              <span style="color:var(--muted);">to</span>
+              <br>
+              ${formatDate(ad.endDate)}
+            </td>
+
+            <td>
+              <div><i class="fas fa-eye"></i> ${Number(ad.impressions || 0)}</div>
+              <div><i class="fas fa-mouse-pointer"></i> ${Number(ad.clicks || 0)}</div>
+            </td>
+
+            <td>
+              <div class="row-actions">
+                <button class="small-btn" onclick="viewAd('${escapeHtml(id)}')">
+                  <i class="fas fa-eye"></i> View
+                </button>
+
+                ${status === 'pending' ? `
+                  <button class="small-btn" onclick="approveAd('${escapeHtml(id)}')">
+                    <i class="fas fa-check"></i> Approve
+                  </button>
+
+                  <button class="small-btn" onclick="rejectAd('${escapeHtml(id)}')">
+                    <i class="fas fa-times"></i> Reject
+                  </button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function findAd(id) {
+      return allAds.find(ad => String(ad._id || ad.id) === String(id));
+    }
+
+    function viewAd(id) {
+      const ad = findAd(id);
+      if (!ad) return;
+
+      selectedAd = ad;
+
+      const status = getStatus(ad);
+
+      document.getElementById('adDetails').innerHTML = `
+        <div class="detail-item">
+          <small>Advertisement Title</small>
+          <strong>${escapeHtml(ad.title || '-')}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>Status</small>
+          <strong>${escapeHtml(status)}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>Business / Advertiser</small>
+          <strong>${escapeHtml(advertiserName(ad))}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>Package</small>
+          <strong>${escapeHtml(packageName(ad))}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>Start Date</small>
+          <strong>${formatDate(ad.startDate)}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>End Date</small>
+          <strong>${formatDate(ad.endDate)}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>Impressions</small>
+          <strong>${Number(ad.impressions || 0)}</strong>
+        </div>
+
+        <div class="detail-item">
+          <small>Clicks</small>
+          <strong>${Number(ad.clicks || 0)}</strong>
+        </div>
+
+        <div class="detail-item full">
+          <small>Description</small>
+          <strong>${escapeHtml(ad.description || '-')}</strong>
+        </div>
+
+        <div class="detail-item full">
+          <small>Target URL</small>
+          <strong>${escapeHtml(ad.targetUrl || ad.website || '-')}</strong>
+        </div>
+      `;
+
+      const approveBtn = document.getElementById('modalApproveBtn');
+      const rejectBtn = document.getElementById('modalRejectBtn');
+
+      approveBtn.style.display = status === 'pending' ? 'inline-block' : 'none';
+      rejectBtn.style.display = status === 'pending' ? 'inline-block' : 'none';
+
+      approveBtn.onclick = () => approveAd(id);
+      rejectBtn.onclick = () => rejectAd(id);
+
+      document.getElementById('adModal').classList.add('show');
+    }
+
+    function closeAdModal() {
+      document.getElementById('adModal').classList.remove('show');
+      selectedAd = null;
+    }
+
+    async function approveAd(id) {
+      if (!confirm('Approve this advertisement?')) return;
+
+      try {
+        await apiAdminApproveBusinessAd(id);
+        showToast('Advertisement approved successfully.', 'success');
+        closeAdModal();
+        await loadAds();
+      } catch (error) {
+        console.error(error);
+        showToast(error.message || 'Unable to approve advertisement.', 'error');
+      }
+    }
+
+    async function rejectAd(id) {
+      const reason = prompt('Enter a rejection reason:');
+
+      if (reason === null) return;
+
+      try {
+        await apiAdminRejectBusinessAd(id, reason);
+        showToast('Advertisement rejected.', 'success');
+        closeAdModal();
+        await loadAds();
+      } catch (error) {
+        console.error(error);
+        showToast(error.message || 'Unable to reject advertisement.', 'error');
+      }
+    }
+
+    document.getElementById('adModal').addEventListener('click', function(e) {
+      if (e.target === this) closeAdModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAds();
+    });
+  </script>
+
+</body>
+</html>

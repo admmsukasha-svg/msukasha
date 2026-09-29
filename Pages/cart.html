@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart | msukasha</title>
+<meta name="description" content="View and manage items in your msukasha cart">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main>
+  <div class="container" style="padding:26px 24px 60px;">
+    <div class="breadcrumb" style="margin-bottom:8px;"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Cart</span></div>
+    <h1 style="font-size:26px;margin:6px 0 22px;">Your Cart</h1>
+    <div id="cart-root"></div>
+  </div>
+
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+function msRenderCart(){
+  const cart = getCart();
+  const root = document.getElementById('cart-root');
+  if (!cart.length) {
+    root.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart"></i><h3>Your cart is empty</h3><p>Browse wholesale listings and add products to your cart.</p><a href="./shop.html" class="btn-primary">Browse listings</a></div>';
+    return;
+  }
+  const rows = cart.map(function(i){
+    const p = getProductById(i.id);
+    const img = p ? msImgTag(p) : '';
+    const icon = p ? p.icon : 'fa-box';
+    const unit = (i.type === 'b2b') ? ('$'+Number(i.price).toFixed(2)+'/pc') : ('Rs. '+Number(i.price).toLocaleString('en-PK'));
+    const lineTotal = (i.type === 'b2b') ? ('$'+(i.price*(i.qty||1)).toFixed(2)) : ('Rs. '+(i.price*(i.qty||1)).toLocaleString('en-PK'));
+    return '<div class="cart-row">'
+      + '<div class="cart-thumb"><i class="fas '+icon+'"></i>'+img+'</div>'
+      + '<div><p class="cart-name">'+escHtml(i.name)+'</p><p class="cart-unit">'+unit+'</p>'
+      + '<div class="qty"><button onclick="msQty(\''+i.id+'\',-1)">−</button><span>'+(i.qty||1)+'</span><button onclick="msQty(\''+i.id+'\',1)">+</button></div></div>'
+      + '<div class="cart-side"><div class="cart-sub">'+lineTotal+'</div><button class="link-danger" onclick="removeFromCart(\''+i.id+'\');msRenderCart();">Remove</button></div>'
+      + '</div>';
+  }).join('');
+  const total = cart.reduce(function(s,i){return s+(i.price*(i.qty||1));},0);
+  root.innerHTML = '<div class="cart-layout">'
+    + '<div class="card" style="padding:8px 22px;">'+rows+'</div>'
+    + '<div class="card summary-card"><h3>Order Summary</h3>'
+    + '<div class="sum-row"><span>Items</span><strong>'+cart.length+'</strong></div>'
+    + '<div class="sum-row sum-total"><span>Estimated total</span><strong>Rs./$ '+total.toLocaleString('en-PK')+'</strong></div>'
+    + '<button onclick="showToast(\'Checkout is coming soon — contact us on WhatsApp to complete this order.\',\'info\')" class="btn-primary" style="justify-content:center;width:100%;border:0;cursor:pointer;"><i class="fas fa-lock"></i> Checkout</button>'
+    + '<a href="./shop.html" class="btn-outline" style="justify-content:center;">Continue shopping</a>'
+    + '</div></div>';
+}
+function msQty(id, delta){
+  const cart = getCart();
+  const item = cart.find(function(i){return i.id===id;});
+  if (!item) return;
+  item.qty = Math.max(1, (item.qty||1)+delta);
+  saveCart(cart); updateCartCount(); msRenderCart();
+}
+document.addEventListener("DOMContentLoaded", msRenderCart);
+</script>
+</body>
+</html>
