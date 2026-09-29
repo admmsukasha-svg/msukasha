@@ -478,3 +478,162 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 /* Override logout */
 window.logout = apiLogout;
+
+
+
+/* ============================================================
+   DIRECT BUSINESS ADVERTISING — MongoDB/Vercel API
+   ============================================================ */
+
+/**
+ * Create a paid business advertisement.
+ * Backend route: POST /api/business-ads
+ */
+async function apiCreateBusinessAd(adData) {
+  return await apiFetch("/api/business-ads", {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify(adData)
+  });
+}
+
+/**
+ * Get business advertisements.
+ * Example filters: { status: "approved" }, { package: "premium" }
+ */
+async function apiGetBusinessAds(filters = {}) {
+  const p = new URLSearchParams(filters);
+  const data = await apiFetch("/api/business-ads?" + p.toString());
+  return data.ads || [];
+}
+
+/**
+ * Get currently active business advertisements.
+ * Backend should enforce start/end date and approved status.
+ */
+async function apiGetActiveBusinessAds() {
+  const data = await apiFetch("/api/business-ads/active");
+  return data.ads || [];
+}
+
+/**
+ * Get advertisements submitted by the logged-in advertiser.
+ */
+async function apiGetMyBusinessAds() {
+  if (!getToken()) return [];
+  const data = await apiFetch("/api/business-ads/my", {
+    headers: authHeaders()
+  });
+  return data.ads || [];
+}
+
+/**
+ * Get one business advertisement.
+ */
+async function apiGetBusinessAd(id) {
+  return await apiFetch("/api/business-ads/" + encodeURIComponent(id));
+}
+
+/**
+ * Update an advertiser's own pending advertisement.
+ */
+async function apiUpdateBusinessAd(id, adData) {
+  return await apiFetch("/api/business-ads/" + encodeURIComponent(id), {
+    method: "PUT",
+    headers: authHeaders(),
+    body: JSON.stringify(adData)
+  });
+}
+
+/**
+ * Delete an advertiser's own advertisement.
+ */
+async function apiDeleteBusinessAd(id) {
+  return await apiFetch("/api/business-ads/" + encodeURIComponent(id), {
+    method: "DELETE",
+    headers: authHeaders()
+  });
+}
+
+/* -------------------- ADMIN AD MANAGEMENT -------------------- */
+
+/**
+ * Admin: get all business advertisements.
+ */
+async function apiAdminGetBusinessAds(filters = {}) {
+  const p = new URLSearchParams(filters);
+  const data = await apiFetch("/api/admin/business-ads?" + p.toString(), {
+    headers: authHeaders()
+  });
+  return data.ads || [];
+}
+
+/**
+ * Admin: approve an advertisement.
+ */
+async function apiAdminApproveBusinessAd(id, approvalData = {}) {
+  return await apiFetch(
+    "/api/admin/business-ads/" + encodeURIComponent(id) + "/approve",
+    {
+      method: "PATCH",
+      headers: authHeaders(),
+      body: JSON.stringify(approvalData)
+    }
+  );
+}
+
+/**
+ * Admin: reject an advertisement.
+ */
+async function apiAdminRejectBusinessAd(id, reason = "") {
+  return await apiFetch(
+    "/api/admin/business-ads/" + encodeURIComponent(id) + "/reject",
+    {
+      method: "PATCH",
+      headers: authHeaders(),
+      body: JSON.stringify({ reason })
+    }
+  );
+}
+
+/**
+ * Admin: update advertisement details/status/dates.
+ */
+async function apiAdminUpdateBusinessAd(id, adData) {
+  return await apiFetch(
+    "/api/admin/business-ads/" + encodeURIComponent(id),
+    {
+      method: "PUT",
+      headers: authHeaders(),
+      body: JSON.stringify(adData)
+    }
+  );
+}
+
+/* -------------------- AD ANALYTICS -------------------- */
+
+/**
+ * Record one advertisement impression.
+ */
+async function apiRecordAdImpression(id) {
+  return await apiFetch(
+    "/api/business-ads/" + encodeURIComponent(id) + "/impression",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+}
+
+/**
+ * Record one advertisement click.
+ */
+async function apiRecordAdClick(id) {
+  return await apiFetch(
+    "/api/business-ads/" + encodeURIComponent(id) + "/click",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+}
