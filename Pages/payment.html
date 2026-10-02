@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment | msukasha</title>
+  <meta name="description" content="Complete your MSUKASHA business advertising payment.">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .payment-page { padding: 38px 0 70px; }
+    .payment-wrap {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .payment-hero {
+      background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      color: #fff;
+      border-radius: 12px;
+      padding: 34px;
+      margin-bottom: 24px;
+    }
+    .payment-hero h1 { margin: 0 0 8px; font-size: 30px; }
+    .payment-hero p { margin: 0; color: #dce2e8; }
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+    }
+    .payment-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      padding: 26px;
+    }
+    .payment-card h2 {
+      margin: 0 0 20px;
+      color: var(--dark);
+      font-size: 21px;
+    }
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .order-row:last-child { border-bottom: 0; }
+    .order-label { color: var(--muted); }
+    .order-value { font-weight: 600; color: var(--dark); text-align: right; }
+    .total-row {
+      margin-top: 8px;
+      padding-top: 18px;
+      border-top: 2px solid var(--border);
+      font-size: 20px;
+    }
+    .total-row .order-value { color: var(--orange); }
+    .payment-method {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .payment-method:hover,
+    .payment-method.selected {
+      border-color: var(--orange);
+      background: var(--orange-light);
+    }
+    .payment-method label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .payment-method input { margin-top: 4px; accent-color: var(--orange); }
+    .method-title { font-weight: 700; color: var(--dark); }
+    .method-note { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .payment-fields { margin-top: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 7px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 13px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      outline: none;
+      font: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255,102,0,.08);
+    }
+    .btn-pay {
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      background: var(--orange);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-pay:hover { background: var(--orange-dark); }
+    .btn-pay:disabled { opacity: .65; cursor: not-allowed; }
+    .secure-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 13px;
+    }
+    .secure-note i { color: #218838; margin-right: 5px; }
+    .notice {
+      background: #fff8e8;
+      border: 1px solid #f0d58a;
+      border-radius: 8px;
+      padding: 13px 15px;
+      color: #6b5520;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 35px 15px;
+      color: var(--muted);
+    }
+    .empty-state i { font-size: 35px; margin-bottom: 12px; color: var(--orange); }
+    .success-box {
+      display: none;
+      text-align: center;
+      padding: 35px 20px;
+    }
+    .success-box i {
+      font-size: 50px;
+      color: #218838;
+      margin-bottom: 15px;
+    }
+    .success-box h2 { color: var(--dark); margin-bottom: 8px; }
+    .success-box p { color: var(--muted); }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 20px;
+      color: var(--orange);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    @media (max-width: 760px) {
+      .payment-grid { grid-template-columns: 1fr; }
+      .payment-hero { padding: 25px 20px; }
+      .payment-hero h1 { font-size: 25px; }
+      .payment-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header" id="site-header"></header>
+
+<main class="payment-page">
+  <div class="container payment-wrap">
+
+    <section class="payment-hero">
+      <h1><i class="fas fa-credit-card"></i> Complete Your Payment</h1>
+      <p>Review your advertising order and select a payment method to continue.</p>
+    </section>
+
+    <div id="paymentContent">
+      <div class="payment-grid">
+
+        <section class="payment-card">
+          <h2>Order Summary</h2>
+          <div class="notice">
+            <strong>Important:</strong> Your advertisement will remain pending until the payment is confirmed and the advertisement is approved by MSUKASHA administration.
+          </div>
+
+          <div class="order-row">
+            <span class="order-label">Advertisement</span>
+            <span class="order-value" id="adTitle">Business Advertisement</span>
+          </div>
+          <div class="order-row">
+            <span class="order-label">Package</span>
+            <span class="order-value" id="adPackage">—</span>
+          </div>
+          <div class="order-row">
+            <span class="order-label">Duration</span>
+            <span class="order-value" id="adDuration">—</span>
+          </div>
+          <div class="order-row">
+            <span class="order-label">Start Date</span>
+            <span class="order-value" id="adStartDate">—</span>
+          </div>
+          <div class="order-row total-row">
+            <span class="order-label"><strong>Total Amount</strong></span>
+            <span class="order-value" id="adAmount">PKR 0</span>
+          </div>
+
+          <a href="./advertise.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Advertisement
+          </a>
+        </section>
+
+        <section class="payment-card">
+          <h2>Payment Method</h2>
+
+          <div class="payment-method selected" data-method="manual">
+            <label>
+              <input type="radio" name="paymentMethod" value="manual" checked>
+              <span>
+                <span class="method-title">Manual Payment / Bank Transfer</span>
+                <span class="method-note">Submit payment details for verification by MSUKASHA.</span>
+              </span>
+            </label>
+          </div>
+
+          <div class="payment-method" data-method="online">
+            <label>
+              <input type="radio" name="paymentMethod" value="online">
+              <span>
+                <span class="method-title">Online Payment</span>
+                <span class="method-note">Available when a supported payment gateway is connected.</span>
+              </span>
+            </label>
+          </div>
+
+          <form id="paymentForm">
+            <div class="payment-fields">
+              <div class="form-group">
+                <label for="payerName">Payer Name</label>
+                <input type="text" id="payerName" name="payerName" placeholder="Enter payer name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="payerEmail">Email Address</label>
+                <input type="email" id="payerEmail" name="payerEmail" placeholder="Enter email address" required>
+              </div>
+
+              <div class="form-group">
+                <label for="transactionId">Transaction / Reference ID</label>
+                <input type="text" id="transactionId" name="transactionId" placeholder="Enter transaction reference">
+              </div>
+
+              <div class="form-group">
+                <label for="paymentNote">Payment Note</label>
+                <textarea id="paymentNote" name="paymentNote" rows="3" placeholder="Optional payment information"></textarea>
+              </div>
+
+              <button type="submit" class="btn-pay" id="payButton">
+                <i class="fas fa-lock"></i> Submit Payment for Verification
+              </button>
+
+              <div class="secure-note">
+                <i class="fas fa-shield-halved"></i>
+                Payment information is submitted securely for order processing.
+              </div>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </div>
+
+    <section class="payment-card success-box" id="successBox">
+      <i class="fas fa-circle-check"></i>
+      <h2>Payment Submitted Successfully</h2>
+      <p>Your payment information has been submitted for verification. Your advertisement will be reviewed after payment confirmation.</p>
+      <a href="../index.html" class="btn-pay" style="display:inline-block;width:auto;text-decoration:none;margin-top:15px;">Return to MSUKASHA</a>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const STORAGE_KEY = "msukasha_pending_ad_payment";
+  const data = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY) || "null");
+
+  const $ = (id) => document.getElementById(id);
+
+  function escapeText(value) {
+    return value == null ? "" : String(value);
+  }
+
+  function formatPKR(value) {
+    const amount = Number(value || 0);
+    return "PKR " + amount.toLocaleString("en-PK");
+  }
+
+  function loadOrder() {
+    if (!data) return;
+
+    $("adTitle").textContent = escapeText(data.title || data.adTitle || "Business Advertisement");
+    $("adPackage").textContent = escapeText(data.packageName || data.package || "—");
+    $("adDuration").textContent = data.duration ? escapeText(data.duration + " days") : "—";
+    $("adStartDate").textContent = escapeText(data.startDate || "—");
+    $("adAmount").textContent = formatPKR(data.amount || data.price || 0);
+
+    if (data.email) $("payerEmail").value = data.email;
+    if (data.contactName) $("payerName").value = data.contactName;
+    else if (data.name) $("payerName").value = data.name;
+  }
+
+  document.querySelectorAll(".payment-method").forEach(function (box) {
+    box.addEventListener("click", function () {
+      const radio = box.querySelector("input[type=radio]");
+      if (radio) radio.checked = true;
+
+      document.querySelectorAll(".payment-method").forEach(function (item) {
+        item.classList.remove("selected");
+      });
+      box.classList.add("selected");
+    });
+  });
+
+  $("paymentForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const method = document.querySelector("input[name=paymentMethod]:checked")?.value || "manual";
+    const button = $("payButton");
+
+    if (!data) {
+      alert("No advertisement order was found. Please return to the advertisement page and submit your advertisement again.");
+      return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+    const paymentInfo = {
+      paymentMethod: method,
+      payerName: $("payerName").value.trim(),
+      payerEmail: $("payerEmail").value.trim(),
+      transactionId: $("transactionId").value.trim(),
+      paymentNote: $("paymentNote").value.trim(),
+      submittedAt: new Date().toISOString()
+    };
+
+    /*
+      This page intentionally does not pretend to process a real online payment.
+      It prepares the payment data for the MSUKASHA Vercel backend.
+
+      When the backend payment endpoint is available, connect it here.
+      Example expected flow:
+        1. Create payment/order on backend.
+        2. Receive gateway/instructions.
+        3. Confirm payment.
+        4. Update business advertisement paymentStatus.
+        5. Keep ad pending until admin approval.
+    */
+
+    try {
+      if (typeof apiFetch === "function" && data.adId && typeof getToken === "function" && getToken()) {
+        await apiFetch("/api/business-ads/" + encodeURIComponent(data.adId) + "/payment", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify(paymentInfo)
+        });
+      } else {
+        /*
+          Frontend fallback only.
+          No payment is claimed as completed. The data is retained locally
+          until the real backend payment endpoint is connected.
+        */
+        const pendingPayment = {
+          ...data,
+          ...paymentInfo,
+          paymentStatus: "pending_verification"
+        };
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(pendingPayment));
+      }
+
+      $("paymentContent").style.display = "none";
+      $("successBox").style.display = "block";
+
+    } catch (error) {
+      console.error("Payment submission error:", error);
+      alert(error.message || "Payment submission could not be completed. Please try again.");
+      button.disabled = false;
+      button.innerHTML = '<i class="fas fa-lock"></i> Submit Payment for Verification';
+    }
+  });
+
+  loadOrder();
+})();
+</script>
+
+</body>
+</html>
