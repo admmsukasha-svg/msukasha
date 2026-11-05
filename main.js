@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
   highlightNav();
   updateCartCount();
   updateAuthButton();
+  injectAdSenseScript();
 });
 
 function injectHeader() {
@@ -173,7 +174,6 @@ function injectHeader() {
     const pageBase = getPageBase();
     const rootBase = getRootBase();
     el.innerHTML = getHeaderHtml(pageBase, rootBase);
-    // Re-run after injection
     updateCartCount();
     updateAuthButton();
     highlightNav();
@@ -187,6 +187,17 @@ function injectFooter() {
     const rootBase = getRootBase();
     el.innerHTML = getFooterHtml(pageBase, rootBase);
   }
+}
+
+function injectAdSenseScript() {
+  const scriptUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782';
+  if (document.querySelector(`script[src="${scriptUrl}"]`)) return;
+
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = scriptUrl;
+  script.crossOrigin = 'anonymous';
+  document.head.appendChild(script);
 }
 
 function highlightNav() {
@@ -287,7 +298,7 @@ function removeFromWishlist(id) {
 }
 
 /* ============================================================
-   SEARCH
+    SEARCH
    ============================================================ */
 function handleSearch(e) {
   e.preventDefault();
@@ -299,10 +310,9 @@ function handleSearch(e) {
 }
 
 /* ============================================================
-   TOAST NOTIFICATION
+    TOAST NOTIFICATION
    ============================================================ */
 function showToast(message, type = 'info') {
-  // Remove existing toasts
   document.querySelectorAll('.ms-toast').forEach(t => t.remove());
 
   const toast = document.createElement('div');
@@ -336,7 +346,7 @@ function showToast(message, type = 'info') {
 }
 
 /* ============================================================
-   FORM VALIDATION
+    FORM VALIDATION
    ============================================================ */
 function validateForm(formEl) {
   let valid = true;
@@ -372,7 +382,7 @@ function validateForm(formEl) {
 }
 
 /* ============================================================
-   UTILITY
+    UTILITY
    ============================================================ */
 function formatPrice(num) {
   return 'Rs. ' + Number(num).toLocaleString('en-PK');
@@ -382,9 +392,9 @@ function getUrlParam(key) {
 }
 
 /* ============================================================
-   MSUKASHA DIRECT ADVERTISING
-   Homepage ad display + ad status helpers
-   ============================================================ */
+    MSUKASHA DIRECT ADVERTISING
+    Homepage ad display + ad status helpers
+    ============================================================ */
 
 /*
  * This prepares the frontend for the MSUKASHA advertising system.
@@ -490,10 +500,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ============================================================
-   PRODUCT CATALOG + SHARED PAGE HELPERS (inner pages)
-   Catalog below = the listings shown on the homepage.
-   Replace / extend it (or load from the API) as listings grow.
-   ============================================================ */
+    PRODUCT CATALOG + SHARED PAGE HELPERS (inner pages)
+    Catalog below = the listings shown on the homepage.
+    Replace / extend it (or load from the API) as listings grow.
+    ============================================================ */
 const MS_CONTACT = { email: 'info@msukasha.com', whatsapp: '923313730953' };
 
 const MS_CATEGORIES = [
