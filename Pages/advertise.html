@@ -8,6 +8,8 @@
 
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782"
+       crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -321,8 +323,10 @@
           sessionStorage.setItem("msukasha_pending_ad_payment", JSON.stringify({
             adId: (result && (result.adId || result._id || result.id || (result.ad && (result.ad._id || result.ad.id)))) || "",
             title: payload.title,
-            packageName: pkg,
+            packageName: (result && result.packageName) || pkg,
             package: payload.package,
+            amount: result && result.amount,
+            duration: result && result.duration,
             email: payload.email,
             contactName: payload.advertiserName
           }));
@@ -331,7 +335,9 @@
           message.style.color = "#16803a";
 
           form.reset();
-          window.location.href = "./payment.html";
+          window.location.href = getToken()
+            ? "./payment.html"
+            : "./login.html?next=payment.html";
 
         } catch (error) {
           console.error("Advertisement submission:", error);
