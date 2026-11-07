@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Msukasha | Pakistan's B2B Wholesale &amp; C2C Marketplace</title>
-    <img src="/Logo/logo.png" alt="msukasha Logo" style="display:none;">
+  <title>msukasha| Pakistan's B2B Wholesale &amp; C2C Marketplace</title>
+  <img src="/Logo/logo.png" alt="msukasha Logo" style="display:none;">
   <meta name="description" content="msukasha - Pakistan's leading platform for B2B wholesale sourcing and C2C local classifieds.">
-  <link rel="icon" type="images/png" href="Favicon/favicon.png">
+  <link rel="icon" type="image/png" href="Favicon/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ad-slider.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782"
+       crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -156,7 +159,8 @@
       <h2 class="section-title"><i class="fas fa-bullhorn" style="color:var(--orange);margin-right:8px;"></i> Advertise With MSUKASHA</h2>
       <a href="./Pages/advertise.html" class="see-all">Advertise Your Business <i class="fas fa-chevron-right" style="font-size:11px;"></i></a>
     </div>
-    <div class="msukasha-ad-box">
+    <div id="msukasha-ad-slider" hidden></div>
+    <div class="msukasha-ad-box" id="msukasha-ad-fallback">
       <div class="msukasha-ad-content">
         <span class="msukasha-ad-label">BUSINESS PROMOTION</span>
         <h2>Reach Buyers Across Pakistan</h2>
@@ -295,6 +299,6 @@
 
 <script src="main.js"></script>
 <script src="api.js"></script>
+<script src="ad-slider.js"></script>
 </body>
 </html>
-
