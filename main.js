@@ -165,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
   highlightNav();
   updateCartCount();
   updateAuthButton();
-  injectAdSenseScript();
 });
 
 function injectHeader() {
@@ -174,6 +173,7 @@ function injectHeader() {
     const pageBase = getPageBase();
     const rootBase = getRootBase();
     el.innerHTML = getHeaderHtml(pageBase, rootBase);
+    // Re-run after injection
     updateCartCount();
     updateAuthButton();
     highlightNav();
@@ -187,17 +187,6 @@ function injectFooter() {
     const rootBase = getRootBase();
     el.innerHTML = getFooterHtml(pageBase, rootBase);
   }
-}
-
-function injectAdSenseScript() {
-  const scriptUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782';
-  if (document.querySelector(`script[src="${scriptUrl}"]`)) return;
-
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = scriptUrl;
-  script.crossOrigin = 'anonymous';
-  document.head.appendChild(script);
 }
 
 function highlightNav() {
@@ -298,7 +287,7 @@ function removeFromWishlist(id) {
 }
 
 /* ============================================================
-    SEARCH
+   SEARCH
    ============================================================ */
 function handleSearch(e) {
   e.preventDefault();
@@ -310,9 +299,10 @@ function handleSearch(e) {
 }
 
 /* ============================================================
-    TOAST NOTIFICATION
+   TOAST NOTIFICATION
    ============================================================ */
 function showToast(message, type = 'info') {
+  // Remove existing toasts
   document.querySelectorAll('.ms-toast').forEach(t => t.remove());
 
   const toast = document.createElement('div');
@@ -346,7 +336,7 @@ function showToast(message, type = 'info') {
 }
 
 /* ============================================================
-    FORM VALIDATION
+   FORM VALIDATION
    ============================================================ */
 function validateForm(formEl) {
   let valid = true;
@@ -382,7 +372,7 @@ function validateForm(formEl) {
 }
 
 /* ============================================================
-    UTILITY
+   UTILITY
    ============================================================ */
 function formatPrice(num) {
   return 'Rs. ' + Number(num).toLocaleString('en-PK');
@@ -392,107 +382,145 @@ function getUrlParam(key) {
 }
 
 /* ============================================================
-    MSUKASHA DIRECT ADVERTISING
-    Homepage ad display + ad status helpers
-    ============================================================ */
+   MSUKASHA DIRECT ADVERTISING
+   Homepage product-ad carousel
+   ============================================================ */
 
-/*
- * This prepares the frontend for the MSUKASHA advertising system.
- * Approved ads can later be loaded from Firebase/API without
- * changing the homepage code again.
- */
-function getAdvertisingAds() {
-  try {
-    return JSON.parse(localStorage.getItem('msukasha_ads') || '[]');
-  } catch {
-    return [];
+const MD_JEWELS_ADS = [
+  {
+    id: 'md-jewels-heavy-green-luxury-jewelry-set',
+    tag: 'MD JEWELS | JEWELRY SET',
+    headline: 'Heavy Green Luxury Jewelry Set',
+    sub: 'Timeless jewelry, crafted with love.',
+    imageUrl: 'https://cdn.storecrafto.com/md-jewels-ktktj6/products/ba65522b-1744-4d7b-bd81-5fee8cbae73a.webp',
+    link: 'https://md-jewels-ktktj6.storecrafto.com/products/heavy-green-luxury-jewelry-set',
+    cta: 'Shop now',
+    price: 'Rs 2,999',
+    compareAtPrice: 'Rs 5,999',
+    discount: '50% OFF',
+    theme: 'plum'
+  },
+  {
+    id: 'md-jewels-elegant-luxury-jewelry-set-for-wedding',
+    tag: 'MD JEWELS | JEWELRY SET',
+    headline: 'Elegant Luxury Jewelry Set FOR WEDDING😍',
+    sub: 'Timeless jewelry, crafted with love.',
+    imageUrl: 'https://cdn.storecrafto.com/md-jewels-ktktj6/products/77f48408-c49e-43b8-aa07-374ee47f985e.webp',
+    link: 'https://md-jewels-ktktj6.storecrafto.com/products/elegant-luxury-jewelry-set-for-wedding',
+    cta: 'Shop now',
+    price: 'Rs 3,099',
+    compareAtPrice: 'Rs 7,900',
+    discount: '61% OFF',
+    theme: 'plum'
+  },
+  {
+    id: 'md-jewels-elegant-luxury-jewelry-set',
+    tag: 'MD JEWELS | JEWELRY SET',
+    headline: 'Elegant Luxury Jewelry Set',
+    sub: 'Timeless jewelry, crafted with love.',
+    imageUrl: 'https://cdn.storecrafto.com/md-jewels-ktktj6/products/48fc7f39-1a96-4717-9f13-342d2f485993.webp',
+    link: 'https://md-jewels-ktktj6.storecrafto.com/products/elegant-luxury-jewelry-set',
+    cta: 'Shop now',
+    price: 'Rs 3,199',
+    compareAtPrice: 'Rs 7,100',
+    discount: '55% OFF',
+    theme: 'plum'
+  },
+  {
+    id: 'md-jewels-elegant-pearl-drop-earrings',
+    tag: 'MD JEWELS | EARRINGS',
+    headline: 'Elegant Pearl Drop Earrings',
+    sub: 'Timeless jewelry, crafted with love.',
+    imageUrl: 'https://cdn.storecrafto.com/md-jewels-ktktj6/products/d9b3df20-0fd3-4863-95ec-92c3b29ec1a4.webp',
+    link: 'https://md-jewels-ktktj6.storecrafto.com/products/elegant-pearl-drop-earrings',
+    cta: 'Shop now',
+    price: 'Rs 1,700',
+    compareAtPrice: 'Rs 3,500',
+    discount: '51% OFF',
+    theme: 'plum'
+  },
+  {
+    id: 'md-jewels-a-pink-jewelry-set-special-for-girl',
+    tag: 'MD JEWELS | JEWELRY SET',
+    headline: 'A PINK JEWELRY SET SPECIAL FOR GIRL💕💕',
+    sub: 'Timeless jewelry, crafted with love.',
+    imageUrl: 'https://cdn.storecrafto.com/md-jewels-ktktj6/products/4e662ddc-d27e-48ae-9bfb-e4163b41415a.jpg',
+    link: 'https://md-jewels-ktktj6.storecrafto.com/products/a-pink-jewelry-set-special-for-girl',
+    cta: 'Shop now',
+    price: 'Rs 2,999',
+    compareAtPrice: 'Rs 6,700',
+    discount: '55% OFF',
+    theme: 'plum'
+  },
+  {
+    id: 'md-jewels-a-beautiful-jewelry-set',
+    tag: 'MD JEWELS | JEWELRY SET',
+    headline: 'A beautiful jewelry set',
+    sub: 'Timeless jewelry, crafted with love.',
+    imageUrl: 'https://cdn.storecrafto.com/md-jewels-ktktj6/products/8c1b99d6-704d-4d16-8c6a-11942594a985.webp',
+    link: 'https://md-jewels-ktktj6.storecrafto.com/products/a-beautiful-jewelry-set',
+    cta: 'Shop now',
+    price: 'Rs 2,999',
+    compareAtPrice: 'Rs 6,900',
+    discount: '57% OFF',
+    theme: 'plum'
   }
-}
-
-function isAdActive(ad) {
-  if (!ad || ad.status !== 'approved') return false;
-
-  const now = new Date();
-  const start = ad.startDate ? new Date(ad.startDate) : null;
-  const end = ad.endDate ? new Date(ad.endDate + 'T23:59:59') : null;
-
-  if (start && now < start) return false;
-  if (end && now > end) return false;
-
-  return true;
-}
-
-function getActiveAdvertisingAds() {
-  return getAdvertisingAds().filter(isAdActive);
-}
-
-function recordAdClick(adId) {
-  const ads = getAdvertisingAds();
-  const ad = ads.find(item => item.id === adId);
-
-  if (ad) {
-    ad.clicks = Number(ad.clicks || 0) + 1;
-    localStorage.setItem('msukasha_ads', JSON.stringify(ads));
-  }
-}
-
-function recordAdImpression(adId) {
-  const ads = getAdvertisingAds();
-  const ad = ads.find(item => item.id === adId);
-
-  if (ad) {
-    ad.impressions = Number(ad.impressions || 0) + 1;
-    localStorage.setItem('msukasha_ads', JSON.stringify(ads));
-  }
-}
+];
 
 function renderAdvertisingAds() {
-  const container = document.getElementById('msukasha-advertising');
-  if (!container) return;
+  const slider = document.getElementById('msukasha-ad-slider');
+  const fallback = document.getElementById('msukasha-ad-fallback');
+  if (!slider || typeof AdSlider === 'undefined') return;
 
-  const ads = getActiveAdvertisingAds();
-  if (!ads.length) return;
-
-  const ad = ads[0];
-
-  const sectionHeader = container.querySelector('.section-header');
-  const oldBox = container.querySelector('.msukasha-ad-box');
-
-  if (sectionHeader) {
-    sectionHeader.innerHTML = `
-      <h2 class="section-title">
-        <i class="fas fa-bullhorn" style="color:var(--orange);margin-right:8px;"></i>
-        Featured Advertisement
-      </h2>
-      <span class="see-all">Sponsored</span>
-    `;
-  }
-
-  if (oldBox) {
-    oldBox.innerHTML = `
-      <a
-        href="${ad.targetUrl || '#'}"
-        ${ad.targetUrl ? 'target="_blank" rel="noopener noreferrer"' : ''}
-        onclick="recordAdClick('${String(ad.id || '').replace(/'/g, "\\'")}')"
-        style="display:block;text-decoration:none;color:inherit;"
-      >
-        ${ad.imageUrl ? `
-          <img
-            src="${ad.imageUrl}"
-            alt="${ad.title || 'MSUKASHA Advertisement'}"
-            style="width:100%;max-height:320px;object-fit:cover;border-radius:10px;display:block;"
-            onload="recordAdImpression('${String(ad.id || '').replace(/'/g, "\\'")}')"
-          >
-        ` : `
-          <div class="msukasha-ad-content">
-            <span class="msukasha-ad-label">SPONSORED</span>
-            <h2>${ad.title || 'Advertise With MSUKASHA'}</h2>
-            <p>${ad.description || 'Promote your business on MSUKASHA.'}</p>
-          </div>
-        `}
-      </a>
-    `;
-  }
+  AdSlider.mount(slider, {
+    loadAds: async function () {
+      if (typeof apiGetActiveBusinessAds !== 'function') {
+        console.error('Business advertising API is not available.');
+        return MD_JEWELS_ADS;
+      }
+      try {
+        const ads = await apiGetActiveBusinessAds();
+        return ads.map(function (ad) {
+          const trackingId = String(ad.id || ad._id || '');
+          return {
+            id: trackingId,
+            trackingId: trackingId,
+            tag: ad.businessName || 'Sponsored',
+            headline: ad.title || '',
+            sub: ad.description || '',
+            imageUrl: ad.imageUrl || '',
+            link: ad.targetUrl || '',
+            cta: 'Learn more'
+          };
+        }).concat(MD_JEWELS_ADS);
+      } catch (error) {
+        console.error('Unable to load business advertisements:', error);
+        return MD_JEWELS_ADS;
+      }
+    },
+    onImpression: function (ad) {
+      if (ad.trackingId && typeof apiRecordAdImpression === 'function') {
+        apiRecordAdImpression(ad.trackingId).catch(function (error) {
+          console.warn('Ad impression tracking:', error.message);
+        });
+      }
+    },
+    onClick: function (ad) {
+      if (ad.trackingId && typeof apiRecordAdClick === 'function') {
+        apiRecordAdClick(ad.trackingId).catch(function (error) {
+          console.warn('Ad click tracking:', error.message);
+        });
+      }
+    },
+    onAds: function (ads) {
+      const hasAds = ads.length > 0;
+      slider.hidden = !hasAds;
+      if (fallback) fallback.hidden = hasAds;
+    },
+    onError: function (error) {
+      console.error('Unable to load business advertisements:', error);
+    }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -500,10 +528,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ============================================================
-    PRODUCT CATALOG + SHARED PAGE HELPERS (inner pages)
-    Catalog below = the listings shown on the homepage.
-    Replace / extend it (or load from the API) as listings grow.
-    ============================================================ */
+   PRODUCT CATALOG + SHARED PAGE HELPERS (inner pages)
+   Catalog below = the listings shown on the homepage.
+   Replace / extend it (or load from the API) as listings grow.
+   ============================================================ */
 const MS_CONTACT = { email: 'info@msukasha.com', whatsapp: '923313730953' };
 
 const MS_CATEGORIES = [
