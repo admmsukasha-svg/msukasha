@@ -1,12 +1,12 @@
 /**
  * MSukasha — api.js v2
- * Works as a local auth helper for the static site.
+ * Remote API client for the static site.
  * Place AFTER main.js on every HTML page.
  */
 
 const DEFAULT_API = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? `${window.location.protocol}//${window.location.hostname}:5000`
-  : "https://msukasha-backend-git-main-msukasha.vercel.app";
+  : "https://msukasha-backend.vercel.app";
 const API = (window.MSUKASHA_API_BASE || localStorage.getItem("msukasha_api_base") || DEFAULT_API).replace(/\/$/, "");
 const USE_REMOTE_API = true;
 
@@ -43,7 +43,7 @@ function authHeaders() {
    BASE FETCH
    ============================================================ */
 function buildApiUrl(path) {
-  return `${API}${path.startsWith('/') ? '' : '/'}${path.replace(/^\/+/, '')}`;
+  return `${API}/${path.replace(/^\/+/, '')}`;
 }
 
 function normalizeAuthResult(data, fallbackUser = null) {
@@ -65,18 +65,20 @@ async function apiFetch(path, options = {}) {
     ...(options.headers || {})
   };
 
-  try {
-    const res = await fetch(url, { ...options, headers });
-    const text = await res.text();
-    let data = {};
-    if (text) {
-      try { data = JSON.parse(text); } catch { data = { message: text }; }
-    }
-    if (!res.ok) throw new Error(data.error || data.message || data.detail || 'Request failed');
-    return data;
-  } catch (e) {
-    throw e;
+  const res = await fetch(url, { ...options, headers });
+  const text = await res.text();
+  let data = {};
+  if (text) {
+    try { data = JSON.parse(text); } catch { data = { message: text }; }
   }
+  if (!res.ok) {
+    if (res.status === 404) {
+      throw new Error('API endpoint not found (404). Verify that the backend is deployed and the API base URL is correct.');
+    }
+    const message = data.error || data.message || data.detail;
+    throw new Error(typeof message === 'string' && message.length < 300 ? message : 'Request failed with status ' + res.status + '.');
+  }
+  return data;
 }
 
 function makeSessionToken(email) {
@@ -145,44 +147,37 @@ function loginLocalUser(email, password) {
    AUTH
    ============================================================ */
 async function apiRegister(payload) {
-  try {
-    const data = await apiFetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const auth = normalizeAuthResult(data);
-    if (auth.token) setToken(auth.token);
-    if (auth.user) setUser(auth.user);
-    return auth;
-  } catch (error) {
-    console.warn("Remote register failed, using local fallback:", error.message);
-    return registerLocalUser(payload);
+  const data = await apiFetch("/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  const auth = normalizeAuthResult(data);
+  if (!auth.token || !auth.user) {
+    throw new Error("Registration response did not include an account and sign-in token.");
   }
+  setToken(auth.token);
+  setUser(auth.user);
+  return auth;
 }
 
 async function apiLogin(email, password) {
-  try {
-    const data = await apiFetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-    const auth = normalizeAuthResult(data);
-    if (auth.token) setToken(auth.token);
-    if (auth.user) setUser(auth.user);
-    if (auth.user?.uid) {
-      await syncCartFromDB(auth.user.uid);
-      await syncWishlistFromDB(auth.user.uid);
-    }
-    return auth;
-  } catch (error) {
-    console.warn("Remote login failed, using local fallback:", error.message);
-    const data = loginLocalUser(email, password);
-    await syncCartFromDB(data.user.uid);
-    await syncWishlistFromDB(data.user.uid);
-    return data;
+  const data = await apiFetch("/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+  const auth = normalizeAuthResult(data);
+  if (!auth.token || !auth.user) {
+    throw new Error("Sign-in response did not include an account and sign-in token.");
   }
+  setToken(auth.token);
+  setUser(auth.user);
+  if (auth.user.uid) {
+    await syncCartFromDB(auth.user.uid);
+    await syncWishlistFromDB(auth.user.uid);
+  }
+  return auth;
 }
 
 function apiLogout() {
@@ -216,15 +211,15 @@ async function apiGetMe() {
 
 async function apiUpdateProfile(profileData) {
   const user = getUser();
-  if (!user) throw new Error('Not logged in');
-  const updated = { ...user, profile: { ...user.profile, ...profileData } };
+  if (!user || !getToken()) throw new Error('Not logged in');
+  const data = await apiFetch("/api/profile", {
+    method: "PUT",
+    headers: authHeaders(),
+    body: JSON.stringify(profileData)
+  });
+  const updated = data.user;
+  if (!updated) throw new Error("Profile update response did not include the updated account.");
   setUser(updated);
-  const users = getUsers();
-  const index = users.findIndex(u => u.email === user.email);
-  if (index !== -1) {
-    users[index] = updated;
-    saveUsers(users);
-  }
   return { user: updated };
 }
 
