@@ -7,6 +7,8 @@
 <meta name="description" content="Sign in to your msukasha account">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="../style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782"
+       crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -16,20 +18,29 @@
   <div class="narrow" style="max-width:460px;">
     <div class="card form-card">
       <div style="text-align:center;margin-bottom:22px;">
-        <h1 style="font-size:24px;margin:0 0 6px;">Sign in to msukasha</h1>
-        <p style="color:var(--muted);font-size:13.5px;margin:0;">Access your cart, wishlist and seller tools.</p>
+        <h1 id="auth-title" style="font-size:24px;margin:0 0 6px;">Create your msukasha account</h1>
+        <p id="auth-description" style="color:var(--muted);font-size:13.5px;margin:0;">Register to continue and manage your advertisements.</p>
       </div>
-      <form id="login-form">
-        <div class="form-group"><label for="l-name">Full name</label><input id="l-name" name="name" type="text" placeholder="Your name" required></div>
-        <div class="form-group"><label for="l-email">Email address</label><input id="l-email" name="email" type="email" placeholder="you@example.com" required></div>
-        <div class="form-group"><label for="l-pass">Password</label><input id="l-pass" name="password" type="password" placeholder="••••••••" required></div>
+      <form id="register-form">
+        <div class="form-group"><label for="r-name">Full name</label><input id="r-name" name="name" type="text" autocomplete="name" maxlength="120" placeholder="Your name" required></div>
+        <div class="form-group"><label for="r-email">Email address</label><input id="r-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></div>
+        <div class="form-group"><label for="r-pass">Password</label><input id="r-pass" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="At least 8 characters" required></div>
+        <div class="form-group"><label for="r-confirm-pass">Confirm password</label><input id="r-confirm-pass" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></div>
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
+      </form>
+      <form id="login-form" hidden>
+        <div class="form-group"><label for="l-email">Email address</label><input id="l-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></div>
+        <div class="form-group"><label for="l-pass">Password</label><input id="l-pass" name="password" type="password" autocomplete="current-password" maxlength="128" required></div>
         <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
           <i class="fas fa-right-to-bracket"></i> Sign In
         </button>
-        <p style="text-align:center;font-size:12.5px;color:var(--muted);margin-top:14px;">
-          Account sign-in will connect to the msukasha backend once it is live. For now this saves your details locally on this device.
-        </p>
       </form>
+      <p id="auth-message" role="status" aria-live="polite" style="margin:14px 0 0;font-size:13px;"></p>
+      <p style="text-align:center;font-size:13px;margin:16px 0 0;">
+        <button type="button" id="auth-toggle" class="see-all" style="border:0;background:none;cursor:pointer;">Already have an account? Sign in</button>
+      </p>
     </div>
   </div>
 
@@ -40,14 +51,110 @@
 <script src="../main.js"></script>
 <script src="../api.js"></script>
 <script>
-document.getElementById('login-form').addEventListener('submit', function(e){
-  e.preventDefault();
-  if (!validateForm(this)) return;
-  setUser({ name: document.getElementById('l-name').value.trim(), email: document.getElementById('l-email').value.trim() });
-  updateAuthButton();
-  showToast('Signed in — welcome back!', 'success');
-  setTimeout(function(){ window.location.href = './my-account.html'; }, 700);
-});
+(function () {
+  const registerForm = document.getElementById('register-form');
+  const loginForm = document.getElementById('login-form');
+  const title = document.getElementById('auth-title');
+  const description = document.getElementById('auth-description');
+  const message = document.getElementById('auth-message');
+  const toggle = document.getElementById('auth-toggle');
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get('next');
+  const returnTo = next === 'payment.html' ? './payment.html' : './my-account.html';
+  let pendingAdEmail = '';
+  let registering = true;
+
+  try {
+    const pending = JSON.parse(sessionStorage.getItem('msukasha_pending_ad_payment') || 'null');
+    if (pending && pending.email) {
+      pendingAdEmail = String(pending.email).trim().toLowerCase();
+      document.getElementById('r-email').value = pendingAdEmail;
+      document.getElementById('l-email').value = pendingAdEmail;
+    }
+  } catch (error) {
+    console.warn('Could not restore the pending advertisement email.', error);
+  }
+
+  function matchesPendingAdEmail(email) {
+    if (!pendingAdEmail || String(email).trim().toLowerCase() === pendingAdEmail) return true;
+    showMessage('Sign in or register with the same email address used for this advertisement.', true);
+    return false;
+  }
+
+  function showMessage(text, isError) {
+    message.textContent = text;
+    message.style.color = isError ? '#c62828' : '#16803a';
+  }
+
+  function setMode(isRegistering) {
+    registering = isRegistering;
+    registerForm.hidden = !registering;
+    loginForm.hidden = registering;
+    title.textContent = registering ? 'Create your msukasha account' : 'Sign in to msukasha';
+    description.textContent = registering
+      ? 'Register to continue and manage your advertisements.'
+      : 'Sign in to continue to your account.';
+    toggle.textContent = registering ? 'Already have an account? Sign in' : 'New to msukasha? Create an account';
+    showMessage('', false);
+  }
+
+  toggle.addEventListener('click', function () {
+    setMode(!registering);
+  });
+
+  registerForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (!registerForm.reportValidity()) return;
+
+    const email = document.getElementById('r-email').value.trim();
+    if (!matchesPendingAdEmail(email)) return;
+
+    const password = document.getElementById('r-pass').value;
+    if (password !== document.getElementById('r-confirm-pass').value) {
+      showMessage('Passwords do not match.', true);
+      return;
+    }
+
+    const button = registerForm.querySelector('button[type="submit"]');
+    button.disabled = true;
+    showMessage('Creating your account...', false);
+    try {
+      await apiRegister({
+        name: document.getElementById('r-name').value.trim(),
+        email: email,
+        password: password
+      });
+      window.location.href = returnTo;
+    } catch (error) {
+      showMessage(error.message || 'Could not create your account. Please try again.', true);
+      button.disabled = false;
+    }
+  });
+
+  loginForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (!loginForm.reportValidity()) return;
+
+    const email = document.getElementById('l-email').value.trim();
+    if (!matchesPendingAdEmail(email)) return;
+
+    const button = loginForm.querySelector('button[type="submit"]');
+    button.disabled = true;
+    showMessage('Signing in...', false);
+    try {
+      await apiLogin(
+        email,
+        document.getElementById('l-pass').value
+      );
+      window.location.href = returnTo;
+    } catch (error) {
+      showMessage(error.message || 'Could not sign in. Please try again.', true);
+      button.disabled = false;
+    }
+  });
+
+  setMode(params.get('mode') !== 'login');
+})();
 </script>
 </body>
 </html>
