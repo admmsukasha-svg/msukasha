@@ -1,0 +1,73 @@
+/* msukasha slide ads. All classes start with sad- (slider) or ads- (forms and admin) so they do not clash with style.css. */
+.sad{position:relative;overflow:hidden;max-width:1100px;width:100%;margin:16px auto;border-radius:16px;background:#111;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;touch-action:pan-y;container-type:inline-size}
+.sad[hidden]{display:none}
+#msukasha-ad-fallback[hidden]{display:none}
+.sad *{box-sizing:border-box}
+.sad-track{display:flex;transition:transform .6s cubic-bezier(.65,0,.35,1)}
+.sad-slide{position:relative;flex:0 0 100%;min-width:0;min-height:340px;display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:24px;padding:40px 72px;color:#fff;background:linear-gradient(120deg,var(--c1),var(--c2))}
+.sad-copy{min-width:0}
+.sad-tag{margin:0 0 12px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--pop)}
+.sad h2{margin:0 0 12px;font-family:inherit;font-size:clamp(26px,4cqi,44px);line-height:1.08;font-weight:800;letter-spacing:-.02em;text-wrap:balance;color:#fff;overflow-wrap:anywhere}
+.sad-sub{margin:0 0 24px;max-width:42ch;font-size:16px;line-height:1.5;opacity:.9}
+.sad-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.sad-price strong{font-size:clamp(22px,3cqi,30px);font-weight:800;color:var(--pop)}
+.sad-price del{font-size:15px;opacity:.75}
+.sad-price span{padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.18);font-size:12px;font-weight:700}
+.sad-cta{display:inline-block;padding:12px 26px;border-radius:999px;background:var(--pop);color:#16181a;font-weight:700;text-decoration:none}
+.sad-cta:hover{filter:brightness(1.08)}
+.sad-visual{justify-self:center;width:min(100%,270px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.3),rgba(255,255,255,.05))}
+.sad-visual.sad-visual-image{border-radius:18px;background:#fff}
+.sad-image{width:100%;height:100%;object-fit:contain}
+.sad-badge{display:grid;place-items:center;text-align:center;line-height:1;padding:0 12px;min-width:0}
+.sad-badge b{font-size:clamp(34px,7cqi,64px);font-weight:800;letter-spacing:-.03em;color:var(--pop);overflow-wrap:anywhere}
+.sad-badge small{margin-top:8px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.sad-flag{position:absolute;top:12px;right:14px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.sad-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;font-size:24px;line-height:1;cursor:pointer}
+.sad-nav:hover{background:rgba(0,0,0,.55)}
+.sad-prev{left:16px}
+.sad-next{right:16px}
+.sad-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:8px}
+.sad-dots button{width:10px;height:10px;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.45);cursor:pointer;transition:width .3s,background .3s}
+.sad-dots button.on{width:26px;background:#fff}
+.sad-nav:focus-visible,.sad-cta:focus-visible,.sad-dots button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@container (max-width:640px){
+  .sad-slide{grid-template-columns:1fr;min-height:0;gap:16px;padding:28px 20px 56px}
+  .sad-visual{order:-1;width:104px;justify-self:start}
+  .sad-visual.sad-visual-image{width:128px}
+  .sad-badge b{font-size:26px}
+  .sad-badge small{font-size:10px;margin-top:4px}
+  .sad-nav{display:none}
+}
+.sad.sad-static{margin:0}
+.sad.sad-static .sad-slide{padding-bottom:28px}
+@media (prefers-reduced-motion:reduce){.sad-track{transition:none}}
+
+/* Advertise form and admin review. Neutral on purpose: restyle to match style.css. */
+.ads-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:900px}
+.ads-form .span2{grid-column:1/-1}
+.ads-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ads-field>span{font-size:13px;font-weight:600}
+.ads-field small{color:#6b7280;font-size:12px}
+.ads-field input{font:inherit;padding:10px 12px;border:1px solid #cbd5d1;border-radius:8px;width:100%;min-width:0}
+.ads-field input:focus-visible{outline:3px solid #1b7f72;outline-offset:1px}
+.ads-swatches{display:flex;flex-wrap:wrap;gap:12px}
+.ads-swatch{position:relative;cursor:pointer}
+.ads-swatch input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.ads-swatch span{display:block;width:44px;height:44px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px #cbd5d1;background:linear-gradient(120deg,var(--c1),var(--c2))}
+.ads-swatch input:checked+span{box-shadow:0 0 0 3px #1b7f72}
+.ads-swatch input:focus-visible+span{outline:3px solid #1b7f72;outline-offset:4px}
+.ads-btn{font:700 15px system-ui,sans-serif;padding:11px 22px;border-radius:999px;border:0;cursor:pointer;background:#1b7f72;color:#fff}
+.ads-btn:hover{filter:brightness(1.08)}
+.ads-btn.alt{background:transparent;color:inherit;box-shadow:inset 0 0 0 1px #cbd5d1}
+.ads-btn:disabled{opacity:.55;cursor:default}
+.ads-msg{font-size:14px}
+.ads-msg.bad{color:#b42318}
+.ads-msg.ok{color:#14532d}
+.ads-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ads-list{display:flex;flex-direction:column;gap:14px}
+.ads-card{border:1px solid #d3dedb;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0;background:#fff}
+.ads-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 20px;font-size:14px;margin:0}
+.ads-meta dt{color:#6b7280;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.ads-meta dd{margin:0;overflow-wrap:anywhere}
+.ads-empty{margin:0;padding:20px;border:1px dashed #cbd5d1;border-radius:10px;color:#6b7280;text-align:center}
+@media (max-width:640px){.ads-form{grid-template-columns:1fr}}
