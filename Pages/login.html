@@ -23,6 +23,9 @@
       </div>
       <form id="register-form">
         <div class="form-group"><label for="r-name">Full name</label><input id="r-name" name="name" type="text" autocomplete="name" maxlength="120" placeholder="Your name" required></div>
+        <div class="form-group"><label for="r-account-type">Account type</label><select id="r-account-type" name="accountType"><option value="buyer">Buyer account</option><option value="seller">Seller / store account</option></select></div>
+        <div class="form-group" id="r-company-group" hidden><label for="r-company">Store / business name</label><input id="r-company" name="companyName" maxlength="160" placeholder="Your store name"></div>
+        <div class="form-group" id="r-city-group" hidden><label for="r-city">Store city</label><input id="r-city" name="city" maxlength="80" placeholder="e.g. Lahore"></div>
         <div class="form-group"><label for="r-email">Email address</label><input id="r-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></div>
         <div class="form-group"><label for="r-pass">Password</label><input id="r-pass" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="At least 8 characters" required></div>
         <div class="form-group"><label for="r-confirm-pass">Confirm password</label><input id="r-confirm-pass" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></div>
@@ -58,9 +61,22 @@
   const description = document.getElementById('auth-description');
   const message = document.getElementById('auth-message');
   const toggle = document.getElementById('auth-toggle');
+  const accountType = document.getElementById('r-account-type');
+  const companyGroup = document.getElementById('r-company-group');
+  const cityGroup = document.getElementById('r-city-group');
   const params = new URLSearchParams(window.location.search);
   const next = params.get('next');
-  const returnTo = next === 'payment.html' ? './payment.html' : './my-account.html';
+  if (params.get('accountType') === 'seller' || next === 'seller-dashboard.html') accountType.value = 'seller';
+  const returnTo = next === 'payment.html'
+    ? './payment.html'
+    : next === 'messages.html'
+      ? './messages.html?' + ['recipientId', 'recipientName', 'productName']
+        .filter((key) => params.has(key))
+        .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(params.get(key)))
+        .join('&')
+      : next === 'seller-dashboard.html'
+        ? './seller-dashboard.html'
+      : './my-account.html';
   let pendingAdEmail = '';
   let registering = true;
 
@@ -98,6 +114,14 @@
     showMessage('', false);
   }
 
+  function updateSellerFields() {
+    const isSeller = accountType.value === 'seller';
+    companyGroup.hidden = !isSeller;
+    cityGroup.hidden = !isSeller;
+  }
+  accountType.addEventListener('change', updateSellerFields);
+  updateSellerFields();
+
   toggle.addEventListener('click', function () {
     setMode(!registering);
   });
@@ -122,7 +146,10 @@
       await apiRegister({
         name: document.getElementById('r-name').value.trim(),
         email: email,
-        password: password
+        password: password,
+        accountType: accountType.value,
+        companyName: document.getElementById('r-company').value.trim(),
+        city: document.getElementById('r-city').value.trim()
       });
       window.location.href = returnTo;
     } catch (error) {
@@ -131,30 +158,3 @@
     }
   });
 
-  loginForm.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    if (!loginForm.reportValidity()) return;
-
-    const email = document.getElementById('l-email').value.trim();
-    if (!matchesPendingAdEmail(email)) return;
-
-    const button = loginForm.querySelector('button[type="submit"]');
-    button.disabled = true;
-    showMessage('Signing in...', false);
-    try {
-      await apiLogin(
-        email,
-        document.getElementById('l-pass').value
-      );
-      window.location.href = returnTo;
-    } catch (error) {
-      showMessage(error.message || 'Could not sign in. Please try again.', true);
-      button.disabled = false;
-    }
-  });
-
-  setMode(params.get('mode') !== 'login');
-})();
-</script>
-</body>
-</html>
