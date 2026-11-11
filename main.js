@@ -578,37 +578,74 @@ function escHtml(v) {
 }
 function getProductById(id) { return MS_PRODUCTS.find(p => p.id === id) || null; }
 function getCategoryName(id) { const c = MS_CATEGORIES.find(x => x.id === id); return c ? c.name : id; }
-function msImg(p) { return getRootBase() + 'images/' + p.img; }
+function msImg(p) {
+  const image = p.img || (Array.isArray(p.images) && p.images[0]) || p.fallback || '';
+  if (/^\/api\//i.test(image)) return (window.MSUKASHA_API_ORIGIN || '') + image;
+  return p.remote || /^https?:\/\//i.test(image)
+    ? image
+    : getRootBase() + 'images/' + image;
+}
 function msPrice(p) {
   return p.type === 'b2b' ? '$' + Number(p.price).toFixed(2) : 'Rs. ' + Number(p.price).toLocaleString('en-PK');
 }
 function msImgTag(p) {
-  return `<img src="${escHtml(msImg(p))}" alt="${escHtml(p.short)}" onerror="this.onerror=function(){this.remove()};this.src='${p.fallback}'">`;
+  const image = msImg(p);
+  const fallback = p.fallback || '';
+  return image
+    ? `<img src="${escHtml(image)}" data-fallback="${escHtml(fallback)}" alt="${escHtml(p.short || p.name)}" onerror="if(this.dataset.fallback){this.onerror=null;this.src=this.dataset.fallback}else{this.remove()}">`
+    : '';
 }
 
 function goToDetail(id, type) {
   window.location.href = `${getPageBase()}product-detail.html?id=${encodeURIComponent(id)}&type=${encodeURIComponent(type || '')}`;
 }
 function msCart(id) {
-  const p = getProductById(id); if (!p) return;
-  addToCart({ id: p.id, name: p.short, price: p.price, type: p.type, img: './images/' + p.img });
+  const p = getProductById(id);
+  if (p) {
+    addToCart({ id: p.id, name: p.short, price: p.price, type: p.type, img: msImg(p) });
+    return;
+  }
+  if (typeof apiGetProduct !== 'function') return;
+  apiGetProduct(id).then(({ product }) => {
+    addToCart({ id: product.id || product._id, name: product.short || product.name, price: product.price, type: product.type, img: product.img });
+  }).catch(error => showToast(error.message || 'Could not add this product to your cart.', 'error'));
 }
 function msWish(id) {
-  const p = getProductById(id); if (!p) return;
-  addToWishlist({ id: p.id, name: p.short, price: p.price, type: p.type, img: './images/' + p.img });
+  const p = getProductById(id);
+  if (p) {
+    addToWishlist({ id: p.id, name: p.short, price: p.price, type: p.type, img: msImg(p) });
+    return;
+  }
+  if (typeof apiGetProduct !== 'function') return;
+  apiGetProduct(id).then(({ product }) => {
+    addToWishlist({ id: product.id || product._id, name: product.short || product.name, price: product.price, type: product.type, img: product.img });
+  }).catch(error => showToast(error.message || 'Could not add this product to your wishlist.', 'error'));
 }
 
 function msProductCard(p) {
   const b2b = p.type === 'b2b';
   const meta = b2b
-    ? `<p class="card-moq"><i class="fas fa-box"></i>MOQ: ${p.moq} Pieces</p>`
-    : `<p class="card-location"><i class="fas fa-map-marker-alt"></i>${escHtml(p.location)}</p>`;
+    ? `<p class="card-moq"><i class="fas fa-box"></i>MOQ: ${Number(p.moq) || 1} Pieces</p>`
+    : `<p class="card-location"><i class="fas fa-map-marker-alt"></i>${escHtml(p.location || p.seller?.city || '')}</p>`;
   const price = b2b ? `${msPrice(p)}<small>/${p.unit}</small>` : msPrice(p);
+  const sellerId = p.seller && (p.seller.id || p.seller._id);
+  const query = new URLSearchParams({
+    recipientId: sellerId || '',
+    recipientName: p.seller && (p.seller.companyName || p.seller.name) || 'Seller',
+    productName: p.name
+  });
+  if (!sellerId) query.delete('recipientId');
+  const inquiryUrl = sellerId
+    ? `${getPageBase()}messages.html?${query.toString()}`
+    : `${getPageBase()}product-detail.html?id=${encodeURIComponent(p.id)}&type=${encodeURIComponent(p.type || '')}`;
+  const storeUrl = sellerId
+    ? `<a href="${getPageBase()}store.html?id=${encodeURIComponent(sellerId)}" class="card-seller-link" onclick="event.stopPropagation()">${escHtml(p.seller.companyName || p.seller.name || 'View store')}</a>`
+    : '';
   const footer = b2b
-    ? `<a href="${getPageBase()}contact.html" class="card-btn" onclick="event.stopPropagation()">Inquire Now</a>
+    ? `<a href="${inquiryUrl}" class="card-btn" onclick="event.stopPropagation()">Inquire Now</a>
        <button class="card-btn solid" onclick="event.stopPropagation();msCart('${p.id}')">Buy Now</button>`
-    : `<a href="${getPageBase()}messages.html" class="card-btn" onclick="event.stopPropagation()">Message Seller</a>
-       <a href="${getPageBase()}contact.html" class="card-btn solid" onclick="event.stopPropagation()">Call Now</a>`;
+    : `<a href="${inquiryUrl}" class="card-btn" onclick="event.stopPropagation()">Message Seller</a>
+       <a href="${inquiryUrl}" class="card-btn solid" onclick="event.stopPropagation()">Contact Seller</a>`;
   return `
   <div class="product-card zone-${p.type}" onclick="goToDetail('${p.id}','${p.type}')">
     <div class="card-img">
@@ -623,6 +660,7 @@ function msProductCard(p) {
       <p class="card-name">${escHtml(p.name)}</p>
       <p class="card-price">${price}</p>
       ${meta}
+      ${storeUrl}
     </div>
     <div class="card-footer">${footer}</div>
   </div>`;
@@ -645,14 +683,17 @@ function msRenderCatalog(opts) {
   catEl.value = getUrlParam('cat');
   if (typeEl) typeEl.value = getUrlParam('type');
 
+  let remoteProducts = [];
+  let requestNumber = 0;
+  let debounceTimer;
   function render() {
     const q = qEl.value.trim().toLowerCase();
     const cat = catEl.value;
     const type = opts.type || (typeEl ? typeEl.value : '');
-    let list = MS_PRODUCTS.filter(p =>
+    let list = [...remoteProducts, ...MS_PRODUCTS].filter(p =>
       (!type || p.type === type) &&
       (!cat || p.cat === cat) &&
-      (!q || (p.name + ' ' + getCategoryName(p.cat) + ' ' + (p.location || '')).toLowerCase().includes(q)));
+      (!q || (p.name + ' ' + (p.description || '') + ' ' + getCategoryName(p.cat) + ' ' + (p.location || '')).toLowerCase().includes(q)));
     const sort = sortEl.value;
     if (sort === 'name') list = list.slice().sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'low') list = list.slice().sort((a, b) => a.price - b.price);
@@ -666,8 +707,66 @@ function msRenderCatalog(opts) {
         <a href="${getPageBase()}categories.html" class="btn-primary">Browse categories</a>
       </div>`;
   }
-  [qEl, catEl, sortEl, typeEl].forEach(el => { if (el) el.addEventListener('input', render); });
+  async function loadRemoteProducts() {
+    if (typeof apiGetProducts !== 'function') return;
+    const requestId = ++requestNumber;
+    const filters = { limit: '100' };
+    const type = opts.type || (typeEl ? typeEl.value : '');
+    if (type) filters.type = type;
+    if (catEl.value) filters.cat = catEl.value;
+    if (qEl.value.trim()) filters.q = qEl.value.trim();
+    countEl.textContent = 'Loading store listings...';
+    try {
+      const data = await apiGetProducts(filters);
+      if (requestId !== requestNumber) return;
+      remoteProducts = (data.products || []).map(product => ({
+        ...product,
+        id: product.id || product._id,
+        short: product.short || product.name,
+        icon: (MS_CATEGORIES.find(category => category.id === product.cat) || {}).icon || 'fa-box',
+        remote: true
+      }));
+      render();
+    } catch (error) {
+      if (requestId !== requestNumber) return;
+      console.error('Unable to load seller listings:', error);
+      countEl.textContent = 'Store listings could not be loaded. Showing featured listings.';
+      remoteProducts = [];
+      render();
+    }
+  }
+  [qEl, catEl].forEach(el => {
+    if (el) el.addEventListener('input', function () {
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(loadRemoteProducts, 250);
+    });
+  });
+  [sortEl, typeEl].forEach(el => { if (el) el.addEventListener('change', function () { render(); loadRemoteProducts(); }); });
   render();
+  loadRemoteProducts();
+}
+
+async function msLoadHomeProducts() {
+  if (typeof apiGetProducts !== 'function') return;
+  if (!document.getElementById('b2b-products') && !document.getElementById('c2c-products')) return;
+  try {
+    const data = await apiGetProducts({ limit: '100' });
+    const products = (data.products || []).map(product => ({
+      ...product,
+      id: product.id || product._id,
+      short: product.short || product.name,
+      icon: (MS_CATEGORIES.find(category => category.id === product.cat) || {}).icon || 'fa-box',
+      remote: true
+    }));
+    const wholesaleGrid = document.getElementById('b2b-products');
+    const localGrid = document.getElementById('c2c-products');
+    const wholesale = products.filter(product => product.type === 'b2b').slice(0, 4);
+    const local = products.filter(product => product.type === 'c2c').slice(0, 4);
+    if (wholesaleGrid && wholesale.length) wholesaleGrid.innerHTML = wholesale.map(msProductCard).join('');
+    if (localGrid && local.length) localGrid.innerHTML = local.map(msProductCard).join('');
+  } catch (error) {
+    console.error('Unable to load seller listings on the homepage:', error);
+  }
 }
 
 /* Lead forms: collects the fields and lets the visitor send them to the
