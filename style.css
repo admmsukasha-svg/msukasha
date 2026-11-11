@@ -158,6 +158,8 @@ button{font-family:inherit;}
 .card-btn{flex:1;text-align:center;padding:11px 0;font-size:12.5px;font-weight:600;color:var(--muted);border:0;border-right:1px solid var(--border);background:transparent;cursor:pointer;}
 .card-btn:last-child{border-right:0;}
 .card-btn:hover{background:var(--bg);}
+.card-seller-link{display:inline-flex;margin-top:8px;color:var(--teal-dark);font-size:12px;font-weight:600;}
+.card-seller-link:hover{text-decoration:underline;}
 .zone-b2b .card-btn.solid{background:var(--orange);color:#fff;}
 .zone-b2b .card-btn.solid:hover{background:var(--orange-dark);}
 .zone-c2c .card-btn.solid{background:var(--teal);color:#fff;}
