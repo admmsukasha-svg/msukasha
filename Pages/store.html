@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Store | msukasha</title>
+<meta name="description" content="Browse a seller's products and digital store on msukasha">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+<style>
+.store-hero{margin:28px 0;padding:30px;background:linear-gradient(120deg,var(--navy),var(--teal-dark));color:#fff;border-radius:var(--radius)}
+.store-hero h1{margin:0 0 8px;font-size:30px}
+.store-hero p{margin:5px 0;color:#e3ecea}
+.store-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-size:13px;color:#e3ecea}
+.store-about{max-width:760px;white-space:pre-wrap}
+.store-message{margin-top:16px}
+.store-error{padding:42px 24px;text-align:center;background:#fff;border:1px solid var(--border);border-radius:var(--radius)}
+.store-error i{font-size:34px;color:var(--orange);margin-bottom:14px}
+</style>
+</head>
+<body>
+<header class="site-header" id="site-header"></header>
+<main class="container" style="padding-bottom:60px;">
+  <div class="breadcrumb" style="padding-top:24px;"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Seller Store</span></div>
+  <section id="store-content">
+    <div class="store-error"><i class="fas fa-spinner fa-spin"></i><h1>Loading store...</h1></div>
+  </section>
+</main>
+<footer class="site-footer" id="site-footer"></footer>
+<script src="../main.js"></script>
+<script src="../api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+  const content = document.getElementById('store-content');
+  const sellerId = new URLSearchParams(window.location.search).get('id') || '';
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function (char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
+  }
+
+  if (!/^[a-f\d]{24}$/i.test(sellerId)) {
+    content.innerHTML = '<div class="store-error"><i class="fas fa-store"></i><h1>Store not found</h1><p>Open a store through a seller product listing.</p><a class="btn-primary" href="./shop.html">Browse products</a></div>';
+    return;
+  }
+
+  try {
+    const result = await apiGetStore(sellerId);
+    const store = result.store || {};
+    const products = (result.products || []).map(function (product) {
+      return {
+        ...product,
+        id: product.id || product._id,
+        short: product.short || product.name,
+        icon: (MS_CATEGORIES.find(category => category.id === product.cat) || {}).icon || 'fa-box',
+        remote: true
+      };
+    });
+    document.title = store.name + ' | msukasha';
+    const messageQuery = new URLSearchParams({
+      recipientId: store.id,
+      recipientName: store.name,
+      productName: 'your store'
+    });
+    content.innerHTML = `
+      <section class="store-hero">
+        <h1><i class="fas fa-store" style="margin-right:10px;"></i>${escapeHtml(store.name)}</h1>
+        <p>Seller: ${escapeHtml(store.ownerName)}</p>
+        ${store.about ? `<p class="store-about">${escapeHtml(store.about)}</p>` : ''}
+        <div class="store-meta">${store.city ? `<span><i class="fas fa-location-dot"></i> ${escapeHtml(store.city)}</span>` : ''}<span><i class="fas fa-box"></i> ${products.length} active products</span></div>
+        <a class="btn-primary store-message" href="./messages.html?${messageQuery.toString()}"><i class="fas fa-comment-dots"></i> Contact this seller</a>
+      </section>
+      <section>
+        <div class="section-header"><div><h2 class="section-title">Store products</h2><p class="section-sub">Products listed by ${escapeHtml(store.name)}.</p></div></div>
+        <div class="product-grid">${products.length ? products.map(msProductCard).join('') : '<div class="store-error" style="grid-column:1/-1;"><i class="fas fa-box-open"></i><h2>No products available</h2><p>This store has not published any products yet.</p></div>'}</div>
+      </section>`;
+  } catch (error) {
+    content.innerHTML = `<div class="store-error"><i class="fas fa-store-slash"></i><h1>Store could not be loaded</h1><p>${escapeHtml(error.message)}</p><a class="btn-primary" href="./shop.html">Browse products</a></div>`;
+  }
+});
+</script>
+</body>
+</html>
