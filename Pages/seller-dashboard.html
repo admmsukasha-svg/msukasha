@@ -7,6 +7,28 @@
 <meta name="description" content="Manage your msukasha listings and ads">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="../style.css">
+<style>
+.store-section{margin-top:24px;padding:24px}
+.store-product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.store-product{display:grid;grid-template-columns:80px minmax(0,1fr);gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.store-product img{width:80px;height:80px;object-fit:cover;border-radius:8px;background:var(--bg)}
+.store-product h3{margin:0 0 5px;font-size:14px}
+.store-product p{margin:0 0 5px;color:var(--muted);font-size:12px}
+.store-product-actions{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.store-product-actions button,.store-product-actions a{font:inherit;font-size:12px;padding:7px 10px}
+.store-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.store-form-grid .full{grid-column:1/-1}
+.store-empty{padding:24px;text-align:center;border:1px dashed var(--border);border-radius:10px;color:var(--muted)}
+.store-status{min-height:20px;margin:12px 0 0;font-size:13px;color:var(--muted)}
+.order-card{border:1px solid var(--border);border-radius:10px;padding:16px;background:#fff}
+.order-card h3{margin:0 0 7px;font-size:15px}
+.order-card p{margin:3px 0;color:var(--muted);font-size:13px}
+.order-items{margin:10px 0;padding-left:20px;font-size:13px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:600px){.store-form-grid{grid-template-columns:1fr}.store-form-grid .full{grid-column:auto}.store-section{padding:17px}}
+</style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782"
+       crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -23,25 +45,105 @@
   </section>
 
   <div class="container" style="padding:32px 24px 60px;">
+    <div id="seller-access-prompt" class="empty-state" hidden>
+      <i class="fas fa-store"></i>
+      <h3 id="seller-access-title">Sign in to manage your store</h3>
+      <p id="seller-access-copy">A seller account gives you access to your product listings, store settings, and orders.</p>
+      <a id="seller-access-link" href="./login.html?next=seller-dashboard.html" class="btn-primary">Sign in or create a seller account</a>
+    </div>
+    <div id="store-dashboard" hidden>
     <div class="stat-strip" style="border-radius:var(--radius);margin-bottom:28px;">
       <div class="container" style="padding:20px 24px;">
-        <div><span class="stat-num">0</span><span class="stat-label">Active listings</span></div>
-        <div><span class="stat-num">0</span><span class="stat-label">Pending ads</span></div>
-        <div><span class="stat-num">0</span><span class="stat-label">Messages</span></div>
-        <div><span class="stat-num">0</span><span class="stat-label">Orders</span></div>
+        <div><span class="stat-num" id="seller-listing-count">—</span><span class="stat-label">Active listings</span></div>
+        <div><span class="stat-num" id="seller-pending-count">—</span><span class="stat-label">Pending ads</span></div>
+        <div><span class="stat-num" id="seller-message-count">—</span><span class="stat-label">Conversations</span></div>
+        <div><span class="stat-num" id="seller-order-count">—</span><span class="stat-label">Orders</span></div>
       </div>
     </div>
     <div class="feature-grid">
       <a class="feature-card card" href="./post-free-ad.html"><div class="ficon"><i class="fas fa-plus-circle"></i></div><h3>Post a C2C Ad</h3><p>List a used item free of charge for local buyers.</p></a>
       <a class="feature-card card" href="./advertise.html"><div class="ficon"><i class="fas fa-bullhorn"></i></div><h3>Advertise Your Business</h3><p>Run a paid promotion across msukasha.</p></a>
       <a class="feature-card card" href="./start-verification.html"><div class="ficon"><i class="fas fa-certificate"></i></div><h3>Get Verified</h3><p>Apply for a verified supplier badge.</p></a>
-      <a class="feature-card card" href="./messages.html"><div class="ficon"><i class="fas fa-comment-dots"></i></div><h3>Buyer Messages</h3><p>Reply to enquiries from interested buyers.</p></a>
+      <a class="feature-card card" href="./messages.html"><div class="ficon"><i class="fas fa-comment-dots"></i></div><h3>Buyer Messages &amp; Video Calls</h3><p>Reply to buyers and arrange a video call from any conversation.</p></a>
     </div>
-    <div class="empty-state" style="margin-top:24px;">
+    <section class="card store-section">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div><h2 class="section-title">Your digital store</h2><p class="section-sub">Update how buyers see your store and its contact details.</p></div>
+        <a id="public-store-link" href="./store.html" target="_blank" rel="noopener" class="btn-outline"><i class="fas fa-arrow-up-right-from-square"></i> View store</a>
+      </div>
+      <form id="store-profile-form">
+        <div class="store-form-grid">
+          <div class="form-group"><label for="store-name">Store name *</label><input id="store-name" name="companyName" maxlength="160" required></div>
+          <div class="form-group"><label for="store-city">City</label><input id="store-city" name="city" maxlength="80"></div>
+          <div class="form-group"><label for="store-owner">Owner name</label><input id="store-owner" name="name" maxlength="120" required></div>
+          <div class="form-group"><label for="store-phone">Phone / WhatsApp</label><input id="store-phone" name="phone" maxlength="30"></div>
+          <div class="form-group full"><label for="store-about">About your store</label><textarea id="store-about" name="about" rows="3" maxlength="1000" placeholder="Tell buyers what your store sells"></textarea></div>
+        </div>
+        <button type="submit" class="btn-primary"><i class="fas fa-floppy-disk"></i> Save store details</button>
+        <p id="store-profile-status" class="store-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <section class="card store-section" id="product-management">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div><h2 class="section-title">Products &amp; listings</h2><p class="section-sub">Add products, update prices and stock, or hide listings from the store.</p></div>
+        <button type="button" class="btn-primary" id="new-product-button"><i class="fas fa-plus"></i> Add product</button>
+      </div>
+      <form id="product-form" hidden>
+        <h3 id="product-form-title" style="margin:0 0 14px;font-size:17px;">Add a product</h3>
+        <input type="hidden" name="productId">
+        <div class="store-form-grid">
+          <div class="form-group"><label for="product-name">Product name *</label><input id="product-name" name="name" maxlength="200" required></div>
+          <div class="form-group"><label for="product-type">Listing type</label><select id="product-type" name="type"><option value="b2b">Wholesale (B2B)</option><option value="c2c">Local (C2C)</option></select></div>
+          <div class="form-group"><label for="product-category">Category *</label><select id="product-category" name="cat" required></select></div>
+          <div class="form-group"><label for="product-price">Price *</label><input id="product-price" name="price" type="number" min="0" step="0.01" required></div>
+          <div class="form-group"><label for="product-stock">Available stock</label><input id="product-stock" name="stock" type="number" min="0" step="1" value="0"></div>
+          <div class="form-group"><label for="product-unit">Unit (wholesale)</label><input id="product-unit" name="unit" maxlength="20" value="pc"></div>
+          <div class="form-group"><label for="product-moq">Minimum order (wholesale)</label><input id="product-moq" name="moq" type="number" min="1" step="1" value="1"></div>
+          <div class="form-group"><label for="product-location">City / area</label><input id="product-location" name="location" maxlength="120"></div>
+          <div class="form-group full"><label for="product-image">Main product photo URL</label><input id="product-image" name="img" type="url" maxlength="2000" placeholder="https://..."></div>
+          <div class="form-group full"><label for="product-photo-file">Or upload a product photo (JPEG, PNG, WebP; up to 2 MB)</label><input id="product-photo-file" name="photoFile" type="file" accept="image/jpeg,image/png,image/webp"><small id="product-photo-hint" style="display:block;color:var(--muted);margin-top:5px;">A photo URL above will be used unless you select a file.</small></div>
+          <div class="form-group full"><label for="product-extra-images">Additional photo URLs (one per line)</label><textarea id="product-extra-images" name="images" rows="2" placeholder="https://..."></textarea></div>
+          <div class="form-group full"><label for="product-description">Description</label><textarea id="product-description" name="description" rows="5" maxlength="5000"></textarea></div>
+          <div class="form-group"><label for="product-status">Store visibility</label><select id="product-status" name="status"><option value="active">Visible in store</option><option value="inactive">Hidden from store</option></select></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button id="save-product-button" type="submit" class="btn-primary"><i class="fas fa-floppy-disk"></i> Save product</button>
+          <button type="button" class="btn-outline" id="cancel-product-button">Cancel</button>
+        </div>
+        <p id="product-form-status" class="store-status" role="status" aria-live="polite"></p>
+      </form>
+      <div id="store-products" class="store-product-grid"></div>
+    </section>
+    <section class="card store-section" id="seller-orders">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div><h2 class="section-title">Customer orders</h2><p class="section-sub">Review orders containing your products and update their status.</p></div>
+      </div>
+      <div id="seller-order-list" class="store-product-grid"></div>
+    </section>
+    <section class="card" style="margin-top:24px;padding:24px;">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div><h2 class="section-title">Ad performance</h2><p class="section-sub">Lifetime results for your business advertising campaigns.</p></div>
+        <a href="./advertise.html" class="btn-primary"><i class="fas fa-bullhorn"></i> Create an ad</a>
+      </div>
+      <div class="feature-grid" style="margin-bottom:20px;">
+        <div class="card" style="padding:16px;"><strong id="ad-total-impressions">—</strong><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Impressions</p></div>
+        <div class="card" style="padding:16px;"><strong id="ad-total-clicks">—</strong><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Clicks</p></div>
+        <div class="card" style="padding:16px;"><strong id="ad-average-ctr">—</strong><p style="margin:4px 0 0;color:var(--muted);font-size:13px;">Click-through rate</p></div>
+      </div>
+      <p id="dashboard-status" role="status" style="font-size:13px;color:var(--muted);"></p>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;text-align:left;font-size:13px;">
+          <thead><tr style="border-bottom:1px solid var(--border);"><th style="padding:10px;">Campaign</th><th style="padding:10px;">Status</th><th style="padding:10px;">Impressions</th><th style="padding:10px;">Clicks</th><th style="padding:10px;">CTR</th></tr></thead>
+          <tbody id="ad-analytics-rows"><tr><td colspan="5" style="padding:14px;color:var(--muted);">Sign in to load your campaign analytics.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <div class="empty-state" id="no-listings" style="margin-top:24px;" hidden>
       <i class="fas fa-boxes-stacked"></i>
       <h3>No listings yet</h3>
-      <p>Once the seller backend is connected, your live listings and their performance will appear here.</p>
+      <p>Post your first listing to start receiving buyer enquiries.</p>
       <a href="./post-free-ad.html" class="btn-primary">Post your first listing</a>
+    </div>
     </div>
   </div>
 
@@ -51,5 +153,341 @@
 
 <script src="../main.js"></script>
 <script src="../api.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+  const dashboard = document.getElementById('store-dashboard');
+  const accessPrompt = document.getElementById('seller-access-prompt');
+  const user = getUser();
+  const role = user && (user.role || user.accountType);
+  const sellerId = user && (user.id || user._id);
+  const categoryChoices = [
+    ['electronics', 'Electronics'], ['fashion', 'Fashion & Apparel'], ['home', 'Home & Living'],
+    ['vehicles', 'Vehicles'], ['industrial', 'Industrial'], ['agriculture', 'Agriculture'],
+    ['sports', 'Sports & Fitness'], ['books', 'Books & Stationery'], ['tools', 'Tools']
+  ];
+  let products = [];
+  let editingProductId = '';
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function (char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
+  }
+
+  if (!getToken() || !user || !['seller', 'admin'].includes(role)) {
+    accessPrompt.hidden = false;
+    document.getElementById('seller-access-title').textContent = user
+      ? 'This account does not have a seller store'
+      : 'Sign in to manage your store';
+    document.getElementById('seller-access-copy').textContent = user
+      ? 'Create or sign in with a seller account to add products, manage your store, and handle orders.'
+      : 'Create a seller account or sign in to add products, manage your storefront, and handle orders.';
+    document.getElementById('seller-access-link').href = './login.html?mode=register&accountType=seller&next=seller-dashboard.html';
+    return;
+  }
+
+  dashboard.hidden = false;
+  const status = document.getElementById('dashboard-status');
+  const rows = document.getElementById('ad-analytics-rows');
+  const productForm = document.getElementById('product-form');
+  const productList = document.getElementById('store-products');
+  const orderList = document.getElementById('seller-order-list');
+  document.getElementById('public-store-link').href = './store.html?id=' + encodeURIComponent(sellerId || '');
+  document.getElementById('product-category').innerHTML = '<option value="">Select category</option>'
+    + categoryChoices.map(([id, name]) => `<option value="${id}">${name}</option>`).join('');
+  document.getElementById('store-name').value = user.companyName || user.name || '';
+  document.getElementById('store-owner').value = user.name || '';
+  document.getElementById('store-city').value = user.city || '';
+  document.getElementById('store-phone').value = user.phone || '';
+  document.getElementById('store-about').value = user.profile && user.profile.about || '';
+
+  function setFormStatus(message, isError) {
+    const formStatus = document.getElementById('product-form-status');
+    formStatus.textContent = message || '';
+    formStatus.style.color = isError ? '#a93a17' : '';
+  }
+
+  function renderProducts() {
+    const activeCount = products.filter(product => product.status === 'active').length;
+    document.getElementById('seller-listing-count').textContent = activeCount;
+    document.getElementById('no-listings').hidden = products.length > 0;
+    if (!products.length) {
+      productList.innerHTML = '<div class="store-empty" style="grid-column:1/-1;">Your store is empty. Add your first product to start receiving orders.</div>';
+      return;
+    }
+    productList.innerHTML = products.map(product => {
+      const id = product.id || product._id;
+      const image = product.img || (product.images && product.images[0]) || '';
+      const imageUrl = /^\/api\//i.test(image) ? (window.MSUKASHA_API_ORIGIN || '') + image : image;
+      const price = product.type === 'b2b' ? '$' + Number(product.price).toFixed(2) : 'Rs. ' + Number(product.price).toLocaleString('en-PK');
+      return `<article class="store-product">
+        ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="" onerror="this.remove()">` : '<div style="width:80px;height:80px;border-radius:8px;background:var(--bg);display:grid;place-items:center;"><i class="fas fa-box"></i></div>'}
+        <div><h3>${escapeHtml(product.name)}</h3><p>${price} · ${escapeHtml(product.type === 'b2b' ? 'Wholesale' : 'Local')} · Stock: ${Number(product.stock) || 0}</p><p>${escapeHtml(product.status === 'active' ? 'Visible in store' : 'Hidden from store')} · ${escapeHtml(product.cat)}</p></div>
+        <div class="store-product-actions">
+          <a class="btn-outline" href="./product-detail.html?id=${encodeURIComponent(id)}" target="_blank" rel="noopener">View listing</a>
+          <button type="button" class="btn-outline" data-product-action="edit" data-product-id="${escapeHtml(id)}">Edit</button>
+          <button type="button" class="btn-outline" data-product-action="toggle" data-product-id="${escapeHtml(id)}">${product.status === 'active' ? 'Hide' : 'Publish'}</button>
+          <button type="button" class="btn-outline" data-product-action="delete" data-product-id="${escapeHtml(id)}">Delete</button>
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  function resetProductForm() {
+    productForm.reset();
+    editingProductId = '';
+    productForm.elements.productId.value = '';
+    productForm.elements.type.value = 'b2b';
+    productForm.elements.unit.value = 'pc';
+    productForm.elements.moq.value = '1';
+    productForm.elements.stock.value = '0';
+    productForm.elements.status.value = 'active';
+    document.getElementById('product-form-title').textContent = 'Add a product';
+    document.getElementById('save-product-button').innerHTML = '<i class="fas fa-floppy-disk"></i> Save product';
+    setFormStatus('', false);
+  }
+
+  function editProduct(product) {
+    editingProductId = product.id || product._id;
+    productForm.elements.productId.value = editingProductId;
+    productForm.elements.name.value = product.name || '';
+    productForm.elements.type.value = product.type || 'b2b';
+    productForm.elements.cat.value = product.cat || '';
+    productForm.elements.price.value = product.price ?? '';
+    productForm.elements.stock.value = product.stock ?? 0;
+    productForm.elements.unit.value = product.unit || 'pc';
+    productForm.elements.moq.value = product.moq || 1;
+    productForm.elements.location.value = product.location || '';
+    productForm.elements.img.value = product.img || '';
+    document.getElementById('product-photo-file').value = '';
+    document.getElementById('product-photo-hint').textContent = product.hasUploadedImage
+      ? 'A saved photo is already uploaded. Select a new file to replace it.'
+      : 'A photo URL above will be used unless you select a file.';
+    productForm.elements.images.value = (product.images || []).join('\n');
+    productForm.elements.description.value = product.description || '';
+    productForm.elements.status.value = product.status || 'active';
+    document.getElementById('product-form-title').textContent = 'Edit product';
+    document.getElementById('save-product-button').innerHTML = '<i class="fas fa-floppy-disk"></i> Update product';
+    productForm.hidden = false;
+    productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderOrders(orders) {
+    document.getElementById('seller-order-count').textContent = orders.length;
+    if (!orders.length) {
+      orderList.innerHTML = '<div class="store-empty" style="grid-column:1/-1;">Orders for your products will appear here.</div>';
+      return;
+    }
+    orderList.innerHTML = orders.map(order => {
+      const id = order.id || order._id;
+      const items = (order.items || []).map(item => `<li>${escapeHtml(item.name)} × ${Number(item.qty) || 1} — Rs. ${(Number(item.price) * (Number(item.qty) || 1)).toLocaleString('en-PK')}</li>`).join('');
+      const shipping = order.shipping || {};
+      const statuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+      return `<article class="order-card">
+        <h3>${escapeHtml(order.orderNumber || id)}</h3>
+        <p>Customer: ${escapeHtml(shipping.name || 'Customer')} · ${escapeHtml(shipping.phone || '')}</p>
+        <p>Delivery: ${escapeHtml(shipping.city || '')} · ${escapeHtml(shipping.address || '')}</p>
+        <ul class="order-items">${items}</ul>
+        <p><strong>Order status:</strong> ${escapeHtml(order.status)}</p>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+          <label for="order-status-${escapeHtml(id)}" class="sr-only">Update order status</label>
+          <select id="order-status-${escapeHtml(id)}" data-order-status>${statuses.map(value => `<option value="${value}"${value === order.status ? ' selected' : ''}>${value}</option>`).join('')}</select>
+          <button type="button" class="btn-outline" data-order-id="${escapeHtml(id)}">Save status</button>
+        </div>
+      </article>`;
+    }).join('');
+  }
+
+  document.getElementById('new-product-button').addEventListener('click', function () {
+    resetProductForm();
+    productForm.hidden = false;
+    productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    productForm.elements.name.focus();
+  });
+  document.getElementById('cancel-product-button').addEventListener('click', function () {
+    productForm.hidden = true;
+    resetProductForm();
+  });
+
+  productForm.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (!productForm.reportValidity()) return;
+    const data = Object.fromEntries(new FormData(productForm).entries());
+    const wasEditing = Boolean(editingProductId);
+    const photoUrls = String(data.images || '').split(/\n/).map(url => url.trim()).filter(Boolean);
+    const photoFile = document.getElementById('product-photo-file').files[0];
+    if (photoFile && !['image/jpeg', 'image/png', 'image/webp'].includes(photoFile.type)) {
+      setFormStatus('Choose a JPEG, PNG, or WebP image.', true);
+      return;
+    }
+    if (photoFile && photoFile.size > 2 * 1024 * 1024) {
+      setFormStatus('Product photos must be 2 MB or smaller.', true);
+      return;
+    }
+    const payload = {
+      name: String(data.name).trim(),
+      type: data.type,
+      cat: data.cat,
+      price: Number(data.price),
+      stock: Number(data.stock),
+      unit: String(data.unit || 'pc').trim(),
+      moq: Number(data.moq) || 1,
+      location: String(data.location || '').trim(),
+      img: String(data.img || '').trim(),
+      images: photoUrls,
+      description: String(data.description || '').trim(),
+      status: data.status
+    };
+    const button = document.getElementById('save-product-button');
+    button.disabled = true;
+    setFormStatus('Saving product...', false);
+    try {
+      let productId = editingProductId;
+      if (productId) {
+        await apiUpdateProduct(productId, payload);
+      } else {
+        const result = await apiAddProduct(payload);
+        const product = result.product || {};
+        productId = product.id || product._id;
+      }
+      if (photoFile) {
+        if (!productId) throw new Error('Product was saved, but its photo could not be uploaded because the product ID was missing.');
+        try {
+          await apiUploadProductImage(productId, photoFile);
+        } catch (error) {
+          products = (await apiGetMyProducts()).products || [];
+          renderProducts();
+          throw new Error('Product was saved, but its photo could not be uploaded: ' + error.message);
+        }
+      }
+      products = (await apiGetMyProducts()).products || [];
+      renderProducts();
+      productForm.hidden = true;
+      resetProductForm();
+      showToast(wasEditing ? 'Product updated.' : 'Product added to your store.', 'success');
+    } catch (error) {
+      setFormStatus(error.message || 'Could not save product.', true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  productList.addEventListener('click', async function (event) {
+    const button = event.target.closest('[data-product-action]');
+    if (!button) return;
+    const product = products.find(item => String(item.id || item._id) === button.dataset.productId);
+    if (!product) return;
+    const id = product.id || product._id;
+    try {
+      if (button.dataset.productAction === 'edit') {
+        editProduct(product);
+        return;
+      }
+      if (button.dataset.productAction === 'delete') {
+        if (!window.confirm('Delete this product from your store?')) return;
+        await apiDeleteProduct(id);
+      } else {
+        await apiUpdateProduct(id, { status: product.status === 'active' ? 'inactive' : 'active' });
+      }
+      products = (await apiGetMyProducts()).products || [];
+      renderProducts();
+    } catch (error) {
+      showToast(error.message || 'Could not update this product.', 'error');
+    }
+  });
+
+  document.getElementById('store-profile-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = form.querySelector('button[type="submit"]');
+    const result = document.getElementById('store-profile-status');
+    button.disabled = true;
+    result.textContent = 'Saving store details...';
+    try {
+      const updated = await apiUpdateProfile({
+        name: form.elements.name.value.trim(),
+        companyName: form.elements.companyName.value.trim(),
+        city: form.elements.city.value.trim(),
+        phone: form.elements.phone.value.trim(),
+        profile: { about: form.elements.about.value.trim() }
+      });
+      Object.assign(user, updated.user);
+      document.getElementById('store-profile-status').textContent = 'Store details saved.';
+    } catch (error) {
+      result.textContent = error.message || 'Could not save store details.';
+      result.style.color = '#a93a17';
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  orderList.addEventListener('click', async function (event) {
+    const button = event.target.closest('[data-order-id]');
+    if (!button) return;
+    const orderId = button.dataset.orderId;
+    const select = orderList.querySelector(`#order-status-${CSS.escape(orderId)}`);
+    button.disabled = true;
+    try {
+      await apiUpdateOrderStatus(orderId, select.value);
+      const result = await apiGetSellerOrders();
+      renderOrders(result);
+      showToast('Order status updated.', 'success');
+    } catch (error) {
+      button.disabled = false;
+      showToast(error.message || 'Could not update order status.', 'error');
+    }
+  });
+
+  status.textContent = 'Loading your store...';
+  document.getElementById('store-profile-status').textContent = '';
+  const results = await Promise.allSettled([
+    apiGetMyProducts(),
+    apiGetSellerOrders(),
+    apiGetMyAds(),
+    apiGetConversations(),
+    apiGetMyBusinessAds()
+  ]);
+  const failed = [];
+  if (results[0].status === 'fulfilled') {
+    products = results[0].value.products || [];
+    renderProducts();
+  } else {
+    failed.push('products: ' + results[0].reason.message);
+    productList.innerHTML = '<div class="store-empty" style="grid-column:1/-1;">Products could not be loaded: ' + escapeHtml(results[0].reason.message) + '</div>';
+  }
+  if (results[1].status === 'fulfilled') renderOrders(results[1].value);
+  else failed.push('orders: ' + results[1].reason.message);
+  if (results[2].status === 'fulfilled') {
+    document.getElementById('seller-pending-count').textContent = results[2].value.filter(ad => ad.status === 'pending').length;
+  } else failed.push('local ads: ' + results[2].reason.message);
+  if (results[3].status === 'fulfilled') document.getElementById('seller-message-count').textContent = results[3].value.length;
+  else failed.push('messages: ' + results[3].reason.message);
+  if (results[4].status === 'fulfilled') {
+    const ads = results[4].value;
+    const impressions = ads.reduce((sum, ad) => sum + (Number(ad.impressions) || 0), 0);
+    const clicks = ads.reduce((sum, ad) => sum + (Number(ad.clicks) || 0), 0);
+    document.getElementById('ad-total-impressions').textContent = impressions.toLocaleString();
+    document.getElementById('ad-total-clicks').textContent = clicks.toLocaleString();
+    document.getElementById('ad-average-ctr').textContent = (impressions ? clicks / impressions * 100 : 0).toFixed(2) + '%';
+    rows.innerHTML = ads.length ? ads.map((ad) => {
+      const adImpressions = Number(ad.impressions) || 0;
+      const adClicks = Number(ad.clicks) || 0;
+      const ctr = adImpressions ? (adClicks / adImpressions * 100).toFixed(2) + '%' : '0.00%';
+      return `<tr style="border-bottom:1px solid #eee;">
+        <td style="padding:10px;">${escapeHtml(ad.title)}</td>
+        <td style="padding:10px;">${escapeHtml(ad.status)}</td>
+        <td style="padding:10px;">${adImpressions.toLocaleString()}</td>
+        <td style="padding:10px;">${adClicks.toLocaleString()}</td>
+        <td style="padding:10px;">${ctr}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="5" style="padding:14px;color:var(--muted);">No ad campaigns yet. Create an ad to start tracking results.</td></tr>';
+  } else {
+    failed.push('ad analytics: ' + results[4].reason.message);
+  }
+
+  status.textContent = failed.length ? 'Some store data could not be loaded: ' + failed.join(' · ') : 'Your store is up to date.';
+  status.style.color = failed.length ? '#a93a17' : '';
+});
+</script>
 </body>
 </html>
