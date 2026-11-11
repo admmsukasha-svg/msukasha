@@ -8,6 +8,7 @@ const DEFAULT_API = ["localhost", "127.0.0.1"].includes(window.location.hostname
   ? `${window.location.protocol}//${window.location.hostname}:5000`
   : "https://msukasha-backend.vercel.app";
 const API = (window.MSUKASHA_API_BASE || localStorage.getItem("msukasha_api_base") || DEFAULT_API).replace(/\/$/, "");
+window.MSUKASHA_API_ORIGIN = API;
 const USE_REMOTE_API = true;
 
 /* ============================================================
@@ -332,6 +333,17 @@ async function apiUpdateProduct(id, data) {
   });
 }
 
+async function apiUploadProductImage(id, file) {
+  return await apiFetch("/api/products/" + encodeURIComponent(id) + "/image", {
+    method: "PUT",
+    headers: {
+      "Authorization": "Bearer " + getToken(),
+      "Content-Type": file.type
+    },
+    body: file
+  });
+}
+
 async function apiDeleteProduct(id) {
   return await apiFetch("/api/products/" + id, {
     method: "DELETE",
@@ -341,6 +353,10 @@ async function apiDeleteProduct(id) {
 
 async function apiGetProduct(id) {
   return await apiFetch("/api/products/" + id);
+}
+
+async function apiGetStore(sellerId) {
+  return await apiFetch("/api/products/store/" + encodeURIComponent(sellerId));
 }
 
 /* ============================================================
@@ -389,6 +405,14 @@ async function apiGetSellerOrders() {
   return data.orders || [];
 }
 
+async function apiUpdateOrderStatus(id, status) {
+  return await apiFetch("/api/orders/" + encodeURIComponent(id) + "/status", {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ status })
+  });
+}
+
 /* ============================================================
    SELLER STATS
    ============================================================ */
@@ -411,9 +435,35 @@ async function apiSendMessage(conversationId, receiverId, text) {
   });
 }
 
+async function apiGetConversations() {
+  const data = await apiFetch("/api/messages", { headers: authHeaders() });
+  return data.conversations || [];
+}
+
 async function apiGetMessages(conversationId) {
   const data = await apiFetch("/api/messages/" + conversationId, { headers: authHeaders() });
   return data.messages || [];
+}
+
+async function apiRequestVideoCall(conversationId, recipientId, scheduledAt) {
+  return await apiFetch("/api/video-calls", {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ conversationId, recipientId, scheduledAt })
+  });
+}
+
+async function apiGetMyVideoCalls() {
+  const data = await apiFetch("/api/video-calls/my", { headers: authHeaders() });
+  return data.calls || [];
+}
+
+async function apiRespondToVideoCall(id, action) {
+  return await apiFetch("/api/video-calls/" + encodeURIComponent(id), {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ action })
+  });
 }
 
 /* ============================================================
@@ -463,6 +513,7 @@ async function apiBookCall(d) {
    INIT — runs on every page load
    ============================================================ */
 document.addEventListener("DOMContentLoaded", async function() {
+  if (typeof msLoadHomeProducts === "function") msLoadHomeProducts();
   if (getToken()) {
     const user = await apiGetMe();
     if (user?.uid) {
