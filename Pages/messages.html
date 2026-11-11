@@ -4,9 +4,48 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Messages | msukasha</title>
-<meta name="description" content="Your msukasha conversations">
+<meta name="description" content="Message buyers and sellers and arrange video calls">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="../style.css">
+<style>
+.messages-shell{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;min-height:570px}
+.messages-sidebar,.conversation-panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.messages-sidebar{display:flex;flex-direction:column}
+.messages-sidebar-head,.conversation-head{padding:18px 20px;border-bottom:1px solid var(--border)}
+.messages-sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.messages-sidebar-head h2,.conversation-head h2{font-size:17px;margin:0}
+.conversation-list{overflow-y:auto;max-height:520px}
+.conversation-item{display:block;width:100%;text-align:left;padding:15px 18px;border:0;border-bottom:1px solid #eee;background:#fff;cursor:pointer;font:inherit}
+.conversation-item:hover,.conversation-item.active{background:var(--orange-light)}
+.conversation-item strong{display:block;font-size:14px;color:var(--text);margin-bottom:3px}
+.conversation-item span{display:block;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conversation-panel{display:flex;flex-direction:column;min-height:570px}
+.conversation-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.thread-messages{padding:20px;flex:1;min-height:230px;max-height:400px;overflow-y:auto;background:#faf9f6}
+.message-bubble{max-width:78%;margin:0 0 12px;padding:10px 13px;border-radius:12px;background:#fff;border:1px solid var(--border);overflow-wrap:anywhere}
+.message-bubble.mine{margin-left:auto;background:#fff0e9;border-color:#f0c7b5}
+.message-bubble p{margin:0;font-size:14px;white-space:pre-wrap}
+.message-bubble time{display:block;margin-top:5px;font-size:10px;color:var(--muted)}
+.message-composer{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--border)}
+.message-composer textarea{flex:1;min-width:0;resize:vertical;min-height:44px;max-height:130px;padding:11px 12px;border:1px solid var(--border);border-radius:9px;font:inherit}
+.call-tools{padding:16px 18px;border-top:1px solid var(--border);background:#fff}
+.call-tools h3{margin:0 0 10px;font-size:15px}
+.call-form{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
+.call-form label{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
+.call-form input{padding:10px;border:1px solid var(--border);border-radius:8px;font:inherit}
+.call-list{display:grid;gap:8px;margin-top:12px}
+.call-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;font-size:12px}
+.call-item p{margin:2px 0;color:var(--muted)}
+.call-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.call-actions button,.call-actions a{font:inherit}
+.call-actions .btn-primary,.call-actions .btn-outline{padding:8px 11px;font-size:12px}
+.conversation-empty{margin:auto;padding:30px;text-align:center;color:var(--muted)}
+.conversation-empty i{font-size:32px;color:var(--orange);margin-bottom:12px}
+.conversation-empty h3{color:var(--text);margin:0 0 6px}
+.message-status{min-height:20px;padding:0 18px;color:var(--muted);font-size:12px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:760px){.messages-shell{grid-template-columns:1fr}.messages-sidebar{max-height:280px}.conversation-panel{min-height:500px}.conversation-list{max-height:190px}.call-item{align-items:flex-start;flex-direction:column}}
+</style>
 </head>
 <body>
 
@@ -15,20 +54,284 @@
 <main>
   <div class="container" style="padding:32px 24px 60px;">
     <div class="breadcrumb" style="margin-bottom:8px;"><a href="../index.html">Home</a><i class="fas fa-chevron-right"></i><span>Messages</span></div>
-    <h1 style="font-size:26px;margin:6px 0 22px;">Messages</h1>
-    <div class="empty-state">
-      <i class="fas fa-comment-dots"></i>
-      <h3>No messages yet</h3>
-      <p>When a buyer or seller messages you about a listing, your conversations will appear here.</p>
-      <a href="./shop.html" class="btn-primary">Browse listings</a>
+    <div class="section-header" style="margin-bottom:20px;">
+      <div><h1 class="section-title">Buyer &amp; Seller Messages</h1><p class="section-sub">Chat about listings and arrange a video call when you need one.</p></div>
+    </div>
+    <div id="login-prompt" class="empty-state" hidden>
+      <i class="fas fa-user-lock"></i><h3>Sign in to your account</h3>
+      <p>Your conversations and call requests are securely linked to your account.</p>
+      <a id="login-link" href="./login.html?next=messages.html" class="btn-primary">Sign in</a>
+    </div>
+    <div id="inbox" class="messages-shell" hidden>
+      <aside class="messages-sidebar">
+        <div class="messages-sidebar-head"><h2>Conversations</h2><button type="button" class="see-all" id="refresh-inbox"><i class="fas fa-rotate"></i> Refresh</button></div>
+        <div class="conversation-list" id="conversation-list"></div>
+      </aside>
+      <section class="conversation-panel" aria-label="Conversation">
+        <div id="thread-empty" class="conversation-empty">
+          <i class="fas fa-comments"></i><h3>Select a conversation</h3>
+          <p>Choose a buyer or seller to view messages and call requests.</p>
+        </div>
+        <div id="thread" hidden style="display:flex;flex-direction:column;flex:1;">
+          <div class="conversation-head"><h2 id="conversation-name"></h2><p id="conversation-context"></p></div>
+          <div class="thread-messages" id="thread-messages" aria-live="polite"></div>
+          <p id="message-status" class="message-status" role="status" aria-live="polite"></p>
+          <form id="message-form" class="message-composer">
+            <label for="message-text" class="sr-only">Write a message</label>
+            <textarea id="message-text" maxlength="2000" rows="2" placeholder="Write a message..." required></textarea>
+            <button type="submit" class="btn-primary" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+          </form>
+          <div class="call-tools">
+            <h3><i class="fas fa-video" style="color:var(--orange);"></i> Video call</h3>
+            <form id="call-form" class="call-form">
+              <div><label for="call-time">Choose a time</label><input id="call-time" type="datetime-local" required></div>
+              <button id="request-call-button" type="submit" class="btn-outline" disabled><i class="fas fa-calendar-plus"></i> Request call</button>
+            </form>
+            <div id="call-list" class="call-list"></div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
-
 </main>
 
 <footer class="site-footer" id="site-footer"></footer>
 
 <script src="../main.js"></script>
 <script src="../api.js"></script>
+<script>
+(function () {
+  const inbox = document.getElementById('inbox');
+  const loginPrompt = document.getElementById('login-prompt');
+  const list = document.getElementById('conversation-list');
+  const thread = document.getElementById('thread');
+  const threadEmpty = document.getElementById('thread-empty');
+  const threadMessages = document.getElementById('thread-messages');
+  const status = document.getElementById('message-status');
+  const user = getUser();
+  const userId = user && String(user._id || user.id || '');
+  const params = new URLSearchParams(window.location.search);
+  const requestedRecipient = params.get('recipientId') || '';
+  const productName = params.get('productName') || '';
+  let conversations = [];
+  let calls = [];
+  let activeConversation = null;
+  let hasInitializedSelection = false;
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function (char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
+  }
+
+  function conversationIdFor(peerId) {
+    return [userId, peerId].sort().join('_');
+  }
+
+  function setStatus(message, isError) {
+    status.textContent = message || '';
+    status.style.color = isError ? '#c62828' : '';
+  }
+
+  function renderConversations() {
+    const items = conversations.slice();
+    if (requestedRecipient && userId && requestedRecipient !== userId
+      && !items.some((item) => item.conversationId === conversationIdFor(requestedRecipient))) {
+      items.unshift({
+        conversationId: conversationIdFor(requestedRecipient),
+        participant: { id: requestedRecipient, name: params.get('recipientName') || 'Seller' },
+        lastMessage: { text: productName ? 'Listing: ' + productName : 'Start a conversation', createdAt: new Date().toISOString() }
+      });
+    }
+
+    if (!items.length) {
+      list.innerHTML = '<div class="conversation-empty"><p>No conversations yet. Open a listing and choose Message Seller to get started.</p></div>';
+      return;
+    }
+    list.innerHTML = items.map((item) => `
+      <button type="button" class="conversation-item${activeConversation && activeConversation.conversationId === item.conversationId ? ' active' : ''}"
+        data-conversation="${escapeHtml(item.conversationId)}" data-peer="${escapeHtml(item.participant.id)}"
+        data-name="${escapeHtml(item.participant.name)}">
+        <strong>${escapeHtml(item.participant.name)}</strong>
+        <span>${escapeHtml(item.lastMessage.text)}</span>
+      </button>`).join('');
+  }
+
+  function renderMessages(messages) {
+    document.getElementById('request-call-button').disabled = messages.length === 0;
+    if (!messages.length) {
+      threadMessages.innerHTML = '<div class="conversation-empty"><p>Start the conversation with a message about this listing.</p></div>';
+      return;
+    }
+    threadMessages.innerHTML = messages.map((message) => {
+      const senderId = String(message.sender && (message.sender._id || message.sender));
+      const date = new Date(message.createdAt);
+      return `<article class="message-bubble${senderId === userId ? ' mine' : ''}">
+        <p>${escapeHtml(message.text)}</p><time>${escapeHtml(date.toLocaleString())}</time>
+      </article>`;
+    }).join('');
+    threadMessages.scrollTop = threadMessages.scrollHeight;
+  }
+
+  function renderCalls() {
+    if (!activeConversation) return;
+    const relevant = calls.filter((call) => call.conversationId === activeConversation.conversationId);
+    if (!relevant.length) {
+      document.getElementById('call-list').innerHTML = '';
+      return;
+    }
+    document.getElementById('call-list').innerHTML = relevant.map((call) => {
+      const requesterId = String(call.requester && (call.requester._id || call.requester.id || call.requester));
+      const incoming = requesterId !== userId;
+      const date = new Date(call.scheduledAt);
+      const actions = call.status === 'accepted'
+        ? `<a class="btn-primary" href="${escapeHtml(call.joinUrl)}" target="_blank" rel="noopener noreferrer"><i class="fas fa-video"></i> Join</a>`
+        : call.status === 'requested' && incoming
+          ? `<button type="button" class="btn-primary" data-call-action="accept" data-call-id="${escapeHtml(call.id || call._id)}">Accept</button><button type="button" class="btn-outline" data-call-action="decline" data-call-id="${escapeHtml(call.id || call._id)}">Decline</button>`
+          : call.status === 'requested'
+            ? `<button type="button" class="btn-outline" data-call-action="cancel" data-call-id="${escapeHtml(call.id || call._id)}">Cancel request</button>`
+            : '';
+      return `<div class="call-item"><div><strong>${incoming ? 'Incoming call request' : 'Your call request'} · ${escapeHtml(call.status)}</strong><p>${escapeHtml(date.toLocaleString())}</p></div><div class="call-actions">${actions}</div></div>`;
+    }).join('');
+  }
+
+  async function loadCalls() {
+    calls = await apiGetMyVideoCalls();
+    renderCalls();
+  }
+
+  async function openConversation(item) {
+    activeConversation = item;
+    document.getElementById('conversation-name').textContent = item.participant.name;
+    document.getElementById('conversation-context').textContent = productName ? 'Listing: ' + productName : 'Messages are private to this conversation.';
+    thread.hidden = false;
+    threadEmpty.hidden = true;
+    setStatus('Loading messages...', false);
+    renderConversations();
+    try {
+      const messages = await apiGetMessages(item.conversationId);
+      renderMessages(messages);
+      setStatus('', false);
+      renderCalls();
+    } catch (error) {
+      setStatus(error.message || 'Could not load messages.', true);
+    }
+  }
+
+  async function loadInbox() {
+    try {
+      conversations = await apiGetConversations();
+      await loadCalls();
+      renderConversations();
+      const requestedId = requestedRecipient && userId ? conversationIdFor(requestedRecipient) : '';
+      const current = (hasInitializedSelection && activeConversation
+        ? conversations.find((item) => item.conversationId === activeConversation.conversationId)
+        : null)
+        || (!hasInitializedSelection ? conversations.find((item) => item.conversationId === requestedId) : null);
+      if (current) await openConversation(current);
+      else if (!hasInitializedSelection && requestedId) {
+        const draft = {
+          conversationId: requestedId,
+          participant: { id: requestedRecipient, name: params.get('recipientName') || 'Seller' }
+        };
+        await openConversation(draft);
+      }
+      hasInitializedSelection = true;
+    } catch (error) {
+      list.innerHTML = `<div class="conversation-empty"><p>${escapeHtml(error.message || 'Could not load conversations.')}</p></div>`;
+    }
+  }
+
+  if (!getToken() || !userId) {
+    loginPrompt.hidden = false;
+    const loginParams = new URLSearchParams({ next: 'messages.html' });
+    ['recipientId', 'recipientName', 'productName'].forEach((key) => {
+      if (params.get(key)) loginParams.set(key, params.get(key));
+    });
+    document.getElementById('login-link').href = './login.html?' + loginParams.toString();
+    return;
+  }
+
+  inbox.hidden = false;
+  const initialTime = new Date(Date.now() + 15 * 60 * 1000);
+  initialTime.setMinutes(initialTime.getMinutes() - initialTime.getTimezoneOffset());
+  document.getElementById('call-time').value = initialTime.toISOString().slice(0, 16);
+
+  list.addEventListener('click', function (event) {
+    const button = event.target.closest('[data-conversation]');
+    if (!button) return;
+    openConversation({
+      conversationId: button.dataset.conversation,
+      participant: { id: button.dataset.peer, name: button.dataset.name }
+    });
+  });
+
+  document.getElementById('refresh-inbox').addEventListener('click', loadInbox);
+
+  document.getElementById('message-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (!activeConversation) return;
+    const input = document.getElementById('message-text');
+    const sendButton = this.querySelector('button[type="submit"]');
+    const text = input.value.trim();
+    if (!text) return;
+    sendButton.disabled = true;
+    setStatus('Sending...', false);
+    try {
+      await apiSendMessage(activeConversation.conversationId, activeConversation.participant.id, text);
+      input.value = '';
+      const messages = await apiGetMessages(activeConversation.conversationId);
+      renderMessages(messages);
+      setStatus('', false);
+      conversations = await apiGetConversations();
+      renderConversations();
+    } catch (error) {
+      setStatus(error.message || 'Message could not be sent.', true);
+    } finally {
+      sendButton.disabled = false;
+    }
+  });
+
+  document.getElementById('call-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (!activeConversation) return;
+    const button = this.querySelector('button[type="submit"]');
+    button.disabled = true;
+    setStatus('Sending call request...', false);
+    try {
+      await apiRequestVideoCall(
+        activeConversation.conversationId,
+        activeConversation.participant.id,
+        new Date(document.getElementById('call-time').value).toISOString()
+      );
+      await loadCalls();
+      setStatus('Video call request sent.', false);
+    } catch (error) {
+      setStatus(error.message || 'Call request could not be sent.', true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.getElementById('call-list').addEventListener('click', async function (event) {
+    const button = event.target.closest('[data-call-action]');
+    if (!button) return;
+    button.disabled = true;
+    try {
+      await apiRespondToVideoCall(button.dataset.callId, button.dataset.callAction);
+      await loadCalls();
+      setStatus('Call request updated.', false);
+    } catch (error) {
+      button.disabled = false;
+      setStatus(error.message || 'Could not update call request.', true);
+    }
+  });
+
+  loadInbox();
+  window.setInterval(function () {
+    if (!document.hidden) loadInbox();
+  }, 20000);
+})();
+</script>
 </body>
 </html>
