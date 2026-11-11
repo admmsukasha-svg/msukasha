@@ -7,6 +7,8 @@
 <meta name="description" content="View wholesale and local listing details on msukasha">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="../style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4770382986050782"
+       crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -32,10 +34,28 @@
 <script src="../main.js"></script>
 <script src="../api.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", async function(){
   const id = getUrlParam('id');
-  const p = getProductById(id);
   const root = document.getElementById('detail-root');
+  let p = getProductById(id);
+  if (!p && /^[a-f\d]{24}$/i.test(id)) {
+    try {
+      const result = await apiGetProduct(id);
+      const item = result.product;
+      p = {
+        ...item,
+        id: item.id || item._id,
+        name: item.name,
+        short: item.short || item.name,
+        icon: 'fa-box',
+        fallback: item.fallback || '',
+        seller: item.seller
+      };
+    } catch (error) {
+      root.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-triangle-exclamation"></i><h3>Listing could not be loaded</h3><p>' + escHtml(error.message) + '</p><a href="./shop.html" class="btn-primary">Back to shop</a></div>';
+      return;
+    }
+  }
   if (!p) {
     root.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-box-open"></i><h3>Listing not found</h3><p>This listing may have been removed or the link is incorrect.</p><a href="./shop.html" class="btn-primary">Back to shop</a></div>';
     return;
@@ -51,9 +71,17 @@ document.addEventListener("DOMContentLoaded", function(){
   const metaRows = b2b
     ? '<div><span>Minimum order</span><strong>' + p.moq + ' pieces</strong></div><div><span>Category</span><strong>' + getCategoryName(p.cat) + '</strong></div><div><span>Supplier location</span><strong>Pakistan</strong></div>'
     : '<div><span>Location</span><strong>' + p.location + '</strong></div><div><span>Category</span><strong>' + getCategoryName(p.cat) + '</strong></div><div><span>Condition</span><strong>Used</strong></div>';
+  const sellerId = p.seller && (p.seller._id || p.seller.id);
+  const messageQuery = new URLSearchParams({
+    recipientId: sellerId || '',
+    recipientName: p.seller && (p.seller.name || p.seller.companyName) || 'Seller',
+    productName: p.name
+  });
+  if (!sellerId) messageQuery.delete('recipientId');
+  const messageUrl = './messages.html?' + messageQuery.toString();
   const actions = b2b
-    ? '<a href="./contact.html" class="btn-outline"><i class="fas fa-comment-dots"></i> Inquire Now</a><button class="btn-primary" onclick="msCart(\''+p.id+'\')"><i class="fas fa-cart-plus"></i> Buy Now</button>'
-    : '<a href="./messages.html" class="btn-outline"><i class="fas fa-comment-dots"></i> Message Seller</a><a href="./contact.html" class="btn-primary"><i class="fas fa-phone"></i> Call Now</a>';
+    ? '<a href="' + messageUrl + '" class="btn-outline"><i class="fas fa-comment-dots"></i> Inquire Now</a><button class="btn-primary" onclick="msCart(\''+p.id+'\')"><i class="fas fa-cart-plus"></i> Buy Now</button>'
+    : '<a href="' + messageUrl + '" class="btn-outline"><i class="fas fa-comment-dots"></i> Message Seller</a><a href="' + messageUrl + '" class="btn-primary"><i class="fas fa-video"></i> Request Video Call</a>';
 
   root.innerHTML = `
     <div class="detail-visual zone-${p.type}">
@@ -65,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function(){
       <h1>${escHtml(p.name)}</h1>
       <p class="price-big">${price}</p>
       <div class="meta-list">${metaRows}</div>
+      ${p.description ? '<p style="white-space:pre-wrap;line-height:1.7;margin:18px 0;">' + escHtml(p.description) + '</p>' : ''}
       <div class="detail-actions">
         <button class="card-action-btn" style="width:48px;height:48px;font-size:18px;" onclick="msWish('${p.id}')" title="Wishlist"><i class="far fa-heart"></i></button>
         ${actions}
