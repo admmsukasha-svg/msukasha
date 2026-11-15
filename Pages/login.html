@@ -94,6 +94,40 @@
       return false;
     }
 
+    // Older versions kept accounts only in this browser. If the matching email
+    // and password are found locally, create that account on the backend once.
+    async function migrateLegacyAccount(email, password) {
+      let localUsers = [];
+      try {
+        localUsers = JSON.parse(localStorage.getItem('msukasha_users') || '[]');
+        if (!Array.isArray(localUsers)) localUsers = [];
+      } catch (_) {
+        localUsers = [];
+      }
+      const normalizedEmail = email.trim().toLowerCase();
+      const legacyUser = localUsers.find((user) =>
+        user && String(user.email || '').trim().toLowerCase() === normalizedEmail && user.password === password
+      );
+      if (!legacyUser) return false;
+
+      try {
+        await apiRegister({
+          name: legacyUser.name || [legacyUser.firstName, legacyUser.lastName].filter(Boolean).join(' ') || email,
+          email: normalizedEmail,
+          password,
+          accountType: legacyUser.accountType || legacyUser.role || 'buyer',
+          companyName: legacyUser.companyName || '',
+          city: legacyUser.city || '',
+          phone: legacyUser.phone || ''
+        });
+        return true;
+      } catch (migrationError) {
+        // If a server account already exists, preserve the original login error.
+        console.warn('Legacy account migration was not completed.', migrationError);
+        return false;
+      }
+    }
+
     function setMode(isRegistering) {
       registering = isRegistering;
       registerForm.hidden = !registering;
@@ -119,12 +153,18 @@
       event.preventDefault();
       if (!loginForm.reportValidity()) return;
       const email = document.getElementById('l-email').value.trim();
+      const password = document.getElementById('l-pass').value;
       if (!matchesPendingAdEmail(email)) return;
       const button = loginForm.querySelector('button[type="submit"]');
       button.disabled = true;
       showMessage('Signing in...', false);
       try {
-        await apiLogin(email, document.getElementById('l-pass').value);
+        try {
+          await apiLogin(email, password);
+        } catch (loginError) {
+          const isInvalidCredentials = /incorrect email or password/i.test(loginError.message || '');
+          if (!isInvalidCredentials || !(await migrateLegacyAccount(email, password))) throw loginError;
+        }
         window.location.href = returnTo;
       } catch (error) {
         showMessage(error.message || 'Could not sign in. Please check your details and try again.', true);
